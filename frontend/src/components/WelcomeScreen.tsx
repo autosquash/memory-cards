@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+import './WelcomeScreen.css'
+
 const url = 'http://127.0.0.1:5000'
 const WelcomeScreen = () => {
-    const [names, setNames] = useState([])
+    const [names, setNames] = useState<null | string[]>(null)
     useEffect(() => {
         axios
             .get(url + '/names')
@@ -13,11 +15,17 @@ const WelcomeScreen = () => {
     return (
         <div>
             <h3>Names:</h3>
-            <ul>
-                {names.map((name, index) => (
-                    <li key={index}>{name}</li>
-                ))}
-            </ul>{' '}
+            {names !== null ? (
+                <ul>
+                    {names.map((name, index) => (
+                        <li key={index}>
+                            <span className="name">{name}</span>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Waiting...</p>
+            )}{' '}
         </div>
     )
 }
