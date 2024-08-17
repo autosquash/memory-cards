@@ -27,13 +27,15 @@ const WelcomeScreen = () => {
     }
     return (
         <div>
-            <h3>Names:</h3>
+            <h3>Who are you?</h3>
             <div>
                 {names !== null ? (
                     <ul>
                         {names.map((name, index) => (
                             <li key={index}>
-                                <span className="name">{name}</span>
+                                <button className="user-button">
+                                    <span className="name">{name}</span>
+                                </button>
                             </li>
                         ))}
                     </ul>

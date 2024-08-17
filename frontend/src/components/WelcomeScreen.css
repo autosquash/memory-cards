@@ -1,3 +1,12 @@
 .name {
     color: aqua;
 }
+
+.user-button {
+    padding: 6px 12px;
+    margin: 6px;
+}
+
+ul {
+    list-style-type: none;
+}
