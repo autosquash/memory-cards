@@ -4,6 +4,7 @@ interface Props {
     color: Color
     shape: Shape
 }
+
 const Card = ({ shape, color }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -54,40 +55,6 @@ const Card = ({ shape, color }: Props) => {
         }
     }, [shape, color])
 
-    const drawCircle = (
-        ctx: CanvasRenderingContext2D,
-        x: number,
-        y: number,
-        radius: number
-    ) => {
-        ctx.beginPath()
-        ctx.arc(x, y, radius, 0, 2 * Math.PI)
-        ctx.fill()
-    }
-
-    const drawSquare = (
-        ctx: CanvasRenderingContext2D,
-        x: number,
-        y: number,
-        size: number
-    ) => {
-        ctx.fillRect(x, y, size, size)
-    }
-
-    const drawTriangle = (
-        ctx: CanvasRenderingContext2D,
-        x: number,
-        y: number,
-        size: number
-    ) => {
-        ctx.beginPath()
-        ctx.moveTo(x, y)
-        ctx.lineTo(x - size / 2, y + size)
-        ctx.lineTo(x + size / 2, y + size)
-        ctx.closePath()
-        ctx.fill()
-    }
-
     return (
         <div
             style={{
@@ -108,5 +75,37 @@ const Card = ({ shape, color }: Props) => {
         </div>
     )
 }
+const drawCircle = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    radius: number
+) => {
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, 2 * Math.PI)
+    ctx.fill()
+}
 
+const drawSquare = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number
+) => {
+    ctx.fillRect(x, y, size, size)
+}
+
+const drawTriangle = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number
+) => {
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+    ctx.lineTo(x - size / 2, y + size)
+    ctx.lineTo(x + size / 2, y + size)
+    ctx.closePath()
+    ctx.fill()
+}
 export default Card
