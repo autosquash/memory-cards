@@ -37,7 +37,6 @@ const displayElapsedTime = () => {
 
 const GameScreen = ({ userName, setNavState }: Props) => {
     const [sequence, setSequence] = useState<CardData[]>([])
-    const [userSequence, setUserSequence] = useState<CardData[]>([])
     const [currentStep, setCurrentStep] = useState(0)
     const [showingSequence, setShowingSequence] = useState(true)
     displayElapsedTime()
@@ -70,15 +69,6 @@ const GameScreen = ({ userName, setNavState }: Props) => {
         return () => clearInterval(interval)
     }, [])
 
-    const handleCardClick = (cardData: CardData) => {
-        if (!showingSequence && userSequence.length < sequence.length) {
-            setUserSequence([...userSequence, cardData])
-        }
-
-        if (userSequence.length + 1 === sequence.length) {
-            console.log('onEnd(userSequence)')
-        }
-    }
     return (
         <div>
             <p>User: {userName}</p>
@@ -91,16 +81,7 @@ const GameScreen = ({ userName, setNavState }: Props) => {
                         {sequence[currentStep].color}
                     </div>
                 ) : (
-                    <div className="grid">
-                        {cardsData.map((cardData, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleCardClick(cardData)}
-                            >
-                                {cardData.shape} {cardData.color}
-                            </button>
-                        ))}
-                    </div>
+                    <p>Cards displayed</p>
                 )}
             </div>
             <ExitButton setNavState={setNavState} />
