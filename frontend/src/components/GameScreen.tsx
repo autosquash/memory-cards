@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { SetNavState } from '../types'
+import { Color, SetNavState, Shape } from '../types'
+import Card from './Card'
 import ExitButton from './ExitButton'
 import './GameScreen.css'
-
-type Color = 'red' | 'green' | 'blue'
-type Shape = 'square' | 'triangle' | 'circle'
 
 interface CardData {
     color: Color
@@ -62,7 +60,11 @@ const GameScreen = ({ userName, setNavState }: Props) => {
             <div className="game-screen">
                 {cardValue ? (
                     <div className="card-display">
-                        {cardValue.shape} {cardValue.color}
+                        <p>
+                            {' '}
+                            {cardValue.shape} {cardValue.color}
+                        </p>
+                        <Card shape={cardValue.shape} color={cardValue.color} />
                     </div>
                 ) : finished ? (
                     <p>Cards displayed! Do you remember them?</p>
