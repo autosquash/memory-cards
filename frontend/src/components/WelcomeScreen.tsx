@@ -1,29 +1,12 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import useNames from '../hooks/useNames'
 import './WelcomeScreen.css'
 
-const url = 'http://127.0.0.1:5000'
 const WelcomeScreen = () => {
-    const [names, setNames] = useState<null | string[]>(null)
-    const [newName, setNewName] = useState<string>('')
-    useEffect(() => {
-        axios
-            .get(url + '/names')
-            .then((response) => setNames(response.data))
-            .catch((error) => console.error('Error fetching names:', error))
-    }, [])
+    const { names, newName, addName, setNewName } = useNames()
+
     const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (!newName.trim()) {
-            return
-        }
-        axios
-            .post(url + '/names', { name: newName })
-            .then(() => {
-                setNames([...(names || []), newName])
-                setNewName('')
-            })
-            .catch((error) => console.error('Error adding name:', error))
+        addName(newName)
     }
     return (
         <div>
