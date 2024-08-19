@@ -17,14 +17,11 @@ const Card = ({ shape, color }: Props) => {
             return
         }
 
-        // Limpiar el canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        // Establecer fondo blanco
         ctx.fillStyle = '#FFFFFF'
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-        // Dibujar la forma
         ctx.fillStyle = color
 
         switch (shape) {
@@ -98,11 +95,16 @@ const Card = ({ shape, color }: Props) => {
                 borderRadius: '8px',
                 padding: '10px',
                 backgroundColor: '#FFFFFF',
-                width: '150px',
+                width: '130px',
                 height: '150px',
             }}
         >
-            <canvas ref={canvasRef} width={130} height={130}></canvas>
+            <canvas
+                ref={canvasRef}
+                width={130}
+                height={130}
+                style={{ width: '130px', height: '130px' }}
+            ></canvas>
         </div>
     )
 }
