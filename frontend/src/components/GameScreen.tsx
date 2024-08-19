@@ -1,4 +1,5 @@
 import { SetNavState } from '../types'
+import ExitButton from './ExitButton'
 
 interface Props {
     userName: string
@@ -9,14 +10,7 @@ const GameScreen = ({ userName, setNavState }: Props) => {
         <div>
             <p>User: {userName}</p>
             <p>The Game has started!</p>
-            <button
-                className="exit-button"
-                onClick={() => {
-                    setNavState(null)
-                }}
-            >
-                Exit
-            </button>
+            <ExitButton setNavState={setNavState} />
         </div>
     )
 }
