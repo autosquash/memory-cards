@@ -1,11 +1,12 @@
 import useNames from '../hooks/useNames'
+import { SetNavState } from '../types'
 import './WelcomeScreen.css'
 
 interface Props {
-    setActiveUser: (user: string | null) => void
+    setNavState: SetNavState
 }
 
-const WelcomeScreen = ({ setActiveUser }: Props) => {
+const WelcomeScreen = ({ setNavState }: Props) => {
     const { userNames, newUserName, commitUser, setNewUserName } = useNames()
 
     const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
@@ -16,7 +17,7 @@ const WelcomeScreen = ({ setActiveUser }: Props) => {
         _: React.MouseEvent<HTMLElement>,
         name: string
     ) => {
-        setActiveUser(name)
+        setNavState(name)
     }
     return (
         <div>
