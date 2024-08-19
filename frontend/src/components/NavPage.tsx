@@ -1,21 +1,37 @@
 import useNav from '../hooks/useNav'
+import GameScreen from './GameScreen'
 import StartScreen from './StartScreen'
 import WelcomeScreen from './WelcomeScreen'
 
+function validateUserNameNotMissing(
+    userName: string | null,
+    page: string
+): asserts userName is string {
+    if (userName === null) {
+        throw new Error(`Can't go to ${page} without a userName`)
+    }
+}
+
 const NavPage = () => {
-    const { navData, setActiveUser } = useNav()
+    const { navData, setNavState } = useNav()
 
     switch (navData.page) {
         case 'home':
-            return <WelcomeScreen setActiveUser={setActiveUser} />
+            return <WelcomeScreen setNavState={setNavState} />
         case 'start-page':
-            if (navData.userName === null) {
-                throw new Error("Can't go to start page without a userName")
-            }
+            validateUserNameNotMissing(navData.userName, 'the start page')
             return (
                 <StartScreen
                     userName={navData.userName}
-                    setActiveUser={setActiveUser}
+                    setNavState={setNavState}
+                />
+            )
+        case 'game-page':
+            validateUserNameNotMissing(navData.userName, 'the game page')
+            return (
+                <GameScreen
+                    userName={navData.userName}
+                    setNavState={setNavState}
                 />
             )
 

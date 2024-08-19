@@ -4,19 +4,11 @@ interface Props {
     userName: string
     setNavState: SetNavState
 }
-
-const StartScreen = ({ userName, setNavState }: Props) => {
+const GameScreen = ({ userName, setNavState }: Props) => {
     return (
-        <div className="start-screen">
+        <div>
             <p>User: {userName}</p>
-            <button
-                className="start-button"
-                onClick={() => {
-                    setNavState(userName, true)
-                }}
-            >
-                Start Game
-            </button>
+            <p>The Game has started!</p>
             <button
                 className="exit-button"
                 onClick={() => {
@@ -29,4 +21,4 @@ const StartScreen = ({ userName, setNavState }: Props) => {
     )
 }
 
-export default StartScreen
+export default GameScreen
