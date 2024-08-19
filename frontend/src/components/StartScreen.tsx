@@ -2,12 +2,10 @@ import { useState } from 'react'
 
 interface Props {
     userName: string
-    setPage: (page: string) => void
-    setUserName: (userName: string | null) => void
+    setActiveUser: (user: string | null) => void
 }
 
-const StartScreen = ({ userName, setPage, setUserName }: Props) => {
-    console.log({ userName })
+const StartScreen = ({ userName, setActiveUser }: Props) => {
     const [playing, setPlaying] = useState(false)
     return (
         <div className="start-screen">
@@ -24,8 +22,7 @@ const StartScreen = ({ userName, setPage, setUserName }: Props) => {
             <button
                 className="exit-button"
                 onClick={() => {
-                    setPage('home')
-                    setUserName(null)
+                    setActiveUser(null)
                 }}
             >
                 Exit
