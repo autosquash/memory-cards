@@ -1,9 +1,8 @@
-import WelcomeScreen from './components/WelcomeScreen'
-
 import './App.css'
+import NavPage from './components/NavPage'
 
 function App() {
-    return <WelcomeScreen />
+    return <NavPage />
 }
 
 export default App

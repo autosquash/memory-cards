@@ -1,12 +1,24 @@
 import useNames from '../hooks/useNames'
 import './WelcomeScreen.css'
 
-const WelcomeScreen = () => {
+interface Props {
+    setPage: (page: string) => void
+    setUserName: (userName: string | null) => void
+}
+
+const WelcomeScreen = ({ setPage, setUserName }: Props) => {
     const { userNames, newUserName, commitUser, setNewUserName } = useNames()
 
     const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()
         commitUser(newUserName)
+    }
+    const handleChooseUser = (
+        _: React.MouseEvent<HTMLElement>,
+        name: string
+    ) => {
+        setPage('start-page')
+        setUserName(name)
     }
     return (
         <div>
@@ -16,7 +28,12 @@ const WelcomeScreen = () => {
                     <ul>
                         {userNames.map((name, index) => (
                             <li key={index}>
-                                <button className="user-button">
+                                <button
+                                    className="user-button"
+                                    onClick={(event) =>
+                                        handleChooseUser(event, name)
+                                    }
+                                >
                                     <span className="name">{name}</span>
                                 </button>
                             </li>
