@@ -2,29 +2,34 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const url = 'http://127.0.0.1:5000'
-const names_api = url + '/names'
+const userNamesApi = url + '/names'
 const useNames = () => {
-    const [names, setNames] = useState<null | string[]>(null)
-    const [newName, setNewName] = useState<string>('')
+    const [userNames, setUserNames] = useState<null | string[]>(null)
+    const [newUserName, setNewUserName] = useState<string>('')
     useEffect(() => {
         axios
-            .get(names_api)
-            .then((response) => setNames(response.data))
+            .get(userNamesApi)
+            .then((response) => setUserNames(response.data))
             .catch((error) => console.error('Error fetching names:', error))
     }, [])
-    const addName = (newName: string) => {
+    const commitUser = (newName: string) => {
         if (!newName.trim()) {
             return
         }
         axios
-            .post(names_api, { name: newName })
+            .post(userNamesApi, { name: newName })
             .then(() => {
-                setNames([...(names || []), newName])
-                setNewName('')
+                setUserNames([...(userNames || []), newName])
+                setNewUserName('')
             })
             .catch((error) => console.error('Error adding name:', error))
     }
-    return { names, newName, addName, setNewName }
+    return {
+        userNames,
+        newUserName,
+        commitUser,
+        setNewUserName,
+    }
 }
 
 export default useNames
