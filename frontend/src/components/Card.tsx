@@ -9,14 +9,18 @@ const Card = ({ shape, color }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
+        console.log('drawing')
         const canvas = canvasRef.current
         if (canvas === null) {
             return
         }
+
         const ctx = canvas.getContext('2d')
         if (ctx === null) {
             return
         }
+        ctx.imageSmoothingEnabled = true
+        ctx.imageSmoothingQuality = 'high'
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -24,7 +28,9 @@ const Card = ({ shape, color }: Props) => {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         ctx.fillStyle = color
+        ctx.translate(0.5, 0.5)
 
+        ctx.imageSmoothingEnabled = false
         switch (shape) {
             case 'circle':
                 drawCircle(
@@ -53,6 +59,7 @@ const Card = ({ shape, color }: Props) => {
             default:
                 break
         }
+        // ctx.translate(-0.5, -0.5)
     }, [shape, color])
 
     return (
@@ -68,10 +75,15 @@ const Card = ({ shape, color }: Props) => {
         >
             <canvas
                 ref={canvasRef}
-                width={130}
-                height={130}
-                style={{ width: '130px', height: '130px' }}
-            ></canvas>
+                width="1300"
+                height="1300"
+                style={{
+                    width: '130px',
+                    height: '130px',
+                }}
+            >
+                Canvas unsupported
+            </canvas>
         </div>
     )
 }
