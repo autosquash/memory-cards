@@ -5,11 +5,17 @@ interface Props {
     shape: Shape
 }
 const Card = ({ shape, color }: Props) => {
-    const canvasRef = useRef(null)
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
         const canvas = canvasRef.current
+        if (canvas === null) {
+            return
+        }
         const ctx = canvas.getContext('2d')
+        if (ctx === null) {
+            return
+        }
 
         // Limpiar el canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -51,17 +57,32 @@ const Card = ({ shape, color }: Props) => {
         }
     }, [shape, color])
 
-    const drawCircle = (ctx, x, y, radius) => {
+    const drawCircle = (
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        radius: number
+    ) => {
         ctx.beginPath()
         ctx.arc(x, y, radius, 0, 2 * Math.PI)
         ctx.fill()
     }
 
-    const drawSquare = (ctx, x, y, size) => {
+    const drawSquare = (
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        size: number
+    ) => {
         ctx.fillRect(x, y, size, size)
     }
 
-    const drawTriangle = (ctx, x, y, size) => {
+    const drawTriangle = (
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        size: number
+    ) => {
         ctx.beginPath()
         ctx.moveTo(x, y)
         ctx.lineTo(x - size / 2, y + size)
