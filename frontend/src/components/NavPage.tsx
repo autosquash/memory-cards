@@ -1,22 +1,21 @@
-import { useState } from 'react'
+import useNav from '../hooks/useNav'
 import StartScreen from './StartScreen'
 import WelcomeScreen from './WelcomeScreen'
 
 const NavPage = () => {
-    const [page, setPage] = useState('home')
-    const [userName, setUserName] = useState<string | null>(null)
-    switch (page) {
+    const { navData, setActiveUser } = useNav()
+
+    switch (navData.page) {
         case 'home':
-            return <WelcomeScreen setPage={setPage} setUserName={setUserName} />
+            return <WelcomeScreen setActiveUser={setActiveUser} />
         case 'start-page':
-            if (userName === null) {
+            if (navData.userName === null) {
                 throw new Error("Can't go to start page without a userName")
             }
             return (
                 <StartScreen
-                    userName={userName}
-                    setPage={setPage}
-                    setUserName={setUserName}
+                    userName={navData.userName}
+                    setActiveUser={setActiveUser}
                 />
             )
 
