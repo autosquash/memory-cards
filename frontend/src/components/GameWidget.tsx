@@ -31,9 +31,7 @@ const GameWidget = () => {
 
         setSequence(createValidSequence(numberOfCardsToGuess))
         // Display the cards sequentially
-        if (intervalIdRef.current !== null) {
-            console.error('there is still a previous timer')
-        }
+        checkRefIsNotNull(intervalIdRef)
         intervalIdRef.current = setInterval(() => {
             setCurrentStep((step) => (step === null ? 0 : step + 1))
         }, 2000)
@@ -46,9 +44,7 @@ const GameWidget = () => {
         if (!shouldAnswer) {
             return
         }
-        if (intervalIdRef.current !== null) {
-            console.error('there is still a previous timer')
-        }
+        checkRefIsNotNull(intervalIdRef)
         intervalIdRef.current = setInterval(() => {
             setAnswering(true)
             clearTimer()
@@ -102,6 +98,12 @@ const GameWidget = () => {
             )}
         </div>
     )
+}
+
+const checkRefIsNotNull = (ref: React.MutableRefObject<number | null>) => {
+    if (ref.current !== null) {
+        console.error('there is still a previous timer')
+    }
 }
 
 export default GameWidget
