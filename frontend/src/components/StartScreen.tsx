@@ -15,7 +15,11 @@ const StartScreen = ({ userName, setNavState }: Props) => {
     return (
         <div className="start-screen">
             <div className="main-game">
-                {playing && <GameWidget key={gameIndex} />}
+                {playing ? (
+                    <GameWidget key={gameIndex} />
+                ) : (
+                    <p>Click 'Start Game' when you are ready</p>
+                )}
             </div>
             <div className="bottom-bar">
                 <p className="user-label">User: {userName}</p>
