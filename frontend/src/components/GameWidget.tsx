@@ -30,7 +30,6 @@ const GameWidget = () => {
         }
 
         setSequence(createValidSequence(numberOfCardsToGuess))
-        console.log('sequence created')
         // Display the cards sequentially
         if (intervalIdRef.current !== null) {
             console.error('there is still a previous timer')
@@ -60,7 +59,6 @@ const GameWidget = () => {
 
     const clearTimer = () => {
         if (intervalIdRef.current !== null) {
-            console.log('cleaning')
             clearInterval(intervalIdRef.current)
             intervalIdRef.current = null
         }
