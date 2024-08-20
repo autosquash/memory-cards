@@ -33,4 +33,23 @@ const createValidSequence = (n: number): CardData[] => {
     return generatedSequence
 }
 
-export { cardsData, createValidSequence }
+const numberOfCardsToGuess = 3
+
+const getResult = (
+    sequence: ReadonlyArray<CardData>,
+    userSequence: ReadonlyArray<CardData>
+) => {
+    for (let i = 0; i < numberOfCardsToGuess; i++) {
+        const correct = sequence[i]
+        const userChoice = userSequence[i]
+        if (
+            correct.shape !== userChoice.shape ||
+            correct.color !== userChoice.color
+        ) {
+            return false
+        }
+    }
+    return true
+}
+
+export { cardsData, createValidSequence, getResult, numberOfCardsToGuess }
