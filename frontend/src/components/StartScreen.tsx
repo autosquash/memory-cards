@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SetNavState } from '../types'
 import ExitButton from './ExitButton'
-import GameScreen from './GameScreen'
+import GameWidget from './GameWidget'
 import './StartScreen.css'
 
 interface Props {
@@ -15,13 +15,7 @@ const StartScreen = ({ userName, setNavState }: Props) => {
     return (
         <div className="start-screen">
             <div className="main-game">
-                {playing && (
-                    <GameScreen
-                        userName={userName}
-                        setNavState={setNavState}
-                        key={gameIndex}
-                    />
-                )}
+                {playing && <GameWidget key={gameIndex} />}
             </div>
             <div className="bottom-bar">
                 <p className="user-label">User: {userName}</p>
