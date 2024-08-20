@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Color, SetNavState, Shape } from '../types'
 import Card from './Card'
-import ExitButton from './ExitButton'
 import './GameScreen.css'
 
 interface CardData {
@@ -68,7 +67,6 @@ const GameScreen = ({ userName, setNavState }: Props) => {
                     <p>The Game is starting!</p>
                 )}
             </div>
-            <ExitButton setNavState={setNavState} />
         </div>
     )
 }

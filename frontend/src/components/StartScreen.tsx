@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { SetNavState } from '../types'
 import ExitButton from './ExitButton'
+import GameScreen from './GameScreen'
 import './StartScreen.css'
 
 interface Props {
@@ -8,15 +10,26 @@ interface Props {
 }
 
 const StartScreen = ({ userName, setNavState }: Props) => {
+    const [playing, setPlaying] = useState(false)
+    const [gameIndex, setGameIndex] = useState(0)
     return (
         <div className="start-screen">
-            <div className="main-game"></div>
+            <div className="main-game">
+                {playing && (
+                    <GameScreen
+                        userName={userName}
+                        setNavState={setNavState}
+                        key={gameIndex}
+                    />
+                )}
+            </div>
             <div className="bottom-bar">
-                <p>User: {userName}</p>
+                <p className="user-label">User: {userName}</p>
                 <button
                     className="start-button"
                     onClick={() => {
-                        setNavState(userName, true)
+                        setGameIndex(gameIndex + 1)
+                        setPlaying(true)
                     }}
                 >
                     Start Game

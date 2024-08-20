@@ -6,12 +6,23 @@
 
 .main-game {
     height: 80%;
-    border: 2px solid red;
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background-color: #213;
 }
 
 .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 20%;
-    border: 2px solid yellow;
     box-sizing: border-box;
+    overflow: hidden;
+    background-color: #333;
+    padding: 16px;
+}
+
+.user-label {
+    font-weight: 600;
 }

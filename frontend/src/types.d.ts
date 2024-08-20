@@ -1,5 +1,5 @@
-type SetNavState = (user: string | null, playing?: boolean) => void
-type Page = 'home' | 'start-page' | 'game-page'
+type SetNavState = (user: string | null) => void
+type Page = 'home' | 'start-page'
 type Color = 'red' | 'green' | 'blue'
 type Shape = 'square' | 'triangle' | 'circle'
 
