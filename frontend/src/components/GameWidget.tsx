@@ -22,34 +22,37 @@ const buildCardsData = () => {
 
 const cardsData: ReadonlyArray<CardData> = buildCardsData()
 
+const createValidSequence = (n: number): CardData[] => {
+    const generatedSequence: CardData[] = []
+    while (generatedSequence.length < n) {
+        const newCardData =
+            cardsData[Math.floor(Math.random() * cardsData.length)]
+        if (generatedSequence.length) {
+            const last = generatedSequence[generatedSequence.length - 1]
+            if (
+                newCardData.color === last.color &&
+                newCardData.shape === last.shape
+            ) {
+                continue
+            }
+        }
+        generatedSequence.push(newCardData)
+    }
+    return generatedSequence
+}
+
 const GameWidget = () => {
     const intervalIdRef = useRef(0)
-    const [sequence, setSequence] = useState<CardData[]>([])
+    const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
 
     const started = currentStep !== null
     const showingSequence =
         sequence.length && started && currentStep < sequence.length
     const cardValue = showingSequence ? sequence[currentStep] : null
-    const finished = currentStep && currentStep >= sequence.length
-    useEffect(() => {
-        const generatedSequence: CardData[] = []
-        while (generatedSequence.length < 3) {
-            const newCardData =
-                cardsData[Math.floor(Math.random() * cardsData.length)]
-            if (generatedSequence.length) {
-                const last = generatedSequence[generatedSequence.length - 1]
-                if (
-                    newCardData.color === last.color &&
-                    newCardData.shape === last.shape
-                ) {
-                    continue
-                }
-            }
-            generatedSequence.push(newCardData)
-        }
 
-        setSequence(generatedSequence)
+    useEffect(() => {
+        setSequence(createValidSequence(3))
         // Display the cards sequentially
         intervalIdRef.current = setInterval(() => {
             setCurrentStep((step) => (step === null ? 0 : step + 1))
@@ -57,7 +60,9 @@ const GameWidget = () => {
 
         return () => clearInterval(intervalIdRef.current)
     }, [])
-    if (finished) {
+
+    const finished = currentStep && currentStep >= sequence.length
+    if (intervalIdRef.current !== null && finished) {
         clearInterval(intervalIdRef.current)
     }
 
