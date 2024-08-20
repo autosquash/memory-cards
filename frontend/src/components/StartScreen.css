@@ -5,6 +5,9 @@
 }
 
 .main-game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 80%;
     box-sizing: border-box;
     padding: 0;
