@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Color, SetNavState, Shape } from '../types'
+import { Color, Shape } from '../types'
 import Card from './Card'
-import './GameScreen.css'
+import './GameWidget.css'
 
 interface CardData {
     color: Color
@@ -10,10 +10,6 @@ interface CardData {
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
-interface Props {
-    userName: string
-    setNavState: SetNavState
-}
 const buildCardsData = () => {
     const cardsData: CardData[] = []
     for (const color of colors) {
@@ -26,7 +22,7 @@ const buildCardsData = () => {
 
 const cardsData: ReadonlyArray<CardData> = buildCardsData()
 
-const GameScreen = ({ userName, setNavState }: Props) => {
+const GameWidget = () => {
     const intervalIdRef = useRef(0)
     const [sequence, setSequence] = useState<CardData[]>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
@@ -69,4 +65,4 @@ const GameScreen = ({ userName, setNavState }: Props) => {
     )
 }
 
-export default GameScreen
+export default GameWidget

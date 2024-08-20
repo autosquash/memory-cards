@@ -25,7 +25,6 @@ const NavPage = () => {
                     setNavState={setNavState}
                 />
             )
-
         default:
             break
     }
