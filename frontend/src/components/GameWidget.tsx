@@ -21,6 +21,7 @@ const buildCardsData = () => {
 }
 
 const cardsData: ReadonlyArray<CardData> = buildCardsData()
+const numberOfCardsToGuess = 3
 
 const createValidSequence = (n: number): CardData[] => {
     const generatedSequence: CardData[] = []
@@ -45,6 +46,9 @@ const GameWidget = () => {
     const intervalIdRef = useRef(0)
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
+    const [answering, setAnswering] = useState(false)
+    const [userSequence, setUserSequence] = useState<CardData[]>([])
+    const [win, setWin] = useState<boolean | null>(null)
 
     const started = currentStep !== null
     const showingSequence =
@@ -52,7 +56,7 @@ const GameWidget = () => {
     const cardValue = showingSequence ? sequence[currentStep] : null
 
     useEffect(() => {
-        setSequence(createValidSequence(3))
+        setSequence(createValidSequence(numberOfCardsToGuess))
         // Display the cards sequentially
         intervalIdRef.current = setInterval(() => {
             setCurrentStep((step) => (step === null ? 0 : step + 1))
@@ -62,9 +66,39 @@ const GameWidget = () => {
     }, [])
 
     const finished = currentStep && currentStep >= sequence.length
+
+    useEffect(() => {
+        if (!finished || answering) {
+            return
+        }
+        intervalIdRef.current = setInterval(() => {
+            setAnswering(true)
+        }, 2000)
+
+        return () => clearInterval(intervalIdRef.current)
+    }, [finished, answering])
+
     if (intervalIdRef.current !== null && finished) {
         clearInterval(intervalIdRef.current)
     }
+
+    useEffect(() => {
+        if (userSequence.length === numberOfCardsToGuess) {
+            setAnswering(false)
+            for (let i = 0; i < numberOfCardsToGuess; i++) {
+                const correct = sequence[i]
+                const userChoice = userSequence[i]
+                if (
+                    correct.shape !== userChoice.shape ||
+                    correct.color !== userChoice.color
+                ) {
+                    setWin(false)
+                    return
+                }
+            }
+            setWin(true)
+        }
+    }, [sequence, userSequence])
 
     return (
         <div className="game-screen">
@@ -73,7 +107,27 @@ const GameWidget = () => {
                     <Card shape={cardValue.shape} color={cardValue.color} />
                 </div>
             ) : finished ? (
-                <p>Cards displayed! Do you remember them?</p>
+                answering ? (
+                    cardsData.map((cardData) => (
+                        <div
+                            key={cardData.shape + cardData.color}
+                            onClick={() => {
+                                console.log(
+                                    'clicked ' + JSON.stringify(cardData)
+                                )
+                                setUserSequence([...userSequence, cardData])
+                            }}
+                        >
+                            {cardData.shape} {cardData.color}
+                        </div>
+                    ))
+                ) : win === null ? (
+                    <p>Cards displayed! Do you remember them?</p>
+                ) : win === true ? (
+                    'You win!'
+                ) : (
+                    "You've lost"
+                )
             ) : (
                 <p>The Game is starting!</p>
             )}
