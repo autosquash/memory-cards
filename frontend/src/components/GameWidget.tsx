@@ -1,27 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { cardsData, createValidSequence } from '../model'
+import {
+    cardsData,
+    createValidSequence,
+    getResult,
+    numberOfCardsToGuess,
+} from '../model'
 import { CardData } from '../types'
 import Card from './Card'
 import './GameWidget.css'
-
-const numberOfCardsToGuess = 3
-
-const getResult = (
-    sequence: ReadonlyArray<CardData>,
-    userSequence: ReadonlyArray<CardData>
-) => {
-    for (let i = 0; i < numberOfCardsToGuess; i++) {
-        const correct = sequence[i]
-        const userChoice = userSequence[i]
-        if (
-            correct.shape !== userChoice.shape ||
-            correct.color !== userChoice.color
-        ) {
-            return false
-        }
-    }
-    return true
-}
 
 const GameWidget = () => {
     const intervalIdRef = useRef(0)
