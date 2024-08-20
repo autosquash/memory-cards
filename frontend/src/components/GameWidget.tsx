@@ -42,6 +42,23 @@ const createValidSequence = (n: number): CardData[] => {
     return generatedSequence
 }
 
+const getResult = (
+    sequence: ReadonlyArray<CardData>,
+    userSequence: ReadonlyArray<CardData>
+) => {
+    for (let i = 0; i < numberOfCardsToGuess; i++) {
+        const correct = sequence[i]
+        const userChoice = userSequence[i]
+        if (
+            correct.shape !== userChoice.shape ||
+            correct.color !== userChoice.color
+        ) {
+            return false
+        }
+    }
+    return true
+}
+
 const GameWidget = () => {
     const intervalIdRef = useRef(0)
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
@@ -85,18 +102,8 @@ const GameWidget = () => {
     useEffect(() => {
         if (userSequence.length === numberOfCardsToGuess) {
             setAnswering(false)
-            for (let i = 0; i < numberOfCardsToGuess; i++) {
-                const correct = sequence[i]
-                const userChoice = userSequence[i]
-                if (
-                    correct.shape !== userChoice.shape ||
-                    correct.color !== userChoice.color
-                ) {
-                    setWin(false)
-                    return
-                }
-            }
-            setWin(true)
+            const result = getResult(sequence, userSequence)
+            setWin(result)
         }
     }, [sequence, userSequence])
 
