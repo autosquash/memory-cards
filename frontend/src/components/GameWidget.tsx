@@ -10,7 +10,7 @@ import Card from './Card'
 import './GameWidget.css'
 
 const GameWidget = () => {
-    const intervalIdRef = useRef(0)
+    const intervalIdRef = useRef<number | null>(null)
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
     const [answering, setAnswering] = useState(false)
@@ -22,31 +22,48 @@ const GameWidget = () => {
         sequence.length && started && currentStep < sequence.length
     const cardValue = showingSequence ? sequence[currentStep] : null
 
+    const finished = currentStep !== null && currentStep >= sequence.length
     useEffect(() => {
+        if (finished) {
+            clearTimer()
+            return
+        }
+
         setSequence(createValidSequence(numberOfCardsToGuess))
+        console.log('sequence created')
         // Display the cards sequentially
+        if (intervalIdRef.current !== null) {
+            console.error('there is still a previous timer')
+        }
         intervalIdRef.current = setInterval(() => {
             setCurrentStep((step) => (step === null ? 0 : step + 1))
         }, 2000)
 
-        return () => clearInterval(intervalIdRef.current)
-    }, [])
-
-    const finished = currentStep && currentStep >= sequence.length
+        return clearTimer
+    }, [finished])
 
     useEffect(() => {
-        if (!finished || answering) {
+        const shouldAnswer = finished && !answering && win === null
+        if (!shouldAnswer) {
             return
+        }
+        if (intervalIdRef.current !== null) {
+            console.error('there is still a previous timer')
         }
         intervalIdRef.current = setInterval(() => {
             setAnswering(true)
+            clearTimer()
         }, 2000)
 
-        return () => clearInterval(intervalIdRef.current)
-    }, [finished, answering])
+        return clearTimer
+    }, [finished, answering, win])
 
-    if (intervalIdRef.current !== null && finished) {
-        clearInterval(intervalIdRef.current)
+    const clearTimer = () => {
+        if (intervalIdRef.current !== null) {
+            console.log('cleaning')
+            clearInterval(intervalIdRef.current)
+            intervalIdRef.current = null
+        }
     }
 
     useEffect(() => {
