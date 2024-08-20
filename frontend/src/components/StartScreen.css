@@ -1,0 +1,17 @@
+.start-screen {
+    height: 100%;
+    border: 2px solid purple;
+    box-sizing: border-box;
+}
+
+.main-game {
+    height: 80%;
+    border: 2px solid red;
+    box-sizing: border-box;
+}
+
+.bottom-bar {
+    height: 20%;
+    border: 2px solid yellow;
+    box-sizing: border-box;
+}
