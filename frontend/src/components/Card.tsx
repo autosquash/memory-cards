@@ -19,8 +19,6 @@ const Card = ({ shape, color }: Props) => {
         if (ctx === null) {
             return
         }
-        ctx.imageSmoothingEnabled = true
-        ctx.imageSmoothingQuality = 'high'
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -28,7 +26,7 @@ const Card = ({ shape, color }: Props) => {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         ctx.fillStyle = color
-        ctx.translate(0.5, 0.5)
+        // ctx.translate(0.5, 0.5)
 
         ctx.imageSmoothingEnabled = false
         switch (shape) {
