@@ -33,11 +33,22 @@ const GameWidget = () => {
     const cardValue = showingSequence ? sequence[currentStep] : null
     const finished = currentStep && currentStep >= sequence.length
     useEffect(() => {
-        //  Generate a random sequence of 3 cards
-        const generatedSequence = Array.from(
-            { length: 3 },
-            () => cardsData[Math.floor(Math.random() * cardsData.length)]
-        )
+        const generatedSequence: CardData[] = []
+        while (generatedSequence.length < 3) {
+            const newCardData =
+                cardsData[Math.floor(Math.random() * cardsData.length)]
+            if (generatedSequence.length) {
+                const last = generatedSequence[generatedSequence.length - 1]
+                if (
+                    newCardData.color === last.color &&
+                    newCardData.shape === last.shape
+                ) {
+                    continue
+                }
+            }
+            generatedSequence.push(newCardData)
+        }
+
         setSequence(generatedSequence)
         // Display the cards sequentially
         intervalIdRef.current = setInterval(() => {
