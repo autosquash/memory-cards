@@ -5,6 +5,8 @@ interface Props {
     shape: Shape
 }
 
+type Position = [number, number]
+
 const Card = ({ shape, color }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -28,24 +30,21 @@ const Card = ({ shape, color }: Props) => {
             case 'circle':
                 drawCircle(
                     ctx,
-                    canvas.width / 2,
-                    canvas.height / 2,
+                    [canvas.width / 2, canvas.height / 2],
                     canvas.width / 4
                 )
                 break
             case 'square':
                 drawSquare(
                     ctx,
-                    canvas.width / 4,
-                    canvas.height / 4,
+                    [canvas.width / 4, canvas.height / 4],
                     canvas.width / 2
                 )
                 break
             case 'triangle':
                 drawTriangle(
                     ctx,
-                    canvas.width / 2,
-                    canvas.height / 4,
+                    [canvas.width / 2, canvas.height / 4],
                     canvas.width / 2
                 )
                 break
@@ -84,10 +83,10 @@ const Card = ({ shape, color }: Props) => {
 }
 const drawCircle = (
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
+    center: Position,
     radius: number
 ) => {
+    const [x, y] = center
     ctx.beginPath()
     ctx.arc(x, y, radius, 0, 2 * Math.PI)
     ctx.fill()
@@ -95,19 +94,19 @@ const drawCircle = (
 
 const drawSquare = (
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
+    pos: Position,
     size: number
 ) => {
+    const [x, y] = pos
     ctx.fillRect(x, y, size, size)
 }
 
 const drawTriangle = (
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
+    pos: Position,
     size: number
 ) => {
+    const [x, y] = pos
     ctx.beginPath()
     ctx.moveTo(x, y)
     ctx.lineTo(x - size / 2, y + size)
