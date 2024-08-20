@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-    cardsData,
-    createValidSequence,
-    getResult,
-    numberOfCardsToGuess,
-} from '../model'
+import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
 import { CardData } from '../types'
 import Card from './Card'
+import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
 const GameWidget = () => {
@@ -76,16 +72,11 @@ const GameWidget = () => {
                 </div>
             ) : finished ? (
                 answering ? (
-                    cardsData.map((cardData) => (
-                        <div
-                            key={cardData.shape + cardData.color}
-                            onClick={() => {
-                                setUserSequence([...userSequence, cardData])
-                            }}
-                        >
-                            {cardData.shape} {cardData.color}
-                        </div>
-                    ))
+                    <CardsToClick
+                        addCard={(cardData) => {
+                            setUserSequence([...userSequence, cardData])
+                        }}
+                    />
                 ) : win === null ? (
                     <p>Cards displayed! Do you remember them?</p>
                 ) : win === true ? (
