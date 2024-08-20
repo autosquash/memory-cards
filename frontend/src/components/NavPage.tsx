@@ -1,5 +1,4 @@
 import useNav from '../hooks/useNav'
-import GameScreen from './GameScreen'
 import StartScreen from './StartScreen'
 import WelcomeScreen from './WelcomeScreen'
 
@@ -22,14 +21,6 @@ const NavPage = () => {
             validateUserNameNotMissing(navData.userName, 'the start page')
             return (
                 <StartScreen
-                    userName={navData.userName}
-                    setNavState={setNavState}
-                />
-            )
-        case 'game-page':
-            validateUserNameNotMissing(navData.userName, 'the game page')
-            return (
-                <GameScreen
                     userName={navData.userName}
                     setNavState={setNavState}
                 />

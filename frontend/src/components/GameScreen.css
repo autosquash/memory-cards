@@ -1,3 +1,7 @@
+.game-screen {
+    overflow: hidden;
+}
+
 .card-display {
     color: yellow;
 }
