@@ -119,9 +119,6 @@ const GameWidget = () => {
                         <div
                             key={cardData.shape + cardData.color}
                             onClick={() => {
-                                console.log(
-                                    'clicked ' + JSON.stringify(cardData)
-                                )
                                 setUserSequence([...userSequence, cardData])
                             }}
                         >
