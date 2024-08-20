@@ -55,18 +55,16 @@ const GameScreen = ({ userName, setNavState }: Props) => {
     }
 
     return (
-        <div>
-            <div className="game-screen">
-                {cardValue ? (
-                    <div className="card-display">
-                        <Card shape={cardValue.shape} color={cardValue.color} />
-                    </div>
-                ) : finished ? (
-                    <p>Cards displayed! Do you remember them?</p>
-                ) : (
-                    <p>The Game is starting!</p>
-                )}
-            </div>
+        <div className="game-screen">
+            {cardValue ? (
+                <div className="card-display">
+                    <Card shape={cardValue.shape} color={cardValue.color} />
+                </div>
+            ) : finished ? (
+                <p>Cards displayed! Do you remember them?</p>
+            ) : (
+                <p>The Game is starting!</p>
+            )}
         </div>
     )
 }

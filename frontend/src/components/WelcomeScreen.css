@@ -1,10 +1,40 @@
+.welcome-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 100%;
+    background-color: #008;
+}
+
 .name {
-    color: aqua;
+    color: #CC0;
 }
 
 .user-button {
     padding: 6px 12px;
     margin: 6px;
+}
+
+.names-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-shrink: 1;
+    max-height: 60%;
+}
+
+.names-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100%;
+}
+
+.name-form {
+    min-height: 20%;
 }
 
 ul {

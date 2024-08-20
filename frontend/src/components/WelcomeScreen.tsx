@@ -20,11 +20,11 @@ const WelcomeScreen = ({ setNavState }: Props) => {
         setNavState(name)
     }
     return (
-        <div>
+        <div className="welcome-screen">
             <h3>Who are you?</h3>
-            <div>
+            <div className="names-list-container">
                 {userNames !== null ? (
-                    <ul>
+                    <ul className="names-list">
                         {userNames.map((name, index) => (
                             <li key={index}>
                                 <button
@@ -42,7 +42,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                     <p>Waiting...</p>
                 )}
             </div>
-            <form onSubmit={handleAddName}>
+            <form className="name-form" onSubmit={handleAddName}>
                 <input
                     type="text"
                     value={newUserName}

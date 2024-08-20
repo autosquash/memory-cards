@@ -1,7 +1,16 @@
 .game-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     overflow: hidden;
+    height: 100%;
 }
 
 .card-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
     color: yellow;
 }
