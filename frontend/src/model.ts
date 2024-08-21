@@ -19,6 +19,10 @@ const createCard = (shape: Shape, color: Color): CardData => ({
     shape,
 })
 
+const equalCards = (card1: CardData, card2: CardData): boolean => {
+    return card1.color === card2.color && card1.shape === card2.shape
+}
+
 const createValidSequence = (n: number): CardData[] => {
     const generatedSequence: CardData[] = []
     while (generatedSequence.length < n) {
@@ -26,10 +30,7 @@ const createValidSequence = (n: number): CardData[] => {
             cardsData[Math.floor(Math.random() * cardsData.length)]
         if (generatedSequence.length) {
             const last = generatedSequence[generatedSequence.length - 1]
-            if (
-                newCardData.color === last.color &&
-                newCardData.shape === last.shape
-            ) {
+            if (equalCards(newCardData, last)) {
                 continue
             }
         }
@@ -45,12 +46,7 @@ const getResult = (
     userSequence: ReadonlyArray<CardData>
 ) => {
     for (let i = 0; i < numberOfCardsToGuess; i++) {
-        const correct = sequence[i]
-        const userChoice = userSequence[i]
-        if (
-            correct.shape !== userChoice.shape ||
-            correct.color !== userChoice.color
-        ) {
+        if (!equalCards(sequence[i], userSequence[i])) {
             return false
         }
     }
