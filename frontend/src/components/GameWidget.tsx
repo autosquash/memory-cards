@@ -5,95 +5,143 @@ import Card from './Card'
 import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
+// TODO: disallow start button when the game is on
+type Status =
+    | 'initial'
+    | 'showing-cards'
+    | 'pause-before-answering'
+    | 'answering'
+    | 'showing-results'
+
+type TimerType = 'interval' | 'timeout'
+
+const debug = false
+const log = (text: string) => debug && console.log(Date.now() + ' ' + text)
 const GameWidget = () => {
-    const intervalIdRef = useRef<number | null>(null)
+    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are checked
+    const [status, setStatus] = useState<Status>('initial')
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
-    const [answering, setAnswering] = useState(false)
     const [userSequence, setUserSequence] = useState<CardData[]>([])
     const [win, setWin] = useState<boolean | null>(null)
 
-    const started = currentStep !== null
-    const showingSequence =
-        sequence.length && started && currentStep < sequence.length
-    const cardValue = showingSequence ? sequence[currentStep] : null
-
-    const finished = currentStep !== null && currentStep >= sequence.length
     useEffect(() => {
-        if (finished) {
-            clearTimer()
-            return
-        }
-
         setSequence(createValidSequence(numberOfCardsToGuess))
+        checkRefIsEmpty(intervalIdRef)
         // Display the cards sequentially
-        checkRefIsNotNull(intervalIdRef)
-        intervalIdRef.current = setInterval(() => {
-            setCurrentStep((step) => (step === null ? 0 : step + 1))
-        }, 2000)
-
-        return clearTimer
-    }, [finished])
-
-    useEffect(() => {
-        const shouldAnswer = finished && !answering && win === null
-        if (!shouldAnswer) {
-            return
-        }
-        checkRefIsNotNull(intervalIdRef)
-        intervalIdRef.current = setInterval(() => {
-            setAnswering(true)
-            clearTimer()
-        }, 2000)
-
-        return clearTimer
-    }, [finished, answering, win])
-
-    const clearTimer = () => {
-        if (intervalIdRef.current !== null) {
-            clearInterval(intervalIdRef.current)
-            intervalIdRef.current = null
-        }
-    }
+        intervalIdRef.current = [
+            setInterval(() => {
+                console.log('inside first interwal')
+                setStatus('showing-cards')
+                setCurrentStep(0)
+                clearTimers('showing cards')
+            }, 2000),
+            'interval',
+        ]
+        return () => clearTimers('clean useEffect 1')
+    }, [])
 
     useEffect(() => {
-        if (userSequence.length === numberOfCardsToGuess) {
-            setAnswering(false)
+        if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
+            clearTimers('end showing cards')
+            setCurrentStep(null)
+            setStatus('pause-before-answering')
+        } else if (currentStep !== null && !intervalIdRef.current) {
+            log('setting step interval')
+            intervalIdRef.current = [
+                setInterval(() => {
+                    log(' incrementing step')
+                    setCurrentStep((step) => (step === null ? 0 : step + 1))
+                }, 2000),
+                'interval',
+            ]
+        }
+        return () => clearTimers('clean useEffect currentStep')
+    }, [currentStep])
+
+    useEffect(() => {
+        if (
+            status === 'pause-before-answering' &&
+            intervalIdRef.current === null
+        ) {
+            intervalIdRef.current = [
+                setInterval(() => {
+                    setStatus('answering')
+                }, 2000),
+                'interval',
+            ]
+        } else if (status === 'showing-results') {
+            checkRefIsEmpty(intervalIdRef)
+        }
+        return () => clearTimers('clean useEffect status')
+    }, [status])
+
+    useEffect(() => {
+        console.log('entering useEffect 2 with status ' + status)
+        if (
+            status === 'answering' &&
+            userSequence.length === numberOfCardsToGuess
+        ) {
+            clearTimers('time to answering')
+            setStatus('showing-results')
             const result = getResult(sequence, userSequence)
             setWin(result)
         }
-    }, [sequence, userSequence])
+    }, [currentStep, status, sequence, userSequence])
+
+    const clearTimers = (reason: string) => {
+        if (intervalIdRef.current) {
+            const [id, type] = intervalIdRef.current
+            if (type === 'interval') {
+                console.log('deleting interval ' + id + ' by reason: ' + reason)
+                clearInterval(id)
+                intervalIdRef.current = null
+            }
+        }
+    }
+
+    const cardValue =
+        status === 'showing-cards' && currentStep !== null
+            ? sequence[currentStep]
+            : null
 
     return (
         <div className="game-screen">
-            {cardValue ? (
-                <div className="card-display">
-                    <Card shape={cardValue.shape} color={cardValue.color} />
-                </div>
-            ) : finished ? (
-                answering ? (
+            {debug && (
+                <p>
+                    {status} {currentStep}
+                </p>
+            )}
+            <>
+                {status === 'initial' ? (
+                    <p>The Game is starting!</p>
+                ) : status === 'showing-cards' && cardValue ? (
+                    <div className="card-display">
+                        <Card shape={cardValue.shape} color={cardValue.color} />
+                    </div>
+                ) : status === 'pause-before-answering' ? (
+                    <p>Cards displayed! Do you remember them?</p>
+                ) : status === 'answering' ? (
                     <CardsToClick
                         addCard={(cardData) => {
                             setUserSequence([...userSequence, cardData])
                         }}
                     />
-                ) : win === null ? (
-                    <p>Cards displayed! Do you remember them?</p>
-                ) : win === true ? (
-                    'You win!'
                 ) : (
-                    "You've lost"
-                )
-            ) : (
-                <p>The Game is starting!</p>
-            )}
+                    status === 'showing-results' &&
+                    (win === true ? 'You win!' : "You've lost")
+                )}
+            </>
         </div>
     )
 }
 
-const checkRefIsNotNull = (ref: React.MutableRefObject<number | null>) => {
-    if (ref.current !== null) {
-        console.error('there is still a previous timer')
+const checkRefIsEmpty = (
+    ref: React.MutableRefObject<[number, TimerType] | null>
+) => {
+    if (ref.current) {
+        const [id, type] = ref.current
+        console.error(`there is still a previous ${type}: ${id}`)
     }
 }
 
