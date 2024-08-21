@@ -5,7 +5,6 @@ import Card from './Card'
 import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
-// TODO: disallow start button when the game is on
 type Status =
     | 'initial'
     | 'showing-cards'
@@ -15,9 +14,13 @@ type Status =
 
 type TimerType = 'interval' | 'timeout'
 
+interface Props {
+    setStartGameButtonEnabled: (value: boolean) => void
+}
+
 const debug = false
 const log = (text: string) => debug && console.log(Date.now() + ' ' + text)
-const GameWidget = () => {
+const GameWidget = ({ setStartGameButtonEnabled }: Props) => {
     const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are checked
     const [status, setStatus] = useState<Status>('initial')
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
@@ -84,10 +87,11 @@ const GameWidget = () => {
         ) {
             clearTimers('time to answering')
             setStatus('showing-results')
+            setStartGameButtonEnabled(true)
             const result = getResult(sequence, userSequence)
             setWin(result)
         }
-    }, [currentStep, status, sequence, userSequence])
+    }, [currentStep, status, sequence, userSequence, setStartGameButtonEnabled])
 
     const clearTimers = (reason: string) => {
         if (intervalIdRef.current) {
