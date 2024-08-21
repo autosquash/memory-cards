@@ -21,7 +21,10 @@ const useGame = (onGameFinished: () => void) => {
     const [win, setWin] = useState<boolean | null>(null)
 
     const addInterval = (callback: () => void, delay: number) => {
-        intervalIdRef.current = [setInterval(callback, delay), 'interval']
+        intervalIdRef.current = [
+            window.setInterval(callback, delay),
+            'interval',
+        ]
     }
 
     useEffect(() => {
