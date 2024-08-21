@@ -18,8 +18,6 @@ interface Props {
     enableStartGameButton: () => void
 }
 
-const debug = false
-const log = (text: string) => debug && console.log(Date.now() + ' ' + text)
 const GameWidget = ({
     enableStartGameButton: enableStartGameButton,
 }: Props) => {
@@ -41,26 +39,24 @@ const GameWidget = ({
         addInterval(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
-            clearTimers('showing cards')
+            clearTimers()
         }, 2000)
-        return () => clearTimers('clean useEffect 1')
+        return clearTimers
     }, [])
 
     useEffect(() => {
         if (currentStep !== null) {
             if (currentStep >= numberOfCardsToGuess) {
-                clearTimers('end showing cards')
+                clearTimers()
                 setCurrentStep(null)
                 setStatus('pause-before-answering')
             } else if (!intervalIdRef.current) {
-                log('setting step interval')
                 addInterval(() => {
-                    log('incrementing step')
                     setCurrentStep((step) => (step === null ? 0 : step + 1))
                 }, 2000)
             }
         }
-        return () => clearTimers('clean useEffect currentStep')
+        return clearTimers
     }, [currentStep])
 
     useEffect(() => {
@@ -70,16 +66,15 @@ const GameWidget = ({
         ) {
             addInterval(() => {
                 setStatus('answering')
-                clearTimers('time to answer')
+                clearTimers()
             }, 2000)
         } else if (status === 'showing-results') {
             checkRefIsEmpty(intervalIdRef)
         }
-        return () => clearTimers('clean useEffect status')
+        return clearTimers
     }, [status])
 
     useEffect(() => {
-        console.log('entering useEffect 2 with status ' + status)
         if (
             status === 'answering' &&
             userSequence.length === numberOfCardsToGuess
@@ -92,11 +87,10 @@ const GameWidget = ({
         }
     }, [currentStep, status, sequence, userSequence, enableStartGameButton])
 
-    const clearTimers = (reason: string) => {
+    const clearTimers = () => {
         if (intervalIdRef.current) {
             const [id, type] = intervalIdRef.current
             if (type === 'interval') {
-                console.log('deleting interval ' + id + ' by reason: ' + reason)
                 clearInterval(id)
                 intervalIdRef.current = null
             }
@@ -110,11 +104,6 @@ const GameWidget = ({
 
     return (
         <div className="game-screen">
-            {debug && (
-                <p>
-                    {status} {currentStep}
-                </p>
-            )}
             <>
                 {status === 'initial' ? (
                     <p>The Game is starting!</p>
