@@ -4,12 +4,11 @@ import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
 interface Props {
-    enableStartGameButton: () => void
+    onGameFinished: () => void
 }
 
-const GameWidget = ({ enableStartGameButton }: Props) => {
-    const handleGameFinished = enableStartGameButton
-    const { status, win, cardValue, addCard } = useGame(handleGameFinished)
+const GameWidget = ({ onGameFinished }: Props) => {
+    const { status, win, cardValue, addCard } = useGame(onGameFinished)
 
     return (
         <div className="game-screen">
