@@ -15,12 +15,14 @@ type Status =
 type TimerType = 'interval' | 'timeout'
 
 interface Props {
-    setStartGameButtonEnabled: (value: boolean) => void
+    enableStartGameButton: () => void
 }
 
 const debug = false
 const log = (text: string) => debug && console.log(Date.now() + ' ' + text)
-const GameWidget = ({ setStartGameButtonEnabled }: Props) => {
+const GameWidget = ({
+    enableStartGameButton: enableStartGameButton,
+}: Props) => {
     const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are checked
     const [status, setStatus] = useState<Status>('initial')
     const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
@@ -87,11 +89,11 @@ const GameWidget = ({ setStartGameButtonEnabled }: Props) => {
         ) {
             clearTimers('time to answering')
             setStatus('showing-results')
-            setStartGameButtonEnabled(true)
+            enableStartGameButton()
             const result = getResult(sequence, userSequence)
             setWin(result)
         }
-    }, [currentStep, status, sequence, userSequence, setStartGameButtonEnabled])
+    }, [currentStep, status, sequence, userSequence, enableStartGameButton])
 
     const clearTimers = (reason: string) => {
         if (intervalIdRef.current) {
