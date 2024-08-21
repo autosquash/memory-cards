@@ -30,19 +30,19 @@ const GameWidget = ({
     const [userSequence, setUserSequence] = useState<CardData[]>([])
     const [win, setWin] = useState<boolean | null>(null)
 
+    const addInterval = (callback: () => void, delay: number) => {
+        intervalIdRef.current = [setInterval(callback, delay), 'interval']
+    }
+
     useEffect(() => {
         setSequence(createValidSequence(numberOfCardsToGuess))
         checkRefIsEmpty(intervalIdRef)
         // Display the cards sequentially
-        intervalIdRef.current = [
-            setInterval(() => {
-                console.log('inside first interwal')
-                setStatus('showing-cards')
-                setCurrentStep(0)
-                clearTimers('showing cards')
-            }, 2000),
-            'interval',
-        ]
+        addInterval(() => {
+            setStatus('showing-cards')
+            setCurrentStep(0)
+            clearTimers('showing cards')
+        }, 2000)
         return () => clearTimers('clean useEffect 1')
     }, [])
 
@@ -53,13 +53,10 @@ const GameWidget = ({
             setStatus('pause-before-answering')
         } else if (currentStep !== null && !intervalIdRef.current) {
             log('setting step interval')
-            intervalIdRef.current = [
-                setInterval(() => {
-                    log(' incrementing step')
-                    setCurrentStep((step) => (step === null ? 0 : step + 1))
-                }, 2000),
-                'interval',
-            ]
+            addInterval(() => {
+                log(' incrementing step')
+                setCurrentStep((step) => (step === null ? 0 : step + 1))
+            }, 2000)
         }
         return () => clearTimers('clean useEffect currentStep')
     }, [currentStep])
@@ -69,12 +66,9 @@ const GameWidget = ({
             status === 'pause-before-answering' &&
             intervalIdRef.current === null
         ) {
-            intervalIdRef.current = [
-                setInterval(() => {
-                    setStatus('answering')
-                }, 2000),
-                'interval',
-            ]
+            addInterval(() => {
+                setStatus('answering')
+            }, 2000)
         } else if (status === 'showing-results') {
             checkRefIsEmpty(intervalIdRef)
         }
