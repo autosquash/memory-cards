@@ -21,9 +21,9 @@ interface Props {
 const GameWidget = ({
     enableStartGameButton: enableStartGameButton,
 }: Props) => {
-    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are checked
+    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
+    const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
     const [status, setStatus] = useState<Status>('initial')
-    const [sequence, setSequence] = useState<ReadonlyArray<CardData>>([])
     const [currentStep, setCurrentStep] = useState<number | null>(null)
     const [userSequence, setUserSequence] = useState<CardData[]>([])
     const [win, setWin] = useState<boolean | null>(null)
@@ -33,7 +33,7 @@ const GameWidget = ({
     }
 
     useEffect(() => {
-        setSequence(createValidSequence(numberOfCardsToGuess))
+        sequenceRef.current = createValidSequence(numberOfCardsToGuess)
         checkRefIsEmpty(intervalIdRef)
         // Display the cards sequentially
         addInterval(() => {
@@ -82,10 +82,10 @@ const GameWidget = ({
             checkRefIsEmpty(intervalIdRef)
             setStatus('showing-results')
             enableStartGameButton()
-            const result = getResult(sequence, userSequence)
+            const result = getResult(sequenceRef.current!, userSequence)
             setWin(result)
         }
-    }, [currentStep, status, sequence, userSequence, enableStartGameButton])
+    }, [currentStep, status, userSequence, enableStartGameButton])
 
     const clearTimers = () => {
         if (intervalIdRef.current) {
@@ -99,7 +99,7 @@ const GameWidget = ({
 
     const cardValue =
         status === 'showing-cards' && currentStep !== null
-            ? sequence[currentStep]
+            ? sequenceRef.current![currentStep]
             : null
 
     return (
