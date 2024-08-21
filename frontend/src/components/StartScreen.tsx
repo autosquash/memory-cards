@@ -13,14 +13,14 @@ const StartScreen = ({ userName, setNavState }: Props) => {
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
-    const enableStartGameButton = () => setStartGameButtonEnabled(true)
+    const handleGameFinished = () => setStartGameButtonEnabled(true)
     return (
         <div className="start-screen">
             <div className="main-game">
                 {playing ? (
                     <GameWidget
                         key={gameIndex}
-                        enableStartGameButton={enableStartGameButton}
+                        onGameFinished={handleGameFinished}
                     />
                 ) : (
                     <p>Click 'Start Game' when you are ready</p>
