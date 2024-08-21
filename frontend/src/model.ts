@@ -14,6 +14,11 @@ const buildCardsData = () => {
 
 const cardsData: ReadonlyArray<CardData> = buildCardsData()
 
+const createCard = (shape: Shape, color: Color): CardData => ({
+    color,
+    shape,
+})
+
 const createValidSequence = (n: number): CardData[] => {
     const generatedSequence: CardData[] = []
     while (generatedSequence.length < n) {
@@ -52,4 +57,10 @@ const getResult = (
     return true
 }
 
-export { cardsData, createValidSequence, getResult, numberOfCardsToGuess }
+export {
+    cardsData,
+    createCard,
+    createValidSequence,
+    getResult,
+    numberOfCardsToGuess,
+}
