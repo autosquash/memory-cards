@@ -12,11 +12,15 @@ interface Props {
 const StartScreen = ({ userName, setNavState }: Props) => {
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
+    const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
     return (
         <div className="start-screen">
             <div className="main-game">
                 {playing ? (
-                    <GameWidget key={gameIndex} />
+                    <GameWidget
+                        key={gameIndex}
+                        setStartGameButtonEnabled={setStartGameButtonEnabled}
+                    />
                 ) : (
                     <p>Click 'Start Game' when you are ready</p>
                 )}
@@ -28,7 +32,9 @@ const StartScreen = ({ userName, setNavState }: Props) => {
                     onClick={() => {
                         setGameIndex(gameIndex + 1)
                         setPlaying(true)
+                        setStartGameButtonEnabled(false)
                     }}
+                    disabled={!startGameButtonEnabled}
                 >
                     Start Game
                 </button>
