@@ -89,10 +89,15 @@ const useGame = (onGameFinished: () => void) => {
         }
     }
 
-    const cardValue =
-        status === 'showing-cards' && currentStep !== null
-            ? sequenceRef.current![currentStep]
-            : null
+    let cardValue = null
+    if (status === 'showing-cards') {
+        if (currentStep === null) {
+            console.error('invalid value')
+            throw new Error('invalid value')
+        }
+        cardValue = sequenceRef.current![currentStep]
+    }
+
     const addCard = (cardData: CardData) => {
         setUserSequence([...userSequence, cardData])
     }
