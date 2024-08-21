@@ -47,16 +47,18 @@ const GameWidget = ({
     }, [])
 
     useEffect(() => {
-        if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
-            clearTimers('end showing cards')
-            setCurrentStep(null)
-            setStatus('pause-before-answering')
-        } else if (currentStep !== null && !intervalIdRef.current) {
-            log('setting step interval')
-            addInterval(() => {
-                log(' incrementing step')
-                setCurrentStep((step) => (step === null ? 0 : step + 1))
-            }, 2000)
+        if (currentStep !== null) {
+            if (currentStep >= numberOfCardsToGuess) {
+                clearTimers('end showing cards')
+                setCurrentStep(null)
+                setStatus('pause-before-answering')
+            } else if (!intervalIdRef.current) {
+                log('setting step interval')
+                addInterval(() => {
+                    log('incrementing step')
+                    setCurrentStep((step) => (step === null ? 0 : step + 1))
+                }, 2000)
+            }
         }
         return () => clearTimers('clean useEffect currentStep')
     }, [currentStep])
@@ -68,6 +70,7 @@ const GameWidget = ({
         ) {
             addInterval(() => {
                 setStatus('answering')
+                clearTimers('time to answer')
             }, 2000)
         } else if (status === 'showing-results') {
             checkRefIsEmpty(intervalIdRef)
@@ -81,7 +84,7 @@ const GameWidget = ({
             status === 'answering' &&
             userSequence.length === numberOfCardsToGuess
         ) {
-            clearTimers('time to answering')
+            checkRefIsEmpty(intervalIdRef)
             setStatus('showing-results')
             enableStartGameButton()
             const result = getResult(sequence, userSequence)
