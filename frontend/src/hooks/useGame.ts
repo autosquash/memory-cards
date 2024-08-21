@@ -11,7 +11,13 @@ type Status =
 
 type TimerType = 'interval' | 'timeout'
 
-const useGame = (onGameFinished: () => void) => {
+const pauseBeforeFirstCard = 2500
+const pauseBetweenCards = 2000
+
+const useGame = (
+    onGameFinished: () => void,
+    sequence: CardData[] | null = null
+) => {
     const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
     const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
 
@@ -28,16 +34,22 @@ const useGame = (onGameFinished: () => void) => {
     }
 
     useEffect(() => {
-        sequenceRef.current = createValidSequence(numberOfCardsToGuess)
+        if (!sequenceRef.current) {
+            sequenceRef.current =
+                sequence === null
+                    ? createValidSequence(numberOfCardsToGuess)
+                    : sequence
+        }
+
         checkRefIsEmpty(intervalIdRef)
         // Display the cards sequentially
         addInterval(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
             clearTimers()
-        }, 2000)
+        }, pauseBeforeFirstCard)
         return clearTimers
-    }, [])
+    }, [sequence])
 
     useEffect(() => {
         if (currentStep !== null) {
@@ -54,7 +66,7 @@ const useGame = (onGameFinished: () => void) => {
                         }
                         return step + 1
                     })
-                }, 2000)
+                }, pauseBetweenCards)
             }
         }
         return clearTimers
@@ -123,3 +135,4 @@ const checkRefIsEmpty = (
 }
 
 export default useGame
+export { pauseBeforeFirstCard, pauseBetweenCards }
