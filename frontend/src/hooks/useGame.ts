@@ -44,7 +44,13 @@ const useGame = (onGameFinished: () => void) => {
                 setStatus('pause-before-answering')
             } else if (!intervalIdRef.current) {
                 addInterval(() => {
-                    setCurrentStep((step) => (step === null ? 0 : step + 1))
+                    setCurrentStep((step) => {
+                        if (step === null) {
+                            console.error('invalid value')
+                            return null
+                        }
+                        return step + 1
+                    })
                 }, 2000)
             }
         }
