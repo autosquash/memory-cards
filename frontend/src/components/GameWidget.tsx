@@ -8,7 +8,8 @@ interface Props {
 }
 
 const GameWidget = ({ onGameFinished }: Props) => {
-    const { status, win, cardValue, addCard } = useGame(onGameFinished)
+    const { status, win, cardValue, sequence, userSequence, addCard } =
+        useGame(onGameFinished)
 
     return (
         <div className="game-screen">
@@ -26,8 +27,43 @@ const GameWidget = ({ onGameFinished }: Props) => {
                         <CardsToClick addCard={addCard} />
                     </div>
                 ) : (
-                    status === 'showing-results' &&
-                    (win === true ? 'You win!' : "You've lost")
+                    status === 'showing-results' && (
+                        <h2>{win === true ? 'You win!' : "You've lost"}</h2>
+                    )
+                )}
+                {['answering', 'showing-results'].includes(status) && (
+                    <>
+                        <p>Your sequence:</p>{' '}
+                        <div className="GameWidget_sequence">
+                            {userSequence.map((cardData) => {
+                                return (
+                                    <Card
+                                        color={cardData.color}
+                                        shape={cardData.shape}
+                                        scale={0.4}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </>
+                )}
+                {status === 'showing-results' && (
+                    <>
+                        {' '}
+                        <p>Actual sequence:</p>
+                        <div className="GameWidget_sequence">
+                            {sequence &&
+                                sequence.map((cardData) => {
+                                    return (
+                                        <Card
+                                            color={cardData.color}
+                                            shape={cardData.shape}
+                                            scale={0.4}
+                                        />
+                                    )
+                                })}
+                        </div>
+                    </>
                 )}
             </>
         </div>

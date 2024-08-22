@@ -21,3 +21,12 @@
     justify-content: center;
     align-items: center;
 }
+
+.GameWidget_sequence {
+    display: flex;
+    justify-content: center;
+}
+
+.GameWidget_sequence>* {
+    margin: 6px;
+}

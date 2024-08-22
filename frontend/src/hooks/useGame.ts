@@ -123,7 +123,14 @@ const useGame = (
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
     }
-    return { status, win, cardValue, addCard }
+    return {
+        status,
+        win,
+        cardValue,
+        sequence: sequenceRef.current,
+        userSequence,
+        addCard,
+    }
 }
 
 const checkRefIsEmpty = (
