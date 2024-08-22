@@ -1,10 +1,15 @@
 import { useState } from 'react'
+import Settings from '../components/Settings'
 import './Demo.css'
 import DemoCard from './DemoCard'
 import DemoCardsToClick from './DemoCardsToClick'
 import DemoHome from './DemoHome'
 
-type SelectOption = 'demo-home' | 'demo-card' | 'demo-cards-to-click'
+type SelectOption =
+    | 'demo-home'
+    | 'demo-card'
+    | 'demo-cards-to-click'
+    | 'settings'
 
 const Demo = () => {
     const [demoName, setDemoName] = useState<SelectOption>('demo-home')
@@ -22,6 +27,7 @@ const Demo = () => {
                 </option>
                 <option value="demo-card">Demo Card</option>
                 <option value="demo-cards-to-click">Demo CardsToClick</option>
+                <option value="settings">Settings</option>
             </select>
             <div className="demo">
                 {(() => {
@@ -32,6 +38,8 @@ const Demo = () => {
                             return <DemoCard />
                         case 'demo-cards-to-click':
                             return <DemoCardsToClick />
+                        case 'settings':
+                            return <Settings />
                         default:
                             return <p>Unknown option</p>
                     }
