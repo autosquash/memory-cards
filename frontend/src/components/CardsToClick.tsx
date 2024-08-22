@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cardsData } from '../model'
 import { CardData } from '../types'
 import './CardsToClick.css'
@@ -15,7 +16,15 @@ function toTitleCase(str: string) {
 }
 
 const CardsToClick = ({ addCard }: Props) => {
+    const { i18n, t } = useTranslation()
     const [hovered, setHovered] = useState<number | null>(null)
+
+    const getFullName = (cardData: CardData) =>
+        i18n.language === 'en'
+            ? toTitleCase(cardData.color) + ' ' + toTitleCase(cardData.shape)
+            : toTitleCase(t(cardData.shape)) +
+              ' ' +
+              toTitleCase(t(cardData.color))
     return (
         <>
             <div className="cards">
@@ -30,10 +39,7 @@ const CardsToClick = ({ addCard }: Props) => {
                         onMouseEnter={() => setHovered(index)}
                         onMouseLeave={() => setHovered(null)}
                     >
-                        <span>
-                            {toTitleCase(cardData.color)}{' '}
-                            {toTitleCase(cardData.shape)}
-                        </span>
+                        <span>{getFullName(cardData)}</span>
                     </div>
                 ))}
             </div>

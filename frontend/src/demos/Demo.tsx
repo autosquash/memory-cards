@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Settings from '../components/Settings'
 import './Demo.css'
 import DemoCard from './DemoCard'
@@ -12,7 +13,8 @@ type SelectOption =
     | 'settings'
 
 const Demo = () => {
-    const [demoName, setDemoName] = useState<SelectOption>('demo-home')
+    const { t } = useTranslation()
+    const [demoName, setDemoName] = useState<SelectOption>('settings')
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
         setDemoName(e.target.value as SelectOption)
     return (
@@ -22,12 +24,10 @@ const Demo = () => {
                 value={demoName}
                 onChange={handleSelectChange}
             >
-                <option value="demo-home" selected>
-                    Demos
-                </option>
+                <option value="demo-home">Demos</option>
                 <option value="demo-card">Demo Card</option>
                 <option value="demo-cards-to-click">Demo CardsToClick</option>
-                <option value="settings">Settings</option>
+                <option value="settings">{t('Settings')}</option>
             </select>
             <div className="demo">
                 {(() => {
@@ -41,7 +41,7 @@ const Demo = () => {
                         case 'settings':
                             return <Settings />
                         default:
-                            return <p>Unknown option</p>
+                            return <p>{t('Unknown option')}</p>
                     }
                 })()}
             </div>

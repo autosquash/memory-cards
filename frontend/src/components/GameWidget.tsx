@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import useGame from '../hooks/useGame'
 import Card from './Card'
 import CardSequence from './CardSequence'
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const GameWidget = ({ onGameFinished }: Props) => {
+    const { t } = useTranslation()
     const { status, win, cardValue, sequence, userSequence, addCard } =
         useGame(onGameFinished)
 
@@ -16,25 +18,25 @@ const GameWidget = ({ onGameFinished }: Props) => {
         <div className="game-screen">
             <>
                 {status === 'initial' ? (
-                    <p>The Game is starting!</p>
+                    <p>{t('Game starting')}</p>
                 ) : status === 'showing-cards' && cardValue ? (
                     <div className="card-display">
                         <Card shape={cardValue.shape} color={cardValue.color} />
                     </div>
                 ) : status === 'pause-before-answering' ? (
-                    <p>Cards displayed! Do you remember them?</p>
+                    <p>{t('Cards displayed')}</p>
                 ) : status === 'answering' ? (
                     <div className="GameWidget_container">
                         <CardsToClick addCard={addCard} />
                     </div>
                 ) : (
                     status === 'showing-results' && (
-                        <h2>{win === true ? 'You win!' : "You've lost"}</h2>
+                        <h2>{win === true ? t('win') : t('lost')}</h2>
                     )
                 )}
                 {['answering', 'showing-results'].includes(status) && (
                     <>
-                        <p>Your sequence:</p>{' '}
+                        <p>{t('Your sequence')}</p>{' '}
                         <div className="CardSequence_sequence">
                             <CardSequence sequence={userSequence} scale={0.4} />
                         </div>
@@ -42,7 +44,7 @@ const GameWidget = ({ onGameFinished }: Props) => {
                 )}
                 {status === 'showing-results' && (
                     <>
-                        <p>Actual sequence:</p>
+                        <p>{t('Actual sequence')}</p>
                         <div className="CardSequence_sequence">
                             {sequence && (
                                 <CardSequence sequence={sequence} scale={0.4} />
