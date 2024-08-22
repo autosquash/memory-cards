@@ -1,9 +1,12 @@
 import { act, renderHook } from '@testing-library/react'
 import useGame, {
+    pauseBeforeAnswering,
     pauseBeforeFirstCard,
     pauseBetweenCards,
 } from '../hooks/useGame'
-import { numberOfCardsToGuess } from '../model'
+import { createCard, numberOfCardsToGuess } from '../model'
+import { CardData } from '../types'
+import { sequenceData } from './examples'
 
 jest.useFakeTimers()
 
@@ -17,9 +20,8 @@ describe('useGame initial', () => {
         expect(win).toBe(null)
     })
     it('should return the next values', async () => {
-        const { result, rerender } = renderHook(() => useGame(() => {}))
+        const { result } = renderHook(() => useGame(() => {}))
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-        rerender()
 
         let { status, cardValue, win } = result.current
 
@@ -30,10 +32,35 @@ describe('useGame initial', () => {
         act(() =>
             jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
         )
-        rerender()
         ;({ status, cardValue, win } = result.current)
         expect(status).toBe('pause-before-answering')
         expect(cardValue).toBe(null)
         expect(win).toBe(null)
+    })
+    it('should update win', async () => {
+        const sequence = sequenceData.map(([shape, color]) =>
+            createCard(shape, color)
+        )
+        const { result } = renderHook(() => useGame(() => {}, sequence))
+
+        act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
+        act(() =>
+            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
+        )
+        act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
+
+        let { status, cardValue, win, addCard } = result.current
+        expect(status).toBe('answering')
+        expect(cardValue).toBe(null)
+        expect(win).toBe(null)
+
+        act(() => {
+            addCard(sequence[0])
+            addCard(sequence[1])
+            addCard(sequence[2])
+        })
+        ;({ status, cardValue, win, addCard } = result.current)
+        expect(status).toBe('showing-results')
+        expect(win).toBe(true)
     })
 })

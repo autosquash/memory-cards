@@ -13,6 +13,7 @@ type TimerType = 'interval' | 'timeout'
 
 const pauseBeforeFirstCard = 2500
 const pauseBetweenCards = 2000
+const pauseBeforeAnswering = 1600
 
 const useGame = (
     onGameFinished: () => void,
@@ -80,7 +81,7 @@ const useGame = (
             addInterval(() => {
                 setStatus('answering')
                 clearTimers()
-            }, 2000)
+            }, pauseBeforeAnswering)
         } else if (status === 'showing-results') {
             checkRefIsEmpty(intervalIdRef)
         }
@@ -120,7 +121,7 @@ const useGame = (
     }
 
     const addCard = (cardData: CardData) => {
-        setUserSequence([...userSequence, cardData])
+        setUserSequence((userSequence) => [...userSequence, cardData])
     }
     return { status, win, cardValue, addCard }
 }
@@ -135,4 +136,4 @@ const checkRefIsEmpty = (
 }
 
 export default useGame
-export { pauseBeforeFirstCard, pauseBetweenCards }
+export { pauseBeforeAnswering, pauseBeforeFirstCard, pauseBetweenCards }
