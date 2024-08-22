@@ -10,8 +10,8 @@ import { sequenceData } from './examples'
 
 jest.useFakeTimers()
 
-describe('useGame initial', () => {
-    it('should return the initial values', async () => {
+describe('useGame', () => {
+    it('should start with the initial status', () => {
         const { result } = renderHook(() => useGame(() => {}))
         const { status, cardValue, win } = result.current
 
@@ -19,7 +19,7 @@ describe('useGame initial', () => {
         expect(cardValue).toBe(null)
         expect(win).toBe(null)
     })
-    it('should return the next values', async () => {
+    it('should change status when time passes', () => {
         const { result } = renderHook(() => useGame(() => {}))
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
 
@@ -36,31 +36,56 @@ describe('useGame initial', () => {
         expect(status).toBe('pause-before-answering')
         expect(cardValue).toBe(null)
         expect(win).toBe(null)
-    })
-    it('should update win', async () => {
-        const sequence = sequenceData.map(([shape, color]) =>
-            createCard(shape, color)
-        )
-        const { result } = renderHook(() => useGame(() => {}, sequence))
 
-        act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-        act(() =>
-            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
-        )
         act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
-
-        let { status, cardValue, win, addCard } = result.current
+        ;({ status, cardValue, win } = result.current)
         expect(status).toBe('answering')
         expect(cardValue).toBe(null)
         expect(win).toBe(null)
+    })
+    describe('should get right result', () => {
+        let result: { current: ReturnType<typeof useGame> }
+        let sequence: CardData[]
+        beforeEach(() => {
+            // create the sequence
+            sequence = sequenceData.map(([shape, color]) =>
+                createCard(shape, color)
+            )
+            // render the hook
+            ;({ result } = renderHook(() => useGame(() => {}, sequence)))
 
-        act(() => {
-            addCard(sequence[0])
-            addCard(sequence[1])
-            addCard(sequence[2])
+            // forward time
+            act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
+            act(() =>
+                jest.advanceTimersByTime(
+                    pauseBetweenCards * numberOfCardsToGuess
+                )
+            )
+            act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
         })
-        ;({ status, cardValue, win, addCard } = result.current)
-        expect(status).toBe('showing-results')
-        expect(win).toBe(true)
+
+        it('wins', () => {
+            const { addCard } = result.current
+            act(() => {
+                addCard(sequence[0])
+                addCard(sequence[1])
+                addCard(sequence[2])
+            })
+            const { status, win } = result.current
+            expect(status).toBe('showing-results')
+            expect(win).toBe(true)
+        })
+        it('losses', () => {
+            const { addCard } = result.current
+
+            act(() => {
+                addCard(sequence[0])
+                addCard(sequence[2]) // bad order
+                addCard(sequence[1])
+            })
+            const { status, win } = result.current
+            expect(status).toBe('showing-results')
+            expect(win).toBe(false)
+        })
     })
 })
