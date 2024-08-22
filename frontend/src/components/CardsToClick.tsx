@@ -13,7 +13,7 @@ const CardsToClick = ({ addCard }: Props) => {
                     key={cardData.shape + cardData.color}
                     onClick={() => addCard(cardData)}
                 >
-                    {cardData.shape} {cardData.color}
+                    {cardData.color} {cardData.shape}
                 </div>
             ))}
         </div>
