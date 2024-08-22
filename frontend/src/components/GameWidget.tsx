@@ -1,5 +1,6 @@
 import useGame from '../hooks/useGame'
 import Card from './Card'
+import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
@@ -34,34 +35,18 @@ const GameWidget = ({ onGameFinished }: Props) => {
                 {['answering', 'showing-results'].includes(status) && (
                     <>
                         <p>Your sequence:</p>{' '}
-                        <div className="GameWidget_sequence">
-                            {userSequence.map((cardData) => {
-                                return (
-                                    <Card
-                                        color={cardData.color}
-                                        shape={cardData.shape}
-                                        scale={0.4}
-                                    />
-                                )
-                            })}
+                        <div className="CardSequence_sequence">
+                            <CardSequence sequence={userSequence} scale={0.4} />
                         </div>
                     </>
                 )}
                 {status === 'showing-results' && (
                     <>
-                        {' '}
                         <p>Actual sequence:</p>
-                        <div className="GameWidget_sequence">
-                            {sequence &&
-                                sequence.map((cardData) => {
-                                    return (
-                                        <Card
-                                            color={cardData.color}
-                                            shape={cardData.shape}
-                                            scale={0.4}
-                                        />
-                                    )
-                                })}
+                        <div className="CardSequence_sequence">
+                            {sequence && (
+                                <CardSequence sequence={sequence} scale={0.4} />
+                            )}
                         </div>
                     </>
                 )}
