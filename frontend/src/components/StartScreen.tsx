@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { SetNavState } from '../types'
 import ExitButton from './ExitButton'
 import GameWidget from './GameWidget'
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const StartScreen = ({ userName, setNavState }: Props) => {
+    const { t } = useTranslation()
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
@@ -23,11 +25,13 @@ const StartScreen = ({ userName, setNavState }: Props) => {
                         onGameFinished={handleGameFinished}
                     />
                 ) : (
-                    <p>Click 'Start Game' when you are ready</p>
+                    <p>{t('Click Start Game')}</p>
                 )}
             </div>
             <div className="bottom-bar">
-                <p className="user-label">User: {userName}</p>
+                <p className="user-label">
+                    {t('User')} {userName}
+                </p>
                 <button
                     className="start-button"
                     onClick={() => {
@@ -37,7 +41,7 @@ const StartScreen = ({ userName, setNavState }: Props) => {
                     }}
                     disabled={!startGameButtonEnabled}
                 >
-                    Start Game
+                    {t('Start Game')}
                 </button>
                 <ExitButton setNavState={setNavState} />
             </div>

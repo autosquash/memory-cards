@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import useNames from '../hooks/useNames'
 import { SetNavState } from '../types'
 import './WelcomeScreen.css'
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const WelcomeScreen = ({ setNavState }: Props) => {
+    const { t } = useTranslation()
     const { userNames, newUserName, commitUser, setNewUserName } = useNames()
 
     const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
@@ -21,7 +23,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
     }
     return (
         <div className="welcome-screen">
-            <h3>Who are you?</h3>
+            <h3>{t('Who are you?')}</h3>
             <div className="names-list-container">
                 {userNames !== null ? (
                     <ul className="names-list">
@@ -39,7 +41,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                         ))}
                     </ul>
                 ) : (
-                    <p>Waiting...</p>
+                    <p>{t('Waiting...')}</p>
                 )}
             </div>
             <form className="name-form" onSubmit={handleAddName}>
@@ -47,9 +49,9 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                     type="text"
                     value={newUserName}
                     onChange={(e) => setNewUserName(e.target.value)}
-                    placeholder="Add a new user..."
+                    placeholder={t('Add a new user...')}
                 />
-                <button type="submit">Add new user</button>
+                <button type="submit">{t('Add new user')}</button>
             </form>
         </div>
     )

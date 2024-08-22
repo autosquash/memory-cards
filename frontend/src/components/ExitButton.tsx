@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { SetNavState } from '../types'
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
 }
 
 const ExitButton = ({ setNavState }: Props) => {
+    const { t } = useTranslation()
     return (
         <button
             className="exit-button"
@@ -12,7 +14,7 @@ const ExitButton = ({ setNavState }: Props) => {
                 setNavState(null)
             }}
         >
-            Exit
+            {t('Exit')}
         </button>
     )
 }
