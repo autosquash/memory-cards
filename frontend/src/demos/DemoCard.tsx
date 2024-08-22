@@ -7,7 +7,7 @@ const DemoCard = () => {
     return (
         <div>
             <h2>Demo Card</h2>
-            <div className="container">
+            <div className="DemoCard_container">
                 <Card shape="square" color="green" scale={cardSize} />
             </div>
 

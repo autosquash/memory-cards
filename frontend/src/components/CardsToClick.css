@@ -1,0 +1,17 @@
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.cards>div {
+    margin: 6px;
+    padding: 6px;
+    background-color: grey;
+    border: 1px solid black;
+    border-radius: 6px;
+    cursor: default;
+}
+
+.cards>div:hover {
+    background-color: #666;
+}
