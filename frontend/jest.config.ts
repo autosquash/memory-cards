@@ -10,4 +10,5 @@ export default {
         '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/__mocks__/fileMock.js',
         '\\.(css|less|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
     },
+    testMatch: ['**/__tests__/**/*.test.ts?(x)'],
 }
