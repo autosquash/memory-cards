@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Color, Shape } from '../types'
 interface Props {
     color: Color
     shape: Shape
+    scale?: number
 }
 
 type Position = [number, number]
 
-const Card = ({ shape, color }: Props) => {
+const Card = ({ shape, color, scale = 1 }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
@@ -53,15 +54,20 @@ const Card = ({ shape, color }: Props) => {
                 break
         }
     }, [shape, color])
+    const innerSquareSide = 130
+    const cardWidth = 130
+    const cardHeight = 150
+    const toPixels = (value: number) => `${value}px`
+    const scaled = (value: number) => toPixels(value * scale)
 
     return (
         <div
             style={{
-                borderRadius: '8px',
-                padding: '10px',
+                borderRadius: scaled(8),
+                padding: scaled(10),
                 backgroundColor: '#555',
-                width: '130px',
-                height: '150px',
+                width: scaled(cardWidth),
+                height: scaled(cardHeight),
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -72,8 +78,8 @@ const Card = ({ shape, color }: Props) => {
                 width="1300"
                 height="1300"
                 style={{
-                    width: '130px',
-                    height: '130px',
+                    width: scaled(innerSquareSide),
+                    height: scaled(innerSquareSide),
                 }}
             >
                 Canvas unsupported
