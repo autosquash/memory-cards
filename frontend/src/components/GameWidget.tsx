@@ -16,24 +16,37 @@ const GameWidget = ({ onGameFinished }: Props) => {
 
     return (
         <div className="game-screen">
+            {(() => {
+                switch (status) {
+                    case 'initial':
+                        return <p>{t('Game starting')}</p>
+                    case 'showing-cards':
+                        return (
+                            cardValue && (
+                                <div className="card-display">
+                                    <Card
+                                        shape={cardValue.shape}
+                                        color={cardValue.color}
+                                    />
+                                </div>
+                            )
+                        )
+                    case 'pause-before-answering':
+                        return <p>{t('Cards displayed')}</p>
+                    case 'answering':
+                        return (
+                            <div className="GameWidget_container">
+                                <CardsToClick addCard={addCard} />
+                            </div>
+                        )
+                    case 'showing-results':
+                        return <h2>{win === true ? t('win') : t('lost')}</h2>
+                    default:
+                        console.error('Unknown status: ' + status)
+                        return
+                }
+            })()}
             <>
-                {status === 'initial' ? (
-                    <p>{t('Game starting')}</p>
-                ) : status === 'showing-cards' && cardValue ? (
-                    <div className="card-display">
-                        <Card shape={cardValue.shape} color={cardValue.color} />
-                    </div>
-                ) : status === 'pause-before-answering' ? (
-                    <p>{t('Cards displayed')}</p>
-                ) : status === 'answering' ? (
-                    <div className="GameWidget_container">
-                        <CardsToClick addCard={addCard} />
-                    </div>
-                ) : (
-                    status === 'showing-results' && (
-                        <h2>{win === true ? t('win') : t('lost')}</h2>
-                    )
-                )}
                 {['answering', 'showing-results'].includes(status) && (
                     <>
                         <p>{t('Your sequence')}</p>{' '}
