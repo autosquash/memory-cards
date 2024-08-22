@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './Demo.css'
 import DemoCard from './DemoCard'
+import DemoHome from './DemoHome'
 
 type SelectOption = 'demo-home' | 'demo-card'
 
@@ -16,25 +17,15 @@ const Demo = () => {
                 onChange={handleSelectChange}
             >
                 <option value="demo-home" selected>
-                    Demos Home
+                    Demos
                 </option>
-                <option value="demo-card">DemoCard</option>
+                <option value="demo-card">Demo Card</option>
             </select>
             <div className="demo">
                 {(() => {
                     switch (demoName) {
                         case 'demo-home':
-                            return (
-                                <div>
-                                    <h2>Demos</h2>
-                                    <p>
-                                        From here it's possible to explore the
-                                        demos
-                                        <br />
-                                        (just use the dropdown at the top)
-                                    </p>
-                                </div>
-                            )
+                            return <DemoHome />
                         case 'demo-card':
                             return <DemoCard />
                         default:
