@@ -17,7 +17,9 @@ function App() {
                     checked={showingDemo}
                     onChange={handleOnChange}
                 />
-                <label htmlFor="demo-checkbox">Display demos</label>
+                <label htmlFor="demo-checkbox">
+                    Display demos and settings
+                </label>
             </div>
 
             {showingDemo ? <Demo /> : <NavPage />}
