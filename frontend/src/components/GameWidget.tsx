@@ -22,7 +22,9 @@ const GameWidget = ({ onGameFinished }: Props) => {
                 ) : status === 'pause-before-answering' ? (
                     <p>Cards displayed! Do you remember them?</p>
                 ) : status === 'answering' ? (
-                    <CardsToClick addCard={addCard} />
+                    <div className="GameWidget_container">
+                        <CardsToClick addCard={addCard} />
+                    </div>
                 ) : (
                     status === 'showing-results' &&
                     (win === true ? 'You win!' : "You've lost")
