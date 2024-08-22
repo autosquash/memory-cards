@@ -1,0 +1,8 @@
+.demo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 4px solid gray;
+    background-color: rgb(140, 95, 153);
+}

@@ -4,3 +4,14 @@
   box-sizing: border-box;
   text-align: center;
 }
+
+#demo-checkbox {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  padding: 6px;
+}
+
+#demo-checkbox:hover {
+  opacity: 1;
+}
