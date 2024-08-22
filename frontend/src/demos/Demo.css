@@ -2,7 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
     height: 100%;
     border: 4px solid gray;
     background-color: rgb(140, 95, 153);
+}
+
+#demo-select {
+    margin: 12px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
