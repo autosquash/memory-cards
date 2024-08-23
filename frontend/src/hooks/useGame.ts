@@ -38,7 +38,6 @@ const useGame = (
 
     useEffect(() => {
         const timer = getTimer()
-        // Display the cards sequentially
         timer.activateOneTime(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
@@ -59,6 +58,7 @@ const useGame = (
             return
         }
         const goToNextStep = () => {
+            // Display the cards sequentially
             setCurrentStep((step) => {
                 if (step === null) {
                     throw new Error('invalid value')
@@ -104,13 +104,17 @@ const useGame = (
             ? getResult(sequenceRef.current!, userSequence)
             : null
 
-    let cardValue = null
-    if (status === 'showing-cards') {
-        if (currentStep === null) {
-            throw new Error('invalid value')
+    const getCurrentCardValue = () => {
+        let cardValue = null
+        if (status === 'showing-cards') {
+            if (currentStep === null) {
+                throw new Error('invalid value')
+            }
+            cardValue = sequenceRef.current![currentStep]
         }
-        cardValue = sequenceRef.current![currentStep]
+        return cardValue
     }
+    const cardValue = getCurrentCardValue()
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
