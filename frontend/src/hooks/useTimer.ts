@@ -4,6 +4,7 @@ type TimerType = 'interval' | 'timeout'
 
 interface Timer {
     activate: (callback: () => void, delay: number) => void
+    activateOneTime: (callback: () => void, delay: number) => void
     checkIsNotSet: () => void
     clear: (reason?: string) => void
     isActive: () => boolean
@@ -20,6 +21,12 @@ const useTimer = (): Timer => {
             'interval',
         ]
     }
+    const activateOneTime = (callback: () => void, delay: number) => {
+        activate(() => {
+            callback()
+            clear()
+        }, delay)
+    }
     const isActive = () => intervalIdRef.current !== null
     const checkIsNotSet = () => checkRefIsEmpty(intervalIdRef)
     const clear = () => {
@@ -33,6 +40,7 @@ const useTimer = (): Timer => {
     }
     return {
         activate,
+        activateOneTime,
         checkIsNotSet,
         isActive,
         clear,
