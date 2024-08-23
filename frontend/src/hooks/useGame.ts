@@ -81,10 +81,14 @@ const useGame = (
                 setStatus('answering')
                 clearTimers()
             }, pauseBeforeAnswering)
-        } else if (status === 'showing-results') {
-            checkRefIsEmpty(intervalIdRef)
         }
         return clearTimers
+    }, [status])
+
+    useEffect(() => {
+        if (status === 'showing-results') {
+            checkRefIsEmpty(intervalIdRef)
+        }
     }, [status])
 
     useEffect(() => {
@@ -96,7 +100,7 @@ const useGame = (
             setStatus('showing-results')
             onGameFinished()
         }
-    }, [currentStep, status, userSequence, onGameFinished])
+    }, [status, userSequence, onGameFinished])
 
     const win =
         status === 'showing-results'
