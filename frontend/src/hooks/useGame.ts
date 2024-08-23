@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
 import { CardData } from '../types'
+import useInterval, { Timer } from './useInterval'
 
 type Status =
     | 'initial'
@@ -8,8 +9,6 @@ type Status =
     | 'pause-before-answering'
     | 'answering'
     | 'showing-results'
-
-type TimerType = 'interval' | 'timeout'
 
 const pauseBeforeFirstCard = 2500
 const pauseBetweenCards = 2000
@@ -19,19 +18,14 @@ const useGame = (
     onGameFinished: () => void,
     sequence: CardData[] | null = null
 ) => {
-    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
     const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
-
+    const timerRef = useRef<Timer | null>(null)
+    timerRef.current = useInterval()
     const [status, setStatus] = useState<Status>('initial')
     const [currentStep, setCurrentStep] = useState<number | null>(null)
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
-    const addInterval = (callback: () => void, delay: number) => {
-        intervalIdRef.current = [
-            window.setInterval(callback, delay),
-            'interval',
-        ]
-    }
+    const getTimer = () => timerRef.current!
 
     useEffect(() => {
         if (!sequenceRef.current) {
@@ -43,27 +37,31 @@ const useGame = (
     }, [sequence])
 
     useEffect(() => {
-        checkRefIsEmpty(intervalIdRef)
+        const timer = getTimer()
         // Display the cards sequentially
-        addInterval(() => {
+        timer.addInterval(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
-            clearTimers()
+            timer.clearTimers()
         }, pauseBeforeFirstCard)
-        return clearTimers
+        return timer.clearTimers
     }, [])
 
     useEffect(() => {
         if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
-            clearTimers()
+            getTimer().clearTimers()
             setCurrentStep(null)
             setStatus('pause-before-answering')
         }
     }, [currentStep])
 
     useEffect(() => {
-        if (currentStep !== null && intervalIdRef.current === null) {
-            addInterval(() => {
+        if (currentStep === null) {
+            return
+        }
+        const timer = getTimer()
+        if (!timer.intervalIsSet()) {
+            timer.addInterval(() => {
                 setCurrentStep((step) => {
                     if (step === null) {
                         throw new Error('invalid value')
@@ -72,23 +70,22 @@ const useGame = (
                 })
             }, pauseBetweenCards)
         }
-        return clearTimers
+        return timer.clearTimers
     }, [currentStep])
 
     useEffect(() => {
-        if (status === 'pause-before-answering') {
-            checkRefIsEmpty(intervalIdRef)
-            addInterval(() => {
-                setStatus('answering')
-                clearTimers()
-            }, pauseBeforeAnswering)
-        }
-        return clearTimers
+        if (status !== 'pause-before-answering') return
+        const timer = getTimer()
+        timer.addInterval(() => {
+            setStatus('answering')
+            getTimer().clearTimers()
+        }, pauseBeforeAnswering)
+        return getTimer().clearTimers
     }, [status])
 
     useEffect(() => {
         if (status === 'showing-results') {
-            checkRefIsEmpty(intervalIdRef)
+            getTimer().checkIntervalIsNotSet()
         }
     }, [status])
 
@@ -97,7 +94,7 @@ const useGame = (
             status === 'answering' &&
             userSequence.length === numberOfCardsToGuess
         ) {
-            checkRefIsEmpty(intervalIdRef)
+            getTimer().checkIntervalIsNotSet()
             setStatus('showing-results')
             onGameFinished()
         }
@@ -107,16 +104,6 @@ const useGame = (
         status === 'showing-results'
             ? getResult(sequenceRef.current!, userSequence)
             : null
-
-    const clearTimers = () => {
-        if (intervalIdRef.current) {
-            const [id, type] = intervalIdRef.current
-            if (type === 'interval') {
-                clearInterval(id)
-                intervalIdRef.current = null
-            }
-        }
-    }
 
     let cardValue = null
     if (status === 'showing-cards') {
@@ -136,15 +123,6 @@ const useGame = (
         sequence: sequenceRef.current,
         userSequence,
         addCard,
-    }
-}
-
-const checkRefIsEmpty = (
-    ref: React.MutableRefObject<[number, TimerType] | null>
-) => {
-    if (ref.current) {
-        const [id, type] = ref.current
-        console.error(`there is still a previous ${type}: ${id}`)
     }
 }
 
