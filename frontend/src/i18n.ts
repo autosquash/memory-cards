@@ -26,6 +26,7 @@ const resources = {
             'Actual sequence': 'Actual sequence:',
             'Display demos': 'Display demos and settings',
             Language: 'Language:',
+            'No users yet': 'There is no registered users yet',
         },
     },
     es: {
@@ -60,6 +61,7 @@ const resources = {
             'Display demos': 'Mostrar demos y ajustes',
             'Unknown option': 'Opción desconocida',
             Language: 'Idioma:',
+            'No users yet': 'Aún no hay usuarios registrados',
         },
     },
 }
