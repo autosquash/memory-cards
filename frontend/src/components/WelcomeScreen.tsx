@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import useNames from '../hooks/useNames'
 import { SetNavState } from '../types'
+import NamesListing from './NamesListing'
 import './WelcomeScreen.css'
 
 interface Props {
@@ -15,35 +16,16 @@ const WelcomeScreen = ({ setNavState }: Props) => {
         event.preventDefault()
         commitUser(newUserName)
     }
-    const handleChooseUser = (
-        _: React.MouseEvent<HTMLElement>,
-        name: string
-    ) => {
+    const handleUserSelection = (name: string) => {
         setNavState(name)
     }
     return (
         <div className="welcome-screen">
             <h3>{t('Who are you?')}</h3>
-            <div className="names-list-container">
-                {userNames !== null ? (
-                    <ul className="names-list">
-                        {userNames.map((name, index) => (
-                            <li key={index}>
-                                <button
-                                    className="user-button"
-                                    onClick={(event) =>
-                                        handleChooseUser(event, name)
-                                    }
-                                >
-                                    <span className="name">{name}</span>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>{t('Waiting...')}</p>
-                )}
-            </div>
+            <NamesListing
+                userNames={userNames}
+                onUserSelection={handleUserSelection}
+            />
             <form className="name-form" onSubmit={handleAddName}>
                 <input
                     type="text"
