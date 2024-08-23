@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
 import { CardData } from '../types'
-import useInterval, { Timer } from './useInterval'
+import useTimer, { Timer } from './useTimer'
 
 type Status =
     | 'initial'
@@ -20,7 +20,7 @@ const useGame = (
 ) => {
     const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
     const timerRef = useRef<Timer | null>(null)
-    timerRef.current = useInterval()
+    timerRef.current = useTimer()
     const [status, setStatus] = useState<Status>('initial')
     const [currentStep, setCurrentStep] = useState<number | null>(null)
     const [userSequence, setUserSequence] = useState<CardData[]>([])
@@ -39,17 +39,17 @@ const useGame = (
     useEffect(() => {
         const timer = getTimer()
         // Display the cards sequentially
-        timer.addInterval(() => {
+        timer.activate(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
-            timer.clearTimers()
+            timer.clear()
         }, pauseBeforeFirstCard)
-        return timer.clearTimers
+        return timer.clear
     }, [])
 
     useEffect(() => {
         if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
-            getTimer().clearTimers()
+            getTimer().clear()
             setCurrentStep(null)
             setStatus('pause-before-answering')
         }
@@ -60,8 +60,8 @@ const useGame = (
             return
         }
         const timer = getTimer()
-        if (!timer.intervalIsSet()) {
-            timer.addInterval(() => {
+        if (!timer.isActive()) {
+            timer.activate(() => {
                 setCurrentStep((step) => {
                     if (step === null) {
                         throw new Error('invalid value')
@@ -70,22 +70,22 @@ const useGame = (
                 })
             }, pauseBetweenCards)
         }
-        return timer.clearTimers
+        return timer.clear
     }, [currentStep])
 
     useEffect(() => {
         if (status !== 'pause-before-answering') return
         const timer = getTimer()
-        timer.addInterval(() => {
+        timer.activate(() => {
             setStatus('answering')
-            getTimer().clearTimers()
+            getTimer().clear()
         }, pauseBeforeAnswering)
-        return getTimer().clearTimers
+        return getTimer().clear
     }, [status])
 
     useEffect(() => {
         if (status === 'showing-results') {
-            getTimer().checkIntervalIsNotSet()
+            getTimer().checkIsNotSet()
         }
     }, [status])
 
@@ -94,7 +94,7 @@ const useGame = (
             status === 'answering' &&
             userSequence.length === numberOfCardsToGuess
         ) {
-            getTimer().checkIntervalIsNotSet()
+            getTimer().checkIsNotSet()
             setStatus('showing-results')
             onGameFinished()
         }
