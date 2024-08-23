@@ -85,12 +85,6 @@ const useGame = (
     }, [status])
 
     useEffect(() => {
-        if (status === 'showing-results') {
-            getTimer().checkIsNotSet()
-        }
-    }, [status])
-
-    useEffect(() => {
         if (
             status === 'answering' &&
             userSequence.length === numberOfCardsToGuess
