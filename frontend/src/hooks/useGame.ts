@@ -66,8 +66,7 @@ const useGame = (
             addInterval(() => {
                 setCurrentStep((step) => {
                     if (step === null) {
-                        console.error('invalid value')
-                        return null
+                        throw new Error('invalid value')
                     }
                     return step + 1
                 })
@@ -77,10 +76,8 @@ const useGame = (
     }, [currentStep])
 
     useEffect(() => {
-        if (
-            status === 'pause-before-answering' &&
-            intervalIdRef.current === null
-        ) {
+        if (status === 'pause-before-answering') {
+            checkRefIsEmpty(intervalIdRef)
             addInterval(() => {
                 setStatus('answering')
                 clearTimers()
@@ -124,7 +121,6 @@ const useGame = (
     let cardValue = null
     if (status === 'showing-cards') {
         if (currentStep === null) {
-            console.error('invalid value')
             throw new Error('invalid value')
         }
         cardValue = sequenceRef.current![currentStep]
