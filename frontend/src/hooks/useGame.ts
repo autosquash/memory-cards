@@ -25,7 +25,6 @@ const useGame = (
     const [status, setStatus] = useState<Status>('initial')
     const [currentStep, setCurrentStep] = useState<number | null>(null)
     const [userSequence, setUserSequence] = useState<CardData[]>([])
-    const [win, setWin] = useState<boolean | null>(null)
 
     const addInterval = (callback: () => void, delay: number) => {
         intervalIdRef.current = [
@@ -96,10 +95,13 @@ const useGame = (
             checkRefIsEmpty(intervalIdRef)
             setStatus('showing-results')
             onGameFinished()
-            const result = getResult(sequenceRef.current!, userSequence)
-            setWin(result)
         }
     }, [currentStep, status, userSequence, onGameFinished])
+
+    const win =
+        status === 'showing-results'
+            ? getResult(sequenceRef.current!, userSequence)
+            : null
 
     const clearTimers = () => {
         if (intervalIdRef.current) {
