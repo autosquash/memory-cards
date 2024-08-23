@@ -26,6 +26,8 @@ const useGame = (
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
     const getTimer = () => timerRef.current!
+    const allCardsShowed =
+        currentStep !== null && currentStep >= numberOfCardsToGuess
 
     useEffect(() => {
         if (!sequenceRef.current) {
@@ -46,12 +48,12 @@ const useGame = (
     }, [])
 
     useEffect(() => {
-        if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
+        if (allCardsShowed) {
             getTimer().clear()
             setCurrentStep(null)
             setStatus('pause-before-answering')
         }
-    }, [currentStep])
+    }, [allCardsShowed])
 
     useEffect(() => {
         if (currentStep === null) {
@@ -110,7 +112,13 @@ const useGame = (
             if (currentStep === null) {
                 throw new Error('invalid value')
             }
+            if (allCardsShowed) {
+                return null
+            }
             cardValue = sequenceRef.current![currentStep]
+            if (cardValue === undefined) {
+                throw new Error('card value should not be undefined')
+            }
         }
         return cardValue
     }
