@@ -15,11 +15,13 @@ function App() {
             <div id="demo-checkbox">
                 <input
                     type="checkbox"
-                    name="demo-checkbox"
+                    id="demo-checkbox-input"
                     checked={showingDemo}
                     onChange={handleOnChange}
                 />
-                <label htmlFor="demo-checkbox">{t('Display demos')}</label>
+                <label htmlFor="demo-checkbox-input">
+                    {t('Display demos')}
+                </label>
             </div>
 
             {showingDemo ? <Demo /> : <NavPage />}
