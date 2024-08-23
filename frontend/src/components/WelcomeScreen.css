@@ -37,6 +37,10 @@
     min-height: 20%;
 }
 
+.WelcomeScreen_add-me-button {
+    margin: 0 6px;
+}
+
 ul {
     list-style-type: none;
 }
