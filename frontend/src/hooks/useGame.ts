@@ -40,7 +40,9 @@ const useGame = (
                     ? createValidSequence(numberOfCardsToGuess)
                     : sequence
         }
+    }, [sequence])
 
+    useEffect(() => {
         checkRefIsEmpty(intervalIdRef)
         // Display the cards sequentially
         addInterval(() => {
@@ -49,25 +51,27 @@ const useGame = (
             clearTimers()
         }, pauseBeforeFirstCard)
         return clearTimers
-    }, [sequence])
+    }, [])
 
     useEffect(() => {
-        if (currentStep !== null) {
-            if (currentStep >= numberOfCardsToGuess) {
-                clearTimers()
-                setCurrentStep(null)
-                setStatus('pause-before-answering')
-            } else if (!intervalIdRef.current) {
-                addInterval(() => {
-                    setCurrentStep((step) => {
-                        if (step === null) {
-                            console.error('invalid value')
-                            return null
-                        }
-                        return step + 1
-                    })
-                }, pauseBetweenCards)
-            }
+        if (currentStep !== null && currentStep >= numberOfCardsToGuess) {
+            clearTimers()
+            setCurrentStep(null)
+            setStatus('pause-before-answering')
+        }
+    }, [currentStep])
+
+    useEffect(() => {
+        if (currentStep !== null && intervalIdRef.current === null) {
+            addInterval(() => {
+                setCurrentStep((step) => {
+                    if (step === null) {
+                        console.error('invalid value')
+                        return null
+                    }
+                    return step + 1
+                })
+            }, pauseBetweenCards)
         }
         return clearTimers
     }, [currentStep])
