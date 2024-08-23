@@ -27,6 +27,9 @@ const resources = {
             'No users yet': 'There is no registered users yet',
             'call to register':
                 'Or, if you are not registered yet, use this form:',
+            'There was an error': 'There was an error:',
+            'user already exists': 'user {{user}} already exists',
+            'user name not valid': 'user name "{{name}}" is not valid',
         },
     },
     es: {
@@ -64,6 +67,11 @@ const resources = {
             'No users yet': 'Aún no hay usuarios registrados',
             'call to register':
                 'O, si todavía no te has registrado, usa este formulario:',
+            'There was an error': 'Hubo un error:',
+            'user already exists': 'el usuario {{user}} ya existe',
+            'user name not valid':
+                'el nombre de usuario "{{name}}" no es válido',
+            'unknown error': 'error desconocido',
         },
     },
 }
