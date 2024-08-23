@@ -10,7 +10,13 @@ interface Props {
 
 const WelcomeScreen = ({ setNavState }: Props) => {
     const { t } = useTranslation()
-    const { userNames, newUserName, commitUser, setNewUserName } = useNames()
+    const {
+        userNames,
+        newUserName,
+        commitUser,
+        setNewUserName,
+        createUserErr,
+    } = useNames()
 
     const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -27,22 +33,39 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                 userNames={userNames}
                 onUserSelection={handleUserSelection}
             />
-            <p>{t('call to register')}</p>
-            <form className="name-form" onSubmit={handleAddName}>
-                <input
-                    type="text"
-                    value={newUserName}
-                    onChange={(e) => setNewUserName(e.target.value)}
-                    placeholder={t('Your name')}
-                />
-                <button
-                    type="submit"
-                    className="WelcomeScreen_add-me-button"
-                    disabled={!newUserName.trim()}
+
+            {createUserErr ? (
+                <div
+                    className="WelcomeScreen_name-form-or-err"
+                    style={{ backgroundColor: 'red' }}
                 >
-                    {t('Add me')}{' '}
-                </button>
-            </form>
+                    <p>
+                        {t('There was an error')} {createUserErr}{' '}
+                    </p>
+                </div>
+            ) : (
+                <>
+                    <p>{t('call to register')}</p>
+                    <form
+                        className="WelcomeScreen_name-form-or-err"
+                        onSubmit={handleAddName}
+                    >
+                        <input
+                            type="text"
+                            value={newUserName}
+                            onChange={(e) => setNewUserName(e.target.value)}
+                            placeholder={t('Your name')}
+                        />
+                        <button
+                            type="submit"
+                            className="WelcomeScreen_add-me-button"
+                            disabled={!newUserName.trim()}
+                        >
+                            {t('Add me')}{' '}
+                        </button>
+                    </form>
+                </>
+            )}
         </div>
     )
 }
