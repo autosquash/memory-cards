@@ -52,6 +52,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                     >
                         <input
                             type="text"
+                            name="user-name"
                             value={newUserName}
                             onChange={(e) => setNewUserName(e.target.value)}
                             placeholder={t('Your name')}
