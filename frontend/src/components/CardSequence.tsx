@@ -11,10 +11,12 @@ const CardSequence = ({ sequence, scale = 0.5 }: Props) => {
     return (
         <>
             {sequence.map((cardData) => {
+                const { color, shape } = cardData
                 return (
                     <Card
-                        color={cardData.color}
-                        shape={cardData.shape}
+                        key={shape + ' ' + color}
+                        color={color}
+                        shape={shape}
                         scale={scale}
                     />
                 )
