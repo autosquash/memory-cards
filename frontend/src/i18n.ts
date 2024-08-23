@@ -11,9 +11,7 @@ const resources = {
             english: 'english',
             'just use dropdown': 'just use the dropdown at the top',
             'Who are you?': 'Who are you?',
-            'Add new user': 'Add new user',
             'Waiting...': 'Waiting...',
-            'Add a new user...': 'Add a new user...',
             'Click Start Game': "Click 'Start Game' when you are ready",
             'Start Game': 'Start Game',
             Exit: 'Exit',
@@ -27,6 +25,8 @@ const resources = {
             'Display demos': 'Display demos and settings',
             Language: 'Language:',
             'No users yet': 'There is no registered users yet',
+            'call to register':
+                'Or, if you are not registered yet, use this form:',
         },
     },
     es: {
@@ -39,9 +39,9 @@ const resources = {
             'just use dropdown':
                 'simplemente utiliza el menú desplegable de arriba',
             'Who are you?': '¿Quién eres?',
-            'Add new user': 'Añadir un/a nueva/o usuaria/o',
+            'Add me': 'Añádeme',
             'Waiting...': 'Esperando...',
-            'Add a new user...': 'Añadir a un nuevo usuario...',
+            'Your name': 'Tu nombre',
             'Click Start Game': "Pulsa 'Iniciar Juego' cuando estés lista/o",
             'Start Game': 'Iniciar Juego',
             Exit: 'Salir',
@@ -62,6 +62,8 @@ const resources = {
             'Unknown option': 'Opción desconocida',
             Language: 'Idioma:',
             'No users yet': 'Aún no hay usuarios registrados',
+            'call to register':
+                'O, si todavía no te has registrado, usa este formulario:',
         },
     },
 }

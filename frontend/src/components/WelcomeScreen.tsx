@@ -19,6 +19,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
     const handleUserSelection = (name: string) => {
         setNavState(name)
     }
+    // TODO: don't show call to register until registered users are loaded
     return (
         <div className="welcome-screen">
             <h3>{t('Who are you?')}</h3>
@@ -26,14 +27,21 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                 userNames={userNames}
                 onUserSelection={handleUserSelection}
             />
+            <p>{t('call to register')}</p>
             <form className="name-form" onSubmit={handleAddName}>
                 <input
                     type="text"
                     value={newUserName}
                     onChange={(e) => setNewUserName(e.target.value)}
-                    placeholder={t('Add a new user...')}
+                    placeholder={t('Your name')}
                 />
-                <button type="submit">{t('Add new user')}</button>
+                <button
+                    type="submit"
+                    className="WelcomeScreen_add-me-button"
+                    disabled={!newUserName.trim()}
+                >
+                    {t('Add me')}{' '}
+                </button>
             </form>
         </div>
     )
