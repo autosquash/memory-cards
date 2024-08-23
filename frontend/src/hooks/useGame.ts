@@ -39,10 +39,9 @@ const useGame = (
     useEffect(() => {
         const timer = getTimer()
         // Display the cards sequentially
-        timer.activate(() => {
+        timer.activateOneTime(() => {
             setStatus('showing-cards')
             setCurrentStep(0)
-            timer.clear()
         }, pauseBeforeFirstCard)
         return timer.clear
     }, [])
@@ -59,16 +58,17 @@ const useGame = (
         if (currentStep === null) {
             return
         }
+        const goToNextStep = () => {
+            setCurrentStep((step) => {
+                if (step === null) {
+                    throw new Error('invalid value')
+                }
+                return step + 1
+            })
+        }
         const timer = getTimer()
         if (!timer.isActive()) {
-            timer.activate(() => {
-                setCurrentStep((step) => {
-                    if (step === null) {
-                        throw new Error('invalid value')
-                    }
-                    return step + 1
-                })
-            }, pauseBetweenCards)
+            timer.activate(goToNextStep, pauseBetweenCards)
         }
         return timer.clear
     }, [currentStep])
@@ -76,11 +76,10 @@ const useGame = (
     useEffect(() => {
         if (status !== 'pause-before-answering') return
         const timer = getTimer()
-        timer.activate(() => {
+        timer.activateOneTime(() => {
             setStatus('answering')
-            getTimer().clear()
         }, pauseBeforeAnswering)
-        return getTimer().clear
+        return timer.clear
     }, [status])
 
     useEffect(() => {
