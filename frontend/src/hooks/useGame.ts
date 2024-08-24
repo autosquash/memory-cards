@@ -20,13 +20,15 @@ const useGame = (
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
     const [status, setStatus] = useState<Status>('initial')
-
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
         sequenceRef.current
     )
+
+    const timeToShowResults =
+        status === 'answering' && userSequence.length === numberOfCardsToGuess
 
     const getTimer = () => timerRef.current!
 
@@ -45,30 +47,21 @@ const useGame = (
 
     useEffect(() => {
         if (allCardsShowed) {
-            getTimer().clear()
             setStatus('pause-before-answering')
+            const timer = getTimer()
+            timer.activateOneTime(() => {
+                setStatus('answering')
+            }, pauseBeforeAnswering)
+            return timer.clear
         }
     }, [allCardsShowed])
 
     useEffect(() => {
-        if (status !== 'pause-before-answering') return
-        const timer = getTimer()
-        timer.activateOneTime(() => {
-            setStatus('answering')
-        }, pauseBeforeAnswering)
-        return timer.clear
-    }, [status])
-
-    useEffect(() => {
-        if (
-            status === 'answering' &&
-            userSequence.length === numberOfCardsToGuess
-        ) {
-            getTimer().checkIsNotSet()
+        if (timeToShowResults) {
             setStatus('showing-results')
             onGameFinished()
         }
-    }, [status, userSequence, onGameFinished])
+    }, [timeToShowResults, onGameFinished])
 
     const win =
         status === 'showing-results'
