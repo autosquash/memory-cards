@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { numberOfCardsToGuess } from '../model'
 import { pauseBetweenCards } from '../settings'
 import { CardData } from '../types'
+import { check, repr } from '../utils'
 import useTimer, { Timer } from './useTimer'
 
 const useShowingCards = (
@@ -28,24 +29,25 @@ const useShowingCards = (
     }, [showingCards])
 
     const getCurrentCardValue = (): CardData | null => {
-        if (!showingCards) {
+        if (!showingCards || allCardsShowed) {
             return null
         }
-        if (!sequence) {
-            throw new Error('There is not sequence')
-        }
-        if (allCardsShowed) {
-            return null
-        }
+        check(sequence, 'There is not sequence')
         const cardValue = sequence.at(currentStep)
-        if (!cardValue) {
-            throw new Error('Card value should not be undefined')
-        }
+        check(cardValue, () => getBadCardValueMsg(sequence, currentStep))
         return cardValue
     }
     const cardValue = getCurrentCardValue()
 
     return { allCardsShowed, cardValue }
 }
+
+const getBadCardValueMsg = (
+    sequence: readonly CardData[],
+    currentStep: number
+) =>
+    `Card value should be a CardData instance (sequence: ${repr(
+        sequence
+    )}, currentStep: ${currentStep})`
 
 export default useShowingCards
