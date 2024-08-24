@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import useGame from '../hooks/useGame'
+import { CardData } from '../types'
 import Card from './Card'
 import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
@@ -48,25 +49,36 @@ const GameWidget = ({ onGameFinished }: Props) => {
             })()}
             <>
                 {['answering', 'showing-results'].includes(status) && (
-                    <>
-                        <p>{t('Your sequence')}</p>{' '}
-                        <div className="CardSequence_sequence">
-                            <CardSequence sequence={userSequence} scale={0.4} />
-                        </div>
-                    </>
+                    <SmallCardSequenceWithTitle
+                        title={t('Your sequence')}
+                        sequence={userSequence}
+                    />
                 )}
                 {status === 'showing-results' && (
-                    <>
-                        <p>{t('Actual sequence')}</p>
-                        <div className="CardSequence_sequence">
-                            {sequence && (
-                                <CardSequence sequence={sequence} scale={0.4} />
-                            )}
-                        </div>
-                    </>
+                    <SmallCardSequenceWithTitle
+                        title={t('Actual sequence')}
+                        sequence={sequence}
+                    />
                 )}
             </>
         </div>
+    )
+}
+
+const SmallCardSequenceWithTitle = ({
+    title,
+    sequence,
+}: {
+    title: string
+    sequence: ReadonlyArray<CardData>
+}) => {
+    return (
+        <>
+            <p>{title}</p>
+            <div className="CardSequence_sequence">
+                <CardSequence sequence={sequence} scale={0.4} />
+            </div>
+        </>
     )
 }
 
