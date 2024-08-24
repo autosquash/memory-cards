@@ -1,4 +1,5 @@
 import { CardData, Color, Shape } from './types'
+import { check } from './utils'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
@@ -31,7 +32,9 @@ const createValidSequence = (n: number): CardData[] => {
         const newCardData =
             cardsData[Math.floor(Math.random() * cardsData.length)]
         if (generatedSequence.length) {
-            const last = generatedSequence[generatedSequence.length - 1]
+            // Don't add it if it's equal to the last one
+            const last = generatedSequence.at(-1)
+            check(last)
             if (equalCards(newCardData, last)) {
                 continue
             }
