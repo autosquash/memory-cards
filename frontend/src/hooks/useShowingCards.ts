@@ -25,7 +25,7 @@ const useShowingCards = (
         const timer = getTimer()
         timer.activate(goToNextStep, pauseBetweenCards)
         return timer.clear
-    }, [showingCards, currentStep])
+    }, [showingCards])
 
     const getCurrentCardValue = (): CardData | null => {
         if (!showingCards) {
