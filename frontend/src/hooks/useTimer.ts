@@ -2,10 +2,11 @@ import { useRef } from 'react'
 
 type TimerType = 'interval' | 'timeout'
 
+type TimerActivator = (callback: () => void, delay: number) => void
+
 interface Timer {
-    activate: (callback: () => void, delay: number) => void
-    activateOneTime: (callback: () => void, delay: number) => void
-    checkIsNotSet: () => void
+    activate: TimerActivator
+    activateOneTime: TimerActivator
     clear: (reason?: string) => void
     isActive: () => boolean
 }
@@ -46,7 +47,6 @@ const useTimer = (): Timer => {
     return {
         activate,
         activateOneTime,
-        checkIsNotSet,
         isActive,
         clear,
     }
