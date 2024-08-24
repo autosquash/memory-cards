@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
+import { check, repr } from '../utils'
 import useShowingCards from './useShowingCards'
 import useTimer, { Timer } from './useTimer'
 
@@ -16,14 +17,14 @@ interface GameView {
     status: Status
     win: boolean | null
     cardValue: CardData | null
-    sequence: readonly CardData[]
+    sequence: ReadonlyArray<CardData>
     userSequence: CardData[]
     addCard: (cardData: CardData) => void
 }
 
 const useGame = (
     onGameFinished: () => void,
-    sequence: CardData[] | null = null
+    sequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
     const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
     const timerRef = useRef<Timer | null>(null)
@@ -43,6 +44,10 @@ const useGame = (
 
     sequenceRef.current ??=
         sequence || createValidSequence(numberOfCardsToGuess)
+
+    check(sequenceRef.current.length === numberOfCardsToGuess, () =>
+        badSequenceLengthMsg(sequenceRef.current!)
+    )
 
     useEffect(() => {
         const timer = getTimer()
@@ -86,6 +91,10 @@ const useGame = (
         userSequence,
         addCard,
     }
+}
+
+function badSequenceLengthMsg(sequence: ReadonlyArray<CardData>): string {
+    return `Bad sequence length: ${repr(sequence)}`
 }
 
 export default useGame
