@@ -23,7 +23,7 @@ const useShowingCards = (
             setCurrentStep((step) => step + 1)
         }
         const timer = getTimer()
-        timer.activate(goToNextStep, pauseBetweenCards)
+        timer.activateOneTime(goToNextStep, pauseBetweenCards)
         return timer.clear
     }, [showingCards, currentStep])
 
