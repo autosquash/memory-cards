@@ -30,14 +30,10 @@ const useGame = (
 
     const getTimer = () => timerRef.current!
 
-    useEffect(() => {
-        if (!sequenceRef.current) {
-            sequenceRef.current =
-                sequence === null
-                    ? createValidSequence(numberOfCardsToGuess)
-                    : sequence
-        }
-    }, [sequence])
+    if (!sequenceRef.current) {
+        sequenceRef.current =
+            sequence || createValidSequence(numberOfCardsToGuess)
+    }
 
     useEffect(() => {
         const timer = getTimer()
