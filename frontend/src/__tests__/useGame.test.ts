@@ -30,9 +30,9 @@ describe('useGame', () => {
         expect(cardValue).toBeTruthy()
         expect(win).toBe(null)
 
-        for (let i = 0; i < numberOfCardsToGuess; i++) {
-            act(() => jest.advanceTimersByTime(pauseBetweenCards))
-        }
+        act(() =>
+            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
+        )
         ;({ status, cardValue, win } = result.current)
         expect(status).toBe('pause-before-answering')
         expect(cardValue).toBe(null)
@@ -57,9 +57,11 @@ describe('useGame', () => {
 
             // forward time
             act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-            for (let i = 0; i < numberOfCardsToGuess; i++) {
-                act(() => jest.advanceTimersByTime(pauseBetweenCards))
-            }
+            act(() =>
+                jest.advanceTimersByTime(
+                    pauseBetweenCards * numberOfCardsToGuess
+                )
+            )
             act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
         })
 
