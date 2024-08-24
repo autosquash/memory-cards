@@ -1,9 +1,6 @@
 import { useRef } from 'react'
 
-type TimerType = 'interval' | 'timeout'
-
 interface Timer {
-    activate: (callback: () => void, delay: number) => void
     activateOneTime: (callback: () => void, delay: number) => void
     checkIsNotSet: () => void
     clear: (reason?: string) => void
@@ -12,14 +9,11 @@ interface Timer {
 
 /// Manage a timer for callbacks
 const useTimer = (): Timer => {
-    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
+    const timeoutIdRef = useRef<number | null>(null) // TODO: check if nulls are really checked
 
     const activate = (callback: () => void, delay: number) => {
         checkIsNotSet()
-        intervalIdRef.current = [
-            window.setInterval(callback, delay),
-            'interval',
-        ]
+        timeoutIdRef.current = window.setTimeout(callback, delay)
     }
     const activateOneTime = (callback: () => void, delay: number) => {
         activate(() => {
@@ -27,19 +21,16 @@ const useTimer = (): Timer => {
             clear()
         }, delay)
     }
-    const isActive = () => intervalIdRef.current !== null
-    const checkIsNotSet = () => checkRefIsEmpty(intervalIdRef)
+    const isActive = () => timeoutIdRef.current !== null
+    const checkIsNotSet = () => checkRefIsEmpty(timeoutIdRef)
     const clear = () => {
         if (isActive()) {
-            const [id, type] = intervalIdRef.current!
-            if (type === 'interval') {
-                clearInterval(id)
-                intervalIdRef.current = null
-            }
+            const id = timeoutIdRef.current!
+            clearInterval(id)
+            timeoutIdRef.current = null
         }
     }
     return {
-        activate,
         activateOneTime,
         checkIsNotSet,
         isActive,
@@ -47,12 +38,10 @@ const useTimer = (): Timer => {
     }
 }
 
-const checkRefIsEmpty = (
-    ref: React.MutableRefObject<[number, TimerType] | null>
-) => {
+const checkRefIsEmpty = (ref: React.MutableRefObject<number | null>) => {
     if (ref.current !== null) {
-        const [id, type] = ref.current
-        console.error(`there is still a previous ${type}: ${id}`)
+        const id = ref.current
+        console.error(`there is still a previous timer: ${id}`)
     }
 }
 
