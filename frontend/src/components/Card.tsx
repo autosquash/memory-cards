@@ -4,11 +4,12 @@ interface Props {
     color: Color
     shape: Shape
     scale?: number
+    hidden?: boolean
 }
 
 type Position = [number, number]
 
-const Card = ({ shape, color, scale = 1 }: Props) => {
+const Card = ({ shape, color, scale = 1, hidden = false }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
@@ -71,6 +72,7 @@ const Card = ({ shape, color, scale = 1 }: Props) => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
+                visibility: hidden ? 'hidden' : 'visible',
             }}
         >
             <canvas
