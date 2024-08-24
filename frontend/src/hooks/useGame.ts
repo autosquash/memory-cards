@@ -12,10 +12,19 @@ type Status =
     | 'answering'
     | 'showing-results'
 
+interface GameView {
+    status: Status
+    win: boolean | null
+    cardValue: CardData | null
+    sequence: readonly CardData[]
+    userSequence: CardData[]
+    addCard: (cardData: CardData) => void
+}
+
 const useGame = (
     onGameFinished: () => void,
     sequence: CardData[] | null = null
-) => {
+): GameView => {
     const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
@@ -80,3 +89,4 @@ const useGame = (
 }
 
 export default useGame
+export type { GameView }
