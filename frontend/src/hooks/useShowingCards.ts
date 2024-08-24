@@ -11,7 +11,7 @@ const useShowingCards = (
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
     const [currentStep, setCurrentStep] = useState<number>(0)
-    const allCardsShowed = showingCards && currentStep >= numberOfCardsToGuess
+    const allCardsShowed = currentStep >= numberOfCardsToGuess
     const getTimer = () => timerRef.current!
 
     useEffect(() => {
@@ -23,9 +23,7 @@ const useShowingCards = (
             setCurrentStep((step) => step + 1)
         }
         const timer = getTimer()
-        if (!timer.isActive()) {
-            timer.activate(goToNextStep, pauseBetweenCards)
-        }
+        timer.activate(goToNextStep, pauseBetweenCards)
         return timer.clear
     }, [showingCards, currentStep])
 
