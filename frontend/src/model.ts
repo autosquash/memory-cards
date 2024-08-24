@@ -2,6 +2,8 @@ import { CardData, Color, Shape } from './types'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
+const numberOfCardsToGuess = 2
+
 const buildCardsData = () => {
     const cardsData: CardData[] = []
     for (const color of colors) {
@@ -38,8 +40,6 @@ const createValidSequence = (n: number): CardData[] => {
     }
     return generatedSequence
 }
-
-const numberOfCardsToGuess = 3
 
 const getResult = (
     sequence: ReadonlyArray<CardData>,

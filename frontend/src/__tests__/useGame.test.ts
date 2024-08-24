@@ -11,6 +11,10 @@ import { sequenceData } from './examples'
 
 jest.useFakeTimers()
 
+beforeAll(() => {
+    expect(numberOfCardsToGuess >= 2 && numberOfCardsToGuess <= 3).toBe(true)
+})
+
 describe('useGame', () => {
     it('should start with the initial status', () => {
         const { result } = renderHook(() => useGame(() => {}))
@@ -49,9 +53,9 @@ describe('useGame', () => {
         let sequence: CardData[]
         beforeEach(() => {
             // create the sequence
-            sequence = sequenceData.map(([shape, color]) =>
-                createCard(shape, color)
-            )
+            sequence = sequenceData
+                .slice(0, numberOfCardsToGuess)
+                .map(([shape, color]) => createCard(shape, color))
             // render the hook
             ;({ result } = renderHook(() => useGame(() => {}, sequence)))
 
@@ -68,9 +72,9 @@ describe('useGame', () => {
         it('wins', () => {
             const { addCard } = result.current
             act(() => {
-                addCard(sequence[0])
-                addCard(sequence[1])
-                addCard(sequence[2])
+                for (const card of sequence) {
+                    addCard(card)
+                }
             })
             const { status, win } = result.current
             expect(status).toBe('showing-results')
@@ -78,11 +82,13 @@ describe('useGame', () => {
         })
         it('losses', () => {
             const { addCard } = result.current
-
+            const anotherSequence = [...sequence]
+            const [a, b] = anotherSequence.slice(-2)
+            anotherSequence.splice(-2, 2, b, a)
             act(() => {
-                addCard(sequence[0])
-                addCard(sequence[2]) // bad order
-                addCard(sequence[1])
+                for (const card of anotherSequence) {
+                    addCard(card)
+                }
             })
             const { status, win } = result.current
             expect(status).toBe('showing-results')
