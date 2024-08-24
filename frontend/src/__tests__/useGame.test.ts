@@ -1,10 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
-import useGame, {
+import useGame from '../hooks/useGame'
+import { createCard, numberOfCardsToGuess } from '../model'
+import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
     pauseBetweenCards,
-} from '../hooks/useGame'
-import { createCard, numberOfCardsToGuess } from '../model'
+} from '../settings'
 import { CardData } from '../types'
 import { sequenceData } from './examples'
 
