@@ -10,32 +10,37 @@ interface Timer {
     isActive: () => boolean
 }
 
-/// Manage a timer for callbacks
+/// Manage a unique timer for callbacks
 const useTimer = (): Timer => {
-    const intervalIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
+    const timerIdRef = useRef<[number, TimerType] | null>(null) // TODO: check if nulls are really checked
 
     const activate = (callback: () => void, delay: number) => {
         checkIsNotSet()
-        intervalIdRef.current = [
-            window.setInterval(callback, delay),
-            'interval',
-        ]
+        timerIdRef.current = [window.setInterval(callback, delay), 'interval']
     }
     const activateOneTime = (callback: () => void, delay: number) => {
-        activate(() => {
-            callback()
-            clear()
-        }, delay)
+        checkIsNotSet()
+        timerIdRef.current = [
+            window.setTimeout(() => {
+                callback()
+                clear()
+            }, delay),
+            'timeout',
+        ]
     }
-    const isActive = () => intervalIdRef.current !== null
-    const checkIsNotSet = () => checkRefIsEmpty(intervalIdRef)
+    const isActive = () => timerIdRef.current !== null
+    const checkIsNotSet = () => checkRefIsEmpty(timerIdRef)
     const clear = () => {
         if (isActive()) {
-            const [id, type] = intervalIdRef.current!
+            const [id, type] = timerIdRef.current!
             if (type === 'interval') {
                 clearInterval(id)
-                intervalIdRef.current = null
+            } else if (type === 'timeout') {
+                clearTimeout(id)
+            } else {
+                throw new Error('Unknown timer type: ' + type)
             }
+            timerIdRef.current = null
         }
     }
     return {
