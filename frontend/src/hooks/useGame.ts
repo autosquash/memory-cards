@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
+import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
+import useShowingCards from './useShowingCards'
 import useTimer, { Timer } from './useTimer'
 
 type Status =
@@ -10,10 +12,6 @@ type Status =
     | 'answering'
     | 'showing-results'
 
-const pauseBeforeFirstCard = 2500
-const pauseBetweenCards = 2000
-const pauseBeforeAnswering = 1600
-
 const useGame = (
     onGameFinished: () => void,
     sequence: CardData[] | null = null
@@ -22,12 +20,15 @@ const useGame = (
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
     const [status, setStatus] = useState<Status>('initial')
-    const [currentStep, setCurrentStep] = useState<number | null>(null)
+
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
+    const { allCardsShowed, cardValue } = useShowingCards(
+        status === 'showing-cards',
+        sequenceRef.current
+    )
+
     const getTimer = () => timerRef.current!
-    const allCardsShowed =
-        currentStep !== null && currentStep >= numberOfCardsToGuess
 
     useEffect(() => {
         if (!sequenceRef.current) {
@@ -42,7 +43,6 @@ const useGame = (
         const timer = getTimer()
         timer.activateOneTime(() => {
             setStatus('showing-cards')
-            setCurrentStep(0)
         }, pauseBeforeFirstCard)
         return timer.clear
     }, [])
@@ -50,30 +50,9 @@ const useGame = (
     useEffect(() => {
         if (allCardsShowed) {
             getTimer().clear()
-            setCurrentStep(null)
             setStatus('pause-before-answering')
         }
     }, [allCardsShowed])
-
-    useEffect(() => {
-        if (currentStep === null) {
-            return
-        }
-        const goToNextStep = () => {
-            // Display the cards sequentially
-            setCurrentStep((step) => {
-                if (step === null) {
-                    throw new Error('invalid value')
-                }
-                return step + 1
-            })
-        }
-        const timer = getTimer()
-        if (!timer.isActive()) {
-            timer.activate(goToNextStep, pauseBetweenCards)
-        }
-        return timer.clear
-    }, [currentStep])
 
     useEffect(() => {
         if (status !== 'pause-before-answering') return
@@ -100,24 +79,6 @@ const useGame = (
             ? getResult(sequenceRef.current!, userSequence)
             : null
 
-    const getCurrentCardValue = () => {
-        let cardValue = null
-        if (status === 'showing-cards') {
-            if (currentStep === null) {
-                throw new Error('invalid value')
-            }
-            if (allCardsShowed) {
-                return null
-            }
-            cardValue = sequenceRef.current![currentStep]
-            if (cardValue === undefined) {
-                throw new Error('card value should not be undefined')
-            }
-        }
-        return cardValue
-    }
-    const cardValue = getCurrentCardValue()
-
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
     }
@@ -132,4 +93,3 @@ const useGame = (
 }
 
 export default useGame
-export { pauseBeforeAnswering, pauseBeforeFirstCard, pauseBetweenCards }
