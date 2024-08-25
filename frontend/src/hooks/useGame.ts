@@ -4,7 +4,7 @@ import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
 import useShowingCards from './useShowingCards'
-import useTimer, { Timer } from './useTimer'
+import useTimer from './useTimer'
 
 type Status =
     | 'initial'
@@ -29,8 +29,8 @@ const useGame = (
     const sequence = useRef<ReadonlyArray<CardData>>(
         providedSequence || createRandomSequence(numberOfCardsToGuess)
     ).current
-    const timerRef = useRef<Timer | null>(null)
-    timerRef.current = useTimer()
+
+    const timerRef = useRef(useTimer())
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
@@ -42,7 +42,7 @@ const useGame = (
     const timeToShowResults =
         status === 'answering' && userSequence.length === numberOfCardsToGuess
 
-    const getTimer = () => timerRef.current!
+    const getTimer = () => timerRef.current
 
     check(sequence.length === numberOfCardsToGuess, () =>
         badSequenceLengthMsg(sequence!)
