@@ -24,11 +24,11 @@ interface GameView {
 
 const useGame = (
     onGameFinished: () => void,
-    sequence: ReadonlyArray<CardData> | null = null
+    providedSequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
-    const sequenceRef = useRef<ReadonlyArray<CardData>>(
-        sequence || createRandomSequence(numberOfCardsToGuess)
-    )
+    const sequence = useRef<ReadonlyArray<CardData>>(
+        providedSequence || createRandomSequence(numberOfCardsToGuess)
+    ).current
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
     const [status, setStatus] = useState<Status>('initial')
@@ -36,7 +36,7 @@ const useGame = (
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
-        sequenceRef.current
+        sequence
     )
 
     const timeToShowResults =
@@ -44,8 +44,8 @@ const useGame = (
 
     const getTimer = () => timerRef.current!
 
-    check(sequenceRef.current.length === numberOfCardsToGuess, () =>
-        badSequenceLengthMsg(sequenceRef.current!)
+    check(sequence.length === numberOfCardsToGuess, () =>
+        badSequenceLengthMsg(sequence!)
     )
 
     useEffect(() => {
@@ -75,9 +75,7 @@ const useGame = (
     }, [timeToShowResults, onGameFinished])
 
     const win =
-        status === 'showing-results'
-            ? getResult(sequenceRef.current!, userSequence)
-            : null
+        status === 'showing-results' ? getResult(sequence!, userSequence) : null
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
@@ -86,7 +84,7 @@ const useGame = (
         status,
         win,
         cardValue,
-        sequence: sequenceRef.current,
+        sequence,
         userSequence,
         addCard,
     }
