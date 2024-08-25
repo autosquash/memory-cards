@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { createValidSequence, getResult, numberOfCardsToGuess } from '../model'
+import { createRandomSequence, getResult, numberOfCardsToGuess } from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
@@ -43,7 +43,7 @@ const useGame = (
     const getTimer = () => timerRef.current!
 
     sequenceRef.current ??=
-        sequence || createValidSequence(numberOfCardsToGuess)
+        sequence || createRandomSequence(numberOfCardsToGuess)
 
     check(sequenceRef.current.length === numberOfCardsToGuess, () =>
         badSequenceLengthMsg(sequenceRef.current!)

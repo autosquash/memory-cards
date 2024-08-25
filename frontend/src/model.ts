@@ -26,7 +26,7 @@ const equalCards = (card1: CardData, card2: CardData): boolean => {
     return card1.color === card2.color && card1.shape === card2.shape
 }
 
-const createValidSequence = (n: number): CardData[] => {
+const createRandomSequence = (n: number): CardData[] => {
     const generatedSequence: CardData[] = []
     while (generatedSequence.length < n) {
         const newCardData =
@@ -59,7 +59,7 @@ const getResult = (
 export {
     cardsData,
     createCard,
-    createValidSequence,
+    createRandomSequence,
     getResult,
     numberOfCardsToGuess,
 }
