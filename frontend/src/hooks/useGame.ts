@@ -32,6 +32,9 @@ const useGame = (
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
+    sequenceRef.current ??=
+        sequence || createRandomSequence(numberOfCardsToGuess)
+
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
         sequenceRef.current
@@ -41,9 +44,6 @@ const useGame = (
         status === 'answering' && userSequence.length === numberOfCardsToGuess
 
     const getTimer = () => timerRef.current!
-
-    sequenceRef.current ??=
-        sequence || createRandomSequence(numberOfCardsToGuess)
 
     check(sequenceRef.current.length === numberOfCardsToGuess, () =>
         badSequenceLengthMsg(sequenceRef.current!)
