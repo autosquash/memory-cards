@@ -7,7 +7,7 @@ import useTimer, { Timer } from './useTimer'
 
 const useShowingCards = (
     showingCards: boolean,
-    sequence: ReadonlyArray<CardData> | null
+    sequence: ReadonlyArray<CardData>
 ) => {
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
@@ -32,7 +32,6 @@ const useShowingCards = (
         if (!showingCards || allCardsShowed) {
             return null
         }
-        check(sequence, 'There is not sequence')
         const cardValue = sequence.at(currentStep)
         check(cardValue, () => getBadCardValueMsg(sequence, currentStep))
         return cardValue
