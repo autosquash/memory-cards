@@ -9,7 +9,9 @@ const useShowingCards = (
     showingCards: boolean,
     sequence: ReadonlyArray<CardData>
 ) => {
-    const timerRef = useRef(useTimer())
+    const timerObj = useTimer()
+    const timerRef = useRef(timerObj)
+    timerRef.current = timerObj
     const [currentStep, setCurrentStep] = useState<number>(0)
     const allCardsShowed = currentStep >= numberOfCardsToGuess
     const getTimer = () => timerRef.current

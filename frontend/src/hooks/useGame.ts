@@ -30,7 +30,9 @@ const useGame = (
         providedSequence || createRandomSequence(numberOfCardsToGuess)
     ).current
 
-    const timerRef = useRef(useTimer())
+    const timerObj = useTimer()
+    const timerRef = useRef(timerObj)
+    timerRef.current = timerObj
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
