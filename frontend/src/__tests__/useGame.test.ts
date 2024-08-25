@@ -15,9 +15,11 @@ beforeAll(() => {
     expect(numberOfCardsToGuess >= 2 && numberOfCardsToGuess <= 3).toBe(true)
 })
 
+const mockOnGameFinished = () => {}
+
 describe('useGame', () => {
     it('should start with the initial status', () => {
-        const { result } = renderHook(() => useGame(() => {}))
+        const { result } = renderHook(() => useGame(mockOnGameFinished))
         const { status, cardValue, win } = result.current
 
         expect(status).toBe('initial')
@@ -25,7 +27,7 @@ describe('useGame', () => {
         expect(win).toBe(null)
     })
     it('should change status when time passes', () => {
-        const { result } = renderHook(() => useGame(() => {}))
+        const { result } = renderHook(() => useGame(mockOnGameFinished))
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
 
         let { status, cardValue, win } = result.current
@@ -57,7 +59,9 @@ describe('useGame', () => {
                 .slice(0, numberOfCardsToGuess)
                 .map(([shape, color]) => createCard(shape, color))
             // render the hook
-            ;({ result } = renderHook(() => useGame(() => {}, sequence)))
+            ;({ result } = renderHook(() =>
+                useGame(mockOnGameFinished, sequence)
+            ))
 
             // forward time
             act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
