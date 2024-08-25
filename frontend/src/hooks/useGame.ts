@@ -26,8 +26,8 @@ const useGame = (
     onGameFinished: () => void,
     providedSequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
-    const sequence = useRef<ReadonlyArray<CardData>>(
-        providedSequence || createRandomSequence(numberOfCardsToGuess)
+    const sequenceToRemember = useRef<ReadonlyArray<CardData>>(
+        getSequenceToRemember(providedSequence)
     ).current
 
     const timerObj = useTimer()
@@ -38,17 +38,13 @@ const useGame = (
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
-        sequence
+        sequenceToRemember
     )
 
     const timeToShowResults =
         status === 'answering' && userSequence.length === numberOfCardsToGuess
 
     const getTimer = () => timerRef.current
-
-    check(sequence.length === numberOfCardsToGuess, () =>
-        badSequenceLengthMsg(sequence!)
-    )
 
     useEffect(() => {
         const timer = getTimer()
@@ -77,7 +73,9 @@ const useGame = (
     }, [timeToShowResults, onGameFinished])
 
     const win =
-        status === 'showing-results' ? getResult(sequence!, userSequence) : null
+        status === 'showing-results'
+            ? getResult(sequenceToRemember, userSequence)
+            : null
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
@@ -86,10 +84,20 @@ const useGame = (
         status,
         win,
         cardValue,
-        sequence,
+        sequence: sequenceToRemember,
         userSequence,
         addCard,
     }
+}
+
+const getSequenceToRemember = (
+    provided: ReadonlyArray<CardData> | null
+): ReadonlyArray<CardData> => {
+    const sequence = provided || createRandomSequence(numberOfCardsToGuess)
+    check(sequence.length === numberOfCardsToGuess, () =>
+        badSequenceLengthMsg(sequence!)
+    )
+    return sequence
 }
 
 function badSequenceLengthMsg(sequence: ReadonlyArray<CardData>): string {
