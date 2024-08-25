@@ -26,14 +26,13 @@ const useGame = (
     onGameFinished: () => void,
     sequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
-    const sequenceRef = useRef<ReadonlyArray<CardData> | null>(null)
+    const sequenceRef = useRef<ReadonlyArray<CardData>>(
+        sequence || createRandomSequence(numberOfCardsToGuess)
+    )
     const timerRef = useRef<Timer | null>(null)
     timerRef.current = useTimer()
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
-
-    sequenceRef.current ??=
-        sequence || createRandomSequence(numberOfCardsToGuess)
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
