@@ -5,6 +5,10 @@ const shapes: Shape[] = ['square', 'triangle', 'circle']
 
 const numberOfCardsToGuess = 2
 
+const reprCardData = (cardData: CardData) => {
+    return cardData.color + ' ' + cardData.shape
+}
+
 const buildCardsData = () => {
     const cardsData: CardData[] = []
     for (const color of colors) {
@@ -62,4 +66,5 @@ export {
     createRandomSequence,
     getResult,
     numberOfCardsToGuess,
+    reprCardData,
 }
