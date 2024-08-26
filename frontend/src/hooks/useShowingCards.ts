@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { numberOfCardsToGuess } from '../model'
 import { pauseBetweenCards } from '../settings'
 import { CardData } from '../types'
@@ -35,7 +35,13 @@ const useShowingCards = (
         check(cardValue, () => getBadCardValueMsg(sequence, currentStep))
         return cardValue
     }
-    const cardValue = getCurrentCardValue()
+
+    const cardValue = useMemo(getCurrentCardValue, [
+        showingCards,
+        allCardsShowed,
+        currentStep,
+        sequence,
+    ])
 
     return { allCardsShowed, cardValue }
 }
