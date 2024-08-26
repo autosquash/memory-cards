@@ -14,10 +14,14 @@ interface Props {
 }
 
 const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
-    const { status, win, cardValue, sequence, userSequence, addCard } = useGame(
-        onGameFinished,
-        providedSequence
-    )
+    const {
+        status,
+        win,
+        cardValue,
+        sequenceToRemember,
+        userSequence,
+        addCard,
+    } = useGame(onGameFinished, providedSequence)
 
     return (
         <div
@@ -31,7 +35,7 @@ const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
                 status={status}
                 win={win}
                 cardValue={cardValue}
-                sequence={sequence}
+                sequenceToRemember={sequenceToRemember}
                 userSequence={userSequence}
                 addCard={addCard}
             />
@@ -43,7 +47,7 @@ const GameWidgetContent = ({
     status,
     win,
     cardValue,
-    sequence,
+    sequenceToRemember,
     userSequence,
     addCard,
 }: GameView) => {
@@ -84,7 +88,7 @@ const GameWidgetContent = ({
                     />
                     <SmallCardSequenceWithTitle
                         title={t('Actual sequence')}
-                        sequence={sequence}
+                        sequence={sequenceToRemember}
                     />
                 </>
             )
