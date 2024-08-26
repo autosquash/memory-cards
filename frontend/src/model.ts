@@ -3,7 +3,7 @@ import { check } from './utils'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
-const numberOfCardsToGuess = 2
+const numberOfCardsToGuess = 3
 
 const reprCardData = (cardData: CardData) => {
     return cardData.color + ' ' + cardData.shape
