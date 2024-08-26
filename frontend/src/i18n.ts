@@ -31,6 +31,7 @@ const resources = {
             'There was an error': 'There was an error:',
             'user already exists': 'user {{user}} already exists',
             'user name not valid': 'user name "{{name}}" is not valid',
+            NumberOfCards: 'Number of cards to remember:',
         },
     },
     es: {
@@ -74,6 +75,7 @@ const resources = {
             'user name not valid':
                 'el nombre de usuario "{{name}}" no es válido',
             'unknown error': 'error desconocido',
+            NumberOfCards: 'Número de tarjetas a recordar',
         },
     },
 }

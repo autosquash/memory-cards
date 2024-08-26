@@ -2,7 +2,17 @@ import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 import './Settings.css'
 
-const Settings = () => {
+interface Props {
+    numberOfCardsToRemember: number
+    setNumberOfCardsToRemember: (n: number) => void
+}
+
+type SelectOption = '2' | '3'
+
+const Settings = ({
+    numberOfCardsToRemember,
+    setNumberOfCardsToRemember,
+}: Props) => {
     const { t } = useTranslation()
     return (
         <div>
@@ -12,6 +22,18 @@ const Settings = () => {
                 <ChangeLanguageButton text={t('spanish')} lang_code={'es'} />
                 <ChangeLanguageButton text={t('english')} lang_code={'en'} />
             </div>
+            <h3>{t('NumberOfCards')}</h3>
+            <select
+                value={numberOfCardsToRemember}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setNumberOfCardsToRemember(
+                        parseInt(e.target.value as SelectOption)
+                    )
+                }
+            >
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
     )
 }
