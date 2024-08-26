@@ -25,6 +25,7 @@ const resources = {
             'Your sequence': 'Your sequence:',
             'Actual sequence': 'Actual sequence:',
             'Display demos': 'Display demos and settings',
+            Language: 'Language:',
         },
     },
     es: {
@@ -58,6 +59,7 @@ const resources = {
             'Actual sequence': 'Secuencia original:',
             'Display demos': 'Mostrar demos y ajustes',
             'Unknown option': 'Opción desconocida',
+            Language: 'Idioma:',
         },
     },
 }
