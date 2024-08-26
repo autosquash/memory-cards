@@ -12,7 +12,15 @@ type SelectOption =
     | 'demo-cards-to-click'
     | 'settings'
 
-const Demo = () => {
+interface Props {
+    numberOfCardsToRemember: number
+    setNumberOfCardsToRemember: (n: number) => void
+}
+
+const Demo = ({
+    numberOfCardsToRemember,
+    setNumberOfCardsToRemember,
+}: Props) => {
     const { t } = useTranslation()
     const [demoName, setDemoName] = useState<SelectOption>('settings')
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -39,7 +47,16 @@ const Demo = () => {
                         case 'demo-cards-to-click':
                             return <DemoCardsToClick />
                         case 'settings':
-                            return <Settings />
+                            return (
+                                <Settings
+                                    numberOfCardsToRemember={
+                                        numberOfCardsToRemember
+                                    }
+                                    setNumberOfCardsToRemember={
+                                        setNumberOfCardsToRemember
+                                    }
+                                />
+                            )
                         default:
                             return <p>{t('Unknown option')}</p>
                     }
