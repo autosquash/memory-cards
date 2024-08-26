@@ -7,7 +7,7 @@ import Demo from './demos/Demo'
 function App() {
     const { t } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
-    const numberOfCardsToRemember = 3
+    const [numberOfCardsToRemember, setNumberOfCardsToRemember] = useState(2)
     const handleOnChange = () => {
         setShowingDemo(!showingDemo)
     }
@@ -26,7 +26,10 @@ function App() {
             </div>
 
             {showingDemo ? (
-                <Demo />
+                <Demo
+                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    setNumberOfCardsToRemember={setNumberOfCardsToRemember}
+                />
             ) : (
                 <NavPage numberOfCardsToRemember={numberOfCardsToRemember} />
             )}
