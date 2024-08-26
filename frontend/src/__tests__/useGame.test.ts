@@ -5,6 +5,7 @@ import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
     pauseBetweenCards,
+    timeToShowEachCard,
 } from '../settings'
 import { CardData } from '../types'
 import { sequenceData } from './examples'
@@ -16,6 +17,13 @@ beforeAll(() => {
 })
 
 const mockOnGameFinished = () => {}
+const times: number[] = []
+for (let i = 0; i < numberOfCardsToGuess; i++) {
+    times.push(timeToShowEachCard)
+    if (i !== numberOfCardsToGuess - 1) {
+        times.push(pauseBetweenCards)
+    }
+}
 
 describe('useGame', () => {
     it('should start with the initial status', () => {
@@ -36,9 +44,7 @@ describe('useGame', () => {
         expect(cardValue).toBeTruthy()
         expect(win).toBe(null)
 
-        act(() =>
-            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
-        )
+        times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
         ;({ status, cardValue, win } = result.current)
         expect(status).toBe('pause-before-answering')
         expect(cardValue).toBe(null)
@@ -65,11 +71,7 @@ describe('useGame', () => {
 
             // forward time
             act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-            act(() =>
-                jest.advanceTimersByTime(
-                    pauseBetweenCards * numberOfCardsToGuess
-                )
-            )
+            times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
             act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
         })
 

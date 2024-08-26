@@ -1,11 +1,11 @@
-import { act, render, renderHook, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import GameWidget from '../components/GameWidget'
-import useGame from '../hooks/useGame'
 import { createCard, numberOfCardsToGuess, reprCardData } from '../model'
 import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
     pauseBetweenCards,
+    timeToShowEachCard,
 } from '../settings'
 import { CardData } from '../types'
 import { sequenceData } from './examples'
@@ -27,6 +27,14 @@ HTMLCanvasElement.prototype.getContext = () => {
 
 const mockOnGameFinished = () => {}
 
+const times: number[] = []
+for (let i = 0; i < numberOfCardsToGuess; i++) {
+    times.push(timeToShowEachCard)
+    if (i !== numberOfCardsToGuess - 1) {
+        times.push(pauseBetweenCards)
+    }
+}
+
 beforeAll(() => {
     expect(numberOfCardsToGuess >= 2 && numberOfCardsToGuess <= 3).toBe(true)
 })
@@ -38,10 +46,6 @@ const getData = () => {
     const cardValue = element.getAttribute('data-card-value')
     const win = element.getAttribute('data-win')
     return { status, cardValue, win }
-}
-const addCard = (cardData: CardData) => {
-    const element = screen.getByTestId(reprCardData(cardData))
-    element.click()
 }
 
 describe('GameWidget', () => {
@@ -62,9 +66,7 @@ describe('GameWidget', () => {
         expect(cardValue).toBeTruthy()
         expect(win).toBe('null')
 
-        act(() =>
-            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
-        )
+        times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
         ;({ status, cardValue, win } = getData())
         expect(status).toBe('pause-before-answering')
         expect(cardValue).toBe(null)
@@ -79,6 +81,7 @@ describe('GameWidget', () => {
 })
 
 describe('should get right result', () => {
+    let addCard: (cardData: CardData) => void
     let sequence: CardData[]
     beforeEach(() => {
         // create the sequence
@@ -95,10 +98,15 @@ describe('should get right result', () => {
 
         // forward time
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-        act(() =>
-            jest.advanceTimersByTime(pauseBetweenCards * numberOfCardsToGuess)
-        )
+        times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
         act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
+    })
+    beforeEach(() => {
+        addCard = (cardData: CardData) => {
+            const element = screen.queryByTestId(reprCardData(cardData))
+            expect(element).toBeTruthy()
+            element!.click()
+        }
     })
 
     it('wins', () => {
