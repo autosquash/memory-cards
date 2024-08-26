@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import useGame, { GameView } from '../hooks/useGame'
 import { CardData } from '../types'
+import { repr } from '../utils'
 import Card from './Card'
 import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
@@ -8,14 +9,25 @@ import './GameWidget.css'
 
 interface Props {
     onGameFinished: () => void
+    providedSequence?: ReadonlyArray<CardData> | null
 }
 
-const GameWidget = ({ onGameFinished }: Props) => {
-    const { status, win, cardValue, sequence, userSequence, addCard } =
-        useGame(onGameFinished)
+const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
+    const { status, win, cardValue, sequence, userSequence, addCard } = useGame(
+        onGameFinished,
+        providedSequence
+    )
 
     return (
-        <div className="game-screen">
+        <div
+            data-testid="game-widget-container"
+            className="game-screen"
+            data-status={status}
+            data-card-value={
+                cardValue && cardValue.color + ' ' + cardValue.shape
+            }
+            data-win={repr(win)}
+        >
             <GameWidgetContent
                 status={status}
                 win={win}
