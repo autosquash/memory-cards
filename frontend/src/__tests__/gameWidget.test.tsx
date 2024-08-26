@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react'
 import GameWidget from '../components/GameWidget'
-import { createCard, numberOfCardsToGuess, reprCardData } from '../model'
+import { createCard, numberOfCardsToRemember, reprCardData } from '../model'
 import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
@@ -28,15 +28,17 @@ HTMLCanvasElement.prototype.getContext = () => {
 const mockOnGameFinished = () => {}
 
 const times: number[] = []
-for (let i = 0; i < numberOfCardsToGuess; i++) {
+for (let i = 0; i < numberOfCardsToRemember; i++) {
     times.push(timeToShowEachCard)
-    if (i !== numberOfCardsToGuess - 1) {
+    if (i !== numberOfCardsToRemember - 1) {
         times.push(pauseBetweenCards)
     }
 }
 
 beforeAll(() => {
-    expect(numberOfCardsToGuess >= 2 && numberOfCardsToGuess <= 3).toBe(true)
+    expect(numberOfCardsToRemember >= 2 && numberOfCardsToRemember <= 3).toBe(
+        true
+    )
 })
 
 const getData = () => {
@@ -86,7 +88,7 @@ describe('should get right result', () => {
     beforeEach(() => {
         // create the sequence
         sequence = sequenceData
-            .slice(0, numberOfCardsToGuess)
+            .slice(0, numberOfCardsToRemember)
             .map(([shape, color]) => createCard(shape, color))
 
         render(

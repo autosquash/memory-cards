@@ -3,7 +3,7 @@ import { check } from './utils'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
-const numberOfCardsToGuess = 3
+const numberOfCardsToRemember = 3
 
 const reprCardData = (cardData: CardData) => {
     return cardData.color + ' ' + cardData.shape
@@ -52,7 +52,7 @@ const getResult = (
     sequence: ReadonlyArray<CardData>,
     userSequence: ReadonlyArray<CardData>
 ) => {
-    for (let i = 0; i < numberOfCardsToGuess; i++) {
+    for (let i = 0; i < numberOfCardsToRemember; i++) {
         if (!equalCards(sequence[i], userSequence[i])) {
             return false
         }
@@ -65,6 +65,6 @@ export {
     createCard,
     createRandomSequence,
     getResult,
-    numberOfCardsToGuess,
+    numberOfCardsToRemember,
     reprCardData,
 }

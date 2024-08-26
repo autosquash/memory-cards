@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { createRandomSequence, getResult, numberOfCardsToGuess } from '../model'
+import {
+    createRandomSequence,
+    getResult,
+    numberOfCardsToRemember,
+} from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
@@ -42,7 +46,8 @@ const useGame = (
     )
 
     const timeToShowResults =
-        status === 'answering' && userSequence.length === numberOfCardsToGuess
+        status === 'answering' &&
+        userSequence.length === numberOfCardsToRemember
 
     useEffect(() => {
         const timer = getTimer()
@@ -91,8 +96,8 @@ const useGame = (
 const getSequenceToRemember = (
     provided: ReadonlyArray<CardData> | null
 ): ReadonlyArray<CardData> => {
-    const sequence = provided || createRandomSequence(numberOfCardsToGuess)
-    check(sequence.length === numberOfCardsToGuess, () =>
+    const sequence = provided || createRandomSequence(numberOfCardsToRemember)
+    check(sequence.length === numberOfCardsToRemember, () =>
         badSequenceLengthMsg(sequence!)
     )
     return sequence
