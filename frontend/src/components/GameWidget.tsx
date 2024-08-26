@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import useGame, { GameView } from '../hooks/useGame'
+import { reprCardData } from '../model'
 import { CardData } from '../types'
 import { repr } from '../utils'
 import Card from './Card'
@@ -23,9 +24,7 @@ const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
             data-testid="game-widget-container"
             className="game-screen"
             data-status={status}
-            data-card-value={
-                cardValue && cardValue.color + ' ' + cardValue.shape
-            }
+            data-card-value={cardValue && reprCardData(cardValue)}
             data-win={repr(win)}
         >
             <GameWidgetContent
