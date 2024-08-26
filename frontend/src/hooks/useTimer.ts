@@ -44,17 +44,16 @@ const useTimer = (): Timer => {
             timerIdRef.current = null
         }
     }
-    return {
+    const ref = useRef({
         activate,
         activateOneTime,
         isActive,
         clear,
-    }
+    })
+    return ref.current
 }
 
-const checkRefIsEmpty = (
-    ref: React.MutableRefObject<[number, TimerType] | null>
-) => {
+const checkRefIsEmpty = (ref: React.RefObject<[number, TimerType] | null>) => {
     if (ref.current !== null) {
         const [id, type] = ref.current
         console.error(`there is still a previous ${type}: ${id}`)

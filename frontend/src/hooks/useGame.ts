@@ -4,7 +4,7 @@ import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
 import useShowingCards from './useShowingCards'
-import useTimer from './useTimer'
+import useTimer, { Timer } from './useTimer'
 
 type Status =
     | 'initial'
@@ -30,9 +30,9 @@ const useGame = (
         getSequenceToRemember(providedSequence)
     ).current
 
-    const timerObj = useTimer()
-    const timerRef = useRef(timerObj)
-    timerRef.current = timerObj
+    const timerRef: React.RefObject<Timer> = useRef(useTimer())
+    const getTimer = () => timerRef.current!
+
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
 
@@ -43,8 +43,6 @@ const useGame = (
 
     const timeToShowResults =
         status === 'answering' && userSequence.length === numberOfCardsToGuess
-
-    const getTimer = () => timerRef.current
 
     useEffect(() => {
         const timer = getTimer()

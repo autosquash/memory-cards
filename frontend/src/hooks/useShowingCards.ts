@@ -3,18 +3,16 @@ import { numberOfCardsToGuess } from '../model'
 import { pauseBetweenCards } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
-import useTimer from './useTimer'
+import useTimer, { Timer } from './useTimer'
 
 const useShowingCards = (
     showingCards: boolean,
     sequence: ReadonlyArray<CardData>
 ) => {
-    const timerObj = useTimer()
-    const timerRef = useRef(timerObj)
-    timerRef.current = timerObj
+    const timerRef: React.RefObject<Timer> = useRef(useTimer())
+    const getTimer = () => timerRef.current!
     const [currentStep, setCurrentStep] = useState<number>(0)
     const allCardsShowed = currentStep >= numberOfCardsToGuess
-    const getTimer = () => timerRef.current
 
     useEffect(() => {
         if (!showingCards) {
