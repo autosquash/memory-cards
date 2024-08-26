@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { numberOfCardsToGuess } from '../model'
+import { numberOfCardsToRemember } from '../model'
 import { pauseBetweenCards, timeToShowEachCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
@@ -15,7 +15,7 @@ const useShowingCards = (
     const timerRef: React.RefObject<Timer> = useRef(useTimer())
     const getTimer = () => timerRef.current!
     const [currentStep, setCurrentStep] = useState<number>(0)
-    const allCardsShowed = currentStep >= numberOfCardsToGuess * 2 - 1
+    const allCardsShowed = currentStep >= numberOfCardsToRemember * 2 - 1
 
     useEffect(() => {
         if (!showingCards) {
