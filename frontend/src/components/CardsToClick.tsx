@@ -30,6 +30,7 @@ const CardsToClick = ({ addCard }: Props) => {
             <div className="cards">
                 {cardsData.map((cardData, index) => (
                     <div
+                        data-testid={cardData.color + ' ' + cardData.shape}
                         style={{
                             backgroundColor: cardData.color,
                             opacity: hovered === index ? 1 : 0.85,
