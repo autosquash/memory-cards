@@ -7,6 +7,7 @@ const Settings = () => {
     return (
         <div>
             <h2>{t('Settings')}</h2>
+            <h3>{t('Language')}</h3>
             <div>
                 <ChangeLanguageButton text={t('spanish')} lang_code={'es'} />
                 <ChangeLanguageButton text={t('english')} lang_code={'en'} />
