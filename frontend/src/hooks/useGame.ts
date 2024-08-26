@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-    createRandomSequence,
-    getResult,
-    numberOfCardsToRemember,
-} from '../model'
+import { createRandomSequence, getResult } from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
 import { check, repr } from '../utils'
@@ -28,10 +24,11 @@ interface GameView {
 
 const useGame = (
     onGameFinished: () => void,
+    numberOfCardsToRemember: number,
     providedSequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
     const sequenceToRemember = useRef<ReadonlyArray<CardData>>(
-        getSequenceToRemember(providedSequence)
+        getSequenceToRemember(providedSequence, numberOfCardsToRemember)
     ).current
 
     const timerRef: React.RefObject<Timer> = useRef(useTimer())
@@ -94,7 +91,8 @@ const useGame = (
 }
 
 const getSequenceToRemember = (
-    provided: ReadonlyArray<CardData> | null
+    provided: ReadonlyArray<CardData> | null,
+    numberOfCardsToRemember: number
 ): ReadonlyArray<CardData> => {
     const sequence = provided || createRandomSequence(numberOfCardsToRemember)
     check(sequence.length === numberOfCardsToRemember, () =>

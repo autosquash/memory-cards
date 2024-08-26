@@ -3,8 +3,6 @@ import { check } from './utils'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
-const numberOfCardsToRemember = 3
-
 const reprCardData = (cardData: CardData) => {
     return cardData.color + ' ' + cardData.shape
 }
@@ -52,7 +50,10 @@ const getResult = (
     sequence: ReadonlyArray<CardData>,
     userSequence: ReadonlyArray<CardData>
 ) => {
-    for (let i = 0; i < numberOfCardsToRemember; i++) {
+    if (sequence.length !== userSequence.length) {
+        throw new Error('Both sequences should have the same length')
+    }
+    for (let i = 0; i < sequence.length; i++) {
         if (!equalCards(sequence[i], userSequence[i])) {
             return false
         }
@@ -60,11 +61,4 @@ const getResult = (
     return true
 }
 
-export {
-    cardsData,
-    createCard,
-    createRandomSequence,
-    getResult,
-    numberOfCardsToRemember,
-    reprCardData,
-}
+export { cardsData, createCard, createRandomSequence, getResult, reprCardData }

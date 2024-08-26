@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react'
 import GameWidget from '../components/GameWidget'
-import { createCard, numberOfCardsToRemember, reprCardData } from '../model'
+import { createCard, reprCardData } from '../model'
 import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
@@ -27,19 +27,19 @@ HTMLCanvasElement.prototype.getContext = () => {
 
 const mockOnGameFinished = () => {}
 
-const times: number[] = []
-for (let i = 0; i < numberOfCardsToRemember; i++) {
-    times.push(timeToShowEachCard)
-    if (i !== numberOfCardsToRemember - 1) {
-        times.push(pauseBetweenCards)
+const getTimes = (numberOfCardsToRemember: number): number[] => {
+    if (![2, 3].includes(numberOfCardsToRemember)) {
+        throw new Error('Wrong number of cards to remember')
     }
+    const times: number[] = []
+    for (let i = 0; i < numberOfCardsToRemember; i++) {
+        times.push(timeToShowEachCard)
+        if (i !== numberOfCardsToRemember - 1) {
+            times.push(pauseBetweenCards)
+        }
+    }
+    return times
 }
-
-beforeAll(() => {
-    expect(numberOfCardsToRemember >= 2 && numberOfCardsToRemember <= 3).toBe(
-        true
-    )
-})
 
 const getData = () => {
     const element = screen.getByTestId('game-widget-container')
@@ -51,15 +51,27 @@ const getData = () => {
 }
 
 describe('GameWidget', () => {
+    const numberOfCardsToRemember = 3
+    const times = getTimes(numberOfCardsToRemember)
     it('should start with the initial status', () => {
-        render(<GameWidget onGameFinished={mockOnGameFinished} />)
+        render(
+            <GameWidget
+                onGameFinished={mockOnGameFinished}
+                numberOfCardsToRemember={numberOfCardsToRemember}
+            />
+        )
         const { status, cardValue, win } = getData()
         expect(status).toBe('initial')
         expect(cardValue).toBe(null)
         expect(win).toBe('null')
     })
     it('should change status when time passes', () => {
-        render(<GameWidget onGameFinished={mockOnGameFinished} />)
+        render(
+            <GameWidget
+                onGameFinished={mockOnGameFinished}
+                numberOfCardsToRemember={numberOfCardsToRemember}
+            />
+        )
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
 
         let { status, cardValue, win } = getData()
@@ -80,58 +92,59 @@ describe('GameWidget', () => {
         expect(cardValue).toBe(null)
         expect(win).toBe('null')
     })
-})
 
-describe('should get right result', () => {
-    let addCard: (cardData: CardData) => void
-    let sequence: CardData[]
-    beforeEach(() => {
-        // create the sequence
-        sequence = sequenceData
-            .slice(0, numberOfCardsToRemember)
-            .map(([shape, color]) => createCard(shape, color))
+    describe('should get right result', () => {
+        let addCard: (cardData: CardData) => void
+        let sequence: CardData[]
+        beforeEach(() => {
+            // create the sequence
+            sequence = sequenceData
+                .slice(0, numberOfCardsToRemember)
+                .map(([shape, color]) => createCard(shape, color))
 
-        render(
-            <GameWidget
-                onGameFinished={mockOnGameFinished}
-                providedSequence={sequence}
-            />
-        )
+            render(
+                <GameWidget
+                    onGameFinished={mockOnGameFinished}
+                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    providedSequence={sequence}
+                />
+            )
 
-        // forward time
-        act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
-        times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
-        act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
-    })
-    beforeEach(() => {
-        addCard = (cardData: CardData) => {
-            const element = screen.queryByTestId(reprCardData(cardData))
-            expect(element).toBeTruthy()
-            element!.click()
-        }
-    })
-
-    it('wins', () => {
-        act(() => {
-            for (const card of sequence) {
-                addCard(card)
+            // forward time
+            act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
+            times.forEach((time) => act(() => jest.advanceTimersByTime(time)))
+            act(() => jest.advanceTimersByTime(pauseBeforeAnswering))
+        })
+        beforeEach(() => {
+            addCard = (cardData: CardData) => {
+                const element = screen.queryByTestId(reprCardData(cardData))
+                expect(element).toBeTruthy()
+                element!.click()
             }
         })
-        const { status, win } = getData()
-        expect(status).toBe('showing-results')
-        expect(win).toBe('true')
-    })
-    it('losses', () => {
-        const anotherSequence = [...sequence]
-        const [a, b] = anotherSequence.slice(-2)
-        anotherSequence.splice(-2, 2, b, a)
-        act(() => {
-            for (const card of anotherSequence) {
-                addCard(card)
-            }
+
+        it('wins', () => {
+            act(() => {
+                for (const card of sequence) {
+                    addCard(card)
+                }
+            })
+            const { status, win } = getData()
+            expect(status).toBe('showing-results')
+            expect(win).toBe('true')
         })
-        const { status, win } = getData()
-        expect(status).toBe('showing-results')
-        expect(win).toBe('false')
+        it('losses', () => {
+            const anotherSequence = [...sequence]
+            const [a, b] = anotherSequence.slice(-2)
+            anotherSequence.splice(-2, 2, b, a)
+            act(() => {
+                for (const card of anotherSequence) {
+                    addCard(card)
+                }
+            })
+            const { status, win } = getData()
+            expect(status).toBe('showing-results')
+            expect(win).toBe('false')
+        })
     })
 })
