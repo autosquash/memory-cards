@@ -1,7 +1,6 @@
-import { act, render, renderHook, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import GameWidget from '../components/GameWidget'
-import useGame from '../hooks/useGame'
-import { createCard, numberOfCardsToGuess } from '../model'
+import { createCard, numberOfCardsToGuess, reprCardData } from '../model'
 import {
     pauseBeforeAnswering,
     pauseBeforeFirstCard,
@@ -40,7 +39,7 @@ const getData = () => {
     return { status, cardValue, win }
 }
 const clickCard = (cardData: CardData) => {
-    const element = screen.getByTestId(cardData.color + ' ' + cardData.shape)
+    const element = screen.getByTestId(reprCardData(cardData))
     element.click()
 }
 

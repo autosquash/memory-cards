@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cardsData } from '../model'
+import { cardsData, reprCardData } from '../model'
 import { CardData } from '../types'
 import './CardsToClick.css'
 
@@ -30,7 +30,7 @@ const CardsToClick = ({ addCard }: Props) => {
             <div className="cards">
                 {cardsData.map((cardData, index) => (
                     <div
-                        data-testid={cardData.color + ' ' + cardData.shape}
+                        data-testid={reprCardData(cardData)}
                         style={{
                             backgroundColor: cardData.color,
                             opacity: hovered === index ? 1 : 0.85,
