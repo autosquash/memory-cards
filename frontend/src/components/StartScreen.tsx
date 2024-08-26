@@ -8,9 +8,14 @@ import './StartScreen.css'
 interface Props {
     userName: string
     setNavState: SetNavState
+    numberOfCardsToRemember: number
 }
 
-const StartScreen = ({ userName, setNavState }: Props) => {
+const StartScreen = ({
+    userName,
+    setNavState,
+    numberOfCardsToRemember,
+}: Props) => {
     const { t } = useTranslation()
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
@@ -23,6 +28,7 @@ const StartScreen = ({ userName, setNavState }: Props) => {
                     <GameWidget
                         key={gameIndex}
                         onGameFinished={handleGameFinished}
+                        numberOfCardsToRemember={numberOfCardsToRemember}
                     />
                 ) : (
                     <p>{t('Click Start Game')}</p>

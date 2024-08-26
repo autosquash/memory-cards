@@ -11,7 +11,11 @@ function validateUserNameNotMissing(
     }
 }
 
-const NavPage = () => {
+interface Props {
+    numberOfCardsToRemember: number
+}
+
+const NavPage = ({ numberOfCardsToRemember }: Props) => {
     const { navData, setNavState } = useNav()
 
     switch (navData.page) {
@@ -23,6 +27,7 @@ const NavPage = () => {
                 <StartScreen
                     userName={navData.userName}
                     setNavState={setNavState}
+                    numberOfCardsToRemember={numberOfCardsToRemember}
                 />
             )
         default:
