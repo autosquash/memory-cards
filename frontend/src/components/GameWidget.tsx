@@ -10,10 +10,15 @@ import './GameWidget.css'
 
 interface Props {
     onGameFinished: () => void
+    numberOfCardsToRemember: number
     providedSequence?: ReadonlyArray<CardData> | null
 }
 
-const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
+const GameWidget = ({
+    onGameFinished,
+    numberOfCardsToRemember,
+    providedSequence = null,
+}: Props) => {
     const {
         status,
         win,
@@ -21,7 +26,7 @@ const GameWidget = ({ onGameFinished, providedSequence = null }: Props) => {
         sequenceToRemember,
         userSequence,
         addCard,
-    } = useGame(onGameFinished, providedSequence)
+    } = useGame(onGameFinished, numberOfCardsToRemember, providedSequence)
 
     return (
         <div
