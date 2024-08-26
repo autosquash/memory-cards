@@ -21,7 +21,7 @@ interface GameView {
     status: Status
     win: boolean | null
     cardValue: CardData | null
-    sequence: ReadonlyArray<CardData>
+    sequenceToRemember: ReadonlyArray<CardData>
     userSequence: CardData[]
     addCard: (cardData: CardData) => void
 }
@@ -87,7 +87,7 @@ const useGame = (
         status,
         win,
         cardValue,
-        sequence: sequenceToRemember,
+        sequenceToRemember,
         userSequence,
         addCard,
     }
