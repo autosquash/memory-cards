@@ -5,21 +5,24 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-names: list[str] = ["Peter", "Joan", "Lukas"]
+names: list[str] = []
 
 ERR_USERNAME_NOT_VALID = "ERR_USERNAME_NOT_VALID"
 ERR_USER_ALREADY_EXISTS = "ERR_USER_ALREADY_EXISTS"
 
+# check frontend behaviour on network delays
+SIMULATED_DELAY = 0.6
+
 
 @app.route("/names", methods=["GET"])
 def get_names():
-    time.sleep(1.5)  # check frontend behaviour on delays
+    time.sleep(SIMULATED_DELAY)
     return jsonify(names)
 
 
 @app.route("/names", methods=["POST"])
 def add_name():
-    time.sleep(1.5)
+    time.sleep(SIMULATED_DELAY)
     assert request.json
     new_name = request.json.get("name")
     if isinstance(new_name, str):
