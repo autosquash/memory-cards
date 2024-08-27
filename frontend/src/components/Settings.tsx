@@ -57,8 +57,13 @@ const ChangeLanguageButton = ({
     )
 }
 
-const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng)
+const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang)
+    let jsonData = window.localStorage.getItem('memory-cards')
+    const data = jsonData ? JSON.parse(jsonData) : {}
+    data['language'] = lang
+    jsonData = JSON.stringify(data)
+    window.localStorage.setItem('memory-cards', jsonData)
 }
 
 export default Settings
