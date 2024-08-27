@@ -1,18 +1,19 @@
+const APP_KEY = 'memory-cards'
+
 const useStorage = () => {
+    const getStorageDict = () => {
+        const jsonData = window.localStorage.getItem(APP_KEY) || '{}'
+        return JSON.parse(jsonData)
+    }
     const read = (key: string): unknown => {
-        const jsonData = window.localStorage.getItem('memory-cards')
-        if (!jsonData) {
-            return null
-        }
-        const data = JSON.parse(jsonData)
+        const data = getStorageDict()
         return data[key]
     }
     const write = (key: string, value: unknown): void => {
-        let jsonData = window.localStorage.getItem('memory-cards') || '{}'
-        const data = JSON.parse(jsonData)
+        const data = getStorageDict()
         data[key] = value
-        jsonData = JSON.stringify(data)
-        window.localStorage.setItem('memory-cards', jsonData)
+        const jsonData = JSON.stringify(data)
+        window.localStorage.setItem(APP_KEY, jsonData)
     }
     return { read, write }
 }
