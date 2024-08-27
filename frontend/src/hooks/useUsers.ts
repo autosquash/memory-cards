@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { User } from '../types'
+import { BackendUser, Game, User } from '../types'
 
 const url = 'http://127.0.0.1:5000'
 const getUsersApi = url + '/users'
@@ -31,9 +31,10 @@ const useUsers = () => {
         axios
             .get(getUsersApi)
             .then((response) => {
-                const fetchedUsers = response.data as User[]
+                const fetchedUsers = response.data as BackendUser[]
                 const usersMap = new Map<string, User>()
-                for (const user of fetchedUsers) {
+                for (const fetchedUser of fetchedUsers) {
+                    const user: User = { ...fetchedUser, recentGamesPlayed: [] }
                     usersMap.set(user.name, user)
                 }
                 setUsersMap(usersMap)
@@ -59,7 +60,11 @@ const useUsers = () => {
             .post(addUserApi, { name: newName })
             .then(() => {
                 const newMap = new Map(usersMap)
-                newMap.set(newName, { name: newName, score: 0 })
+                newMap.set(newName, {
+                    name: newName,
+                    score: 0,
+                    recentGamesPlayed: [],
+                })
                 setUsersMap(newMap)
                 setNewUserName('')
             })
@@ -73,12 +78,28 @@ const useUsers = () => {
                 }
             })
     }
+    const addGame = (
+        userName: string,
+        game: Game,
+        numberOfCardsToRemember: number
+    ) => {
+        const user = usersMap!.get(userName)!
+        const modifiedUser: User = {
+            ...user,
+            score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
+            recentGamesPlayed: [...user.recentGamesPlayed, game],
+        }
+        const newUsersMap = new Map(usersMap)
+        newUsersMap.set(user.name, modifiedUser)
+        setUsersMap(newUsersMap)
+    }
     return {
         usersMap,
         newUserName,
         commitUser,
         setNewUserName,
         createUserErr,
+        addGame,
     }
 }
 

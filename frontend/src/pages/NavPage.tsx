@@ -1,4 +1,5 @@
 import useNav from '../hooks/useNav'
+import useUsers from '../hooks/useUsers'
 import { check } from '../utils'
 import Settings from './Settings'
 import StartScreen from './StartScreen'
@@ -14,19 +15,41 @@ const NavPage = ({
     setNumberOfCardsToRemember,
 }: Props) => {
     const { navData, setNavState } = useNav()
+    const {
+        usersMap,
+        newUserName,
+        commitUser,
+        setNewUserName,
+        createUserErr,
+        addGame,
+    } = useUsers()
 
     switch (navData.page) {
         case 'home':
-            return <WelcomeScreen setNavState={setNavState} />
-        case 'start-page':
-            check(navData.userName)
             return (
-                <StartScreen
-                    userName={navData.userName}
+                <WelcomeScreen
                     setNavState={setNavState}
-                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    usersMap={usersMap}
+                    newUserName={newUserName}
+                    commitUser={commitUser}
+                    setNewUserName={setNewUserName}
+                    createUserErr={createUserErr}
                 />
             )
+        case 'start-page': {
+            check(navData.userName)
+            check(usersMap)
+            const user = usersMap.get(navData.userName)!
+            check(user)
+            return (
+                <StartScreen
+                    user={user}
+                    setNavState={setNavState}
+                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    addGame={addGame}
+                />
+            )
+        }
         case 'settings-page':
             return (
                 <Settings

@@ -3,19 +3,28 @@ import { useTranslation } from 'react-i18next'
 import AddUserForm from '../components/AddUserForm'
 import NamesListing from '../components/NamesListing'
 import Demo from '../demos/Demo'
-import useUsers from '../hooks/useUsers'
-import { SetNavState } from '../types'
+import { SetNavState, User } from '../types'
 import './WelcomeScreen.css'
 
 interface Props {
     setNavState: SetNavState
+    usersMap: ReadonlyMap<string, User> | null
+    newUserName: string
+    commitUser: (newName: string) => void
+    setNewUserName: (newName: string) => void
+    createUserErr: string | null
 }
 
-const WelcomeScreen = ({ setNavState }: Props) => {
+const WelcomeScreen = ({
+    setNavState,
+    usersMap,
+    newUserName,
+    commitUser,
+    setNewUserName,
+    createUserErr,
+}: Props) => {
     const { t } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
-    const { usersMap, newUserName, commitUser, setNewUserName, createUserErr } =
-        useUsers()
 
     const handleUserSelection = (userName: string) => {
         if (!usersMap) {
