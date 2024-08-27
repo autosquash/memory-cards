@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import ExitButton from '../components/ExitButton'
+import GameWidget from '../components/GameWidget'
 import { SetNavState } from '../types'
-import ExitButton from './ExitButton'
-import GameWidget from './GameWidget'
 import './StartScreen.css'
 
 interface Props {
