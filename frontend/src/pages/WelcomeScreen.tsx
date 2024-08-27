@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import AddUserForm from '../components/AddUserForm'
 import NamesListing from '../components/NamesListing'
 import Demo from '../demos/Demo'
-import useNames from '../hooks/useNames'
+import useUsers from '../hooks/useUsers'
 import { SetNavState } from '../types'
 import './WelcomeScreen.css'
 
@@ -14,13 +14,8 @@ interface Props {
 const WelcomeScreen = ({ setNavState }: Props) => {
     const { t } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
-    const {
-        userNames,
-        newUserName,
-        commitUser,
-        setNewUserName,
-        createUserErr,
-    } = useNames()
+    const { users, newUserName, commitUser, setNewUserName, createUserErr } =
+        useUsers()
 
     const handleUserSelection = (name: string) => {
         setNavState('start-page', name)
@@ -49,7 +44,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                 <div className="welcome-screen">
                     <h3>{t('Who are you?')}</h3>
                     <NamesListing
-                        userNames={userNames}
+                        userNames={users?.map((user) => user.name) || null}
                         onUserSelection={handleUserSelection}
                     />
 
