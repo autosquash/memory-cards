@@ -1,16 +1,8 @@
 import useNav from '../hooks/useNav'
+import { check } from '../utils'
 import Settings from './Settings'
 import StartScreen from './StartScreen'
 import WelcomeScreen from './WelcomeScreen'
-
-function validateUserNameNotMissing(
-    userName: string | null,
-    page: string
-): asserts userName is string {
-    if (userName === null) {
-        throw new Error(`Can't go to ${page} without a userName`)
-    }
-}
 
 interface Props {
     numberOfCardsToRemember: number
@@ -27,7 +19,7 @@ const NavPage = ({
         case 'home':
             return <WelcomeScreen setNavState={setNavState} />
         case 'start-page':
-            validateUserNameNotMissing(navData.userName, 'the start page')
+            check(navData.userName)
             return (
                 <StartScreen
                     userName={navData.userName}
