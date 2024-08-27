@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Demo from '../demos/Demo'
 import useNames from '../hooks/useNames'
 import { SetNavState } from '../types'
+import AddUserForm from './AddUserForm'
 import NamesListing from './NamesListing'
 import './WelcomeScreen.css'
 
@@ -21,10 +22,6 @@ const WelcomeScreen = ({ setNavState }: Props) => {
         createUserErr,
     } = useNames()
 
-    const handleAddName = (event: React.ChangeEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        commitUser(newUserName)
-    }
     const handleUserSelection = (name: string) => {
         setNavState('start-page', name)
     }
@@ -62,34 +59,15 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                             style={{ backgroundColor: 'red' }}
                         >
                             <p>
-                                {t('There was an error')} {createUserErr}{' '}
+                                {t('There was an error')} {createUserErr}
                             </p>
                         </div>
                     ) : (
-                        <>
-                            <p>{t('call to register')}</p>
-                            <form
-                                className="WelcomeScreen_name-form-or-err"
-                                onSubmit={handleAddName}
-                            >
-                                <input
-                                    type="text"
-                                    name="user-name"
-                                    value={newUserName}
-                                    onChange={(e) =>
-                                        setNewUserName(e.target.value)
-                                    }
-                                    placeholder={t('Your name')}
-                                />
-                                <button
-                                    type="submit"
-                                    className="WelcomeScreen_add-me-button"
-                                    disabled={!newUserName.trim()}
-                                >
-                                    {t('Add me')}{' '}
-                                </button>
-                            </form>
-                        </>
+                        <AddUserForm
+                            newUserName={newUserName}
+                            commitUser={commitUser}
+                            setNewUserName={setNewUserName}
+                        />
                     )}
                     <div
                         className="WelcomeScreen_settings_button"
