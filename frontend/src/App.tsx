@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
 import NavPage from './components/NavPage'
 import Demo from './demos/Demo'
+import useStorage from './hooks/useStorage'
+
+const DEFAULT_LANGUAGE = 'en'
 
 function App() {
     const { t, i18n } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
     const [numberOfCardsToRemember, setNumberOfCardsToRemember] = useState(2)
+    const storage = useRef(useStorage()).current
     useEffect(() => {
-        const jsonData = window.localStorage.getItem('memory-cards')
-        const data = jsonData ? JSON.parse(jsonData) : {}
-        const lang = data['language'] || 'en'
-        i18n.changeLanguage(lang)
+        const lang = storage.read('language') || DEFAULT_LANGUAGE
+        i18n.changeLanguage(lang as string)
         return
-    }, [i18n])
+    }, [i18n, storage])
 
     const handleOnChange = () => {
         setShowingDemo(!showingDemo)
