@@ -52,5 +52,15 @@ def add_user():
     return jsonify({"message": "User added successfully!"}), 201
 
 
+@app.route("/users/update", methods=["POST"])
+def update_users():
+    time.sleep(SIMULATED_DELAY)
+    assert request.json
+    new_users = request.json.get("users")
+    users.clear()
+    users.extend(new_users)
+    return jsonify({"message": "Users updates successfully!"}), 201
+
+
 if __name__ == "__main__":
     app.run()
