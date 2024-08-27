@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
-import NavPage from './components/NavPage'
 import useStorage from './hooks/useStorage'
+import NavPage from './pages/NavPage'
 
 const DEFAULT_LANGUAGE = 'en'
 
