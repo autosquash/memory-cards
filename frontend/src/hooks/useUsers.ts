@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { BackendUser, Game, User } from '../types'
 
 const url = 'http://127.0.0.1:5000'
+
 const getUsersApi = url + '/users'
 const addUserApi = url + '/users/add'
+const updateUsersApi = url + '/users/update'
 
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
@@ -83,6 +85,9 @@ const useUsers = () => {
         game: Game,
         numberOfCardsToRemember: number
     ) => {
+        if (!usersMap) {
+            throw new Error("Can't add game if there are no users")
+        }
         const user = usersMap!.get(userName)!
         const modifiedUser: User = {
             ...user,
@@ -92,6 +97,9 @@ const useUsers = () => {
         const newUsersMap = new Map(usersMap)
         newUsersMap.set(user.name, modifiedUser)
         setUsersMap(newUsersMap)
+        axios.post(updateUsersApi, {
+            users: toBackendUsers(newUsersMap),
+        })
     }
     return {
         usersMap,
@@ -101,6 +109,15 @@ const useUsers = () => {
         createUserErr,
         addGame,
     }
+}
+
+const toBackendUsers = (
+    usersMap: ReadonlyMap<string, User>
+): ReadonlyArray<BackendUser> => {
+    return Array.from(usersMap.values()).map((user) => ({
+        name: user.name,
+        score: user.score,
+    }))
 }
 
 export default useUsers
