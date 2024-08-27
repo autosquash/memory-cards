@@ -1,7 +1,8 @@
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import useGame, { GameView } from '../hooks/useGame'
 import { reprCardData } from '../model'
-import { CardData } from '../types'
+import { CardData, Game } from '../types'
 import { repr } from '../utils'
 import Card from './Card'
 import CardSequence from './CardSequence'
@@ -9,16 +10,21 @@ import CardsToClick from './CardsToClick'
 import './GameWidget.css'
 
 interface Props {
-    onGameFinished: () => void
+    gameIndex: number
     numberOfCardsToRemember: number
+    onGameFinished: () => void
+    addGame: (game: Game) => void
     providedSequence?: ReadonlyArray<CardData> | null
 }
 
 const GameWidget = ({
     onGameFinished,
     numberOfCardsToRemember,
+    addGame,
+    gameIndex,
     providedSequence = null,
 }: Props) => {
+    const addCurrentGame = useRef(addGame).current
     const {
         status,
         win,
@@ -27,6 +33,12 @@ const GameWidget = ({
         userSequence,
         addCard,
     } = useGame(onGameFinished, numberOfCardsToRemember, providedSequence)
+    useEffect(() => {
+        if (win !== null) {
+            addCurrentGame({ gameIndex: gameIndex, isWin: win })
+        }
+        return
+    }, [gameIndex, win, addCurrentGame])
 
     return (
         <div

@@ -58,6 +58,8 @@ describe('GameWidget', () => {
             <GameWidget
                 onGameFinished={mockOnGameFinished}
                 numberOfCardsToRemember={numberOfCardsToRemember}
+                gameIndex={0}
+                addGame={() => {}}
             />
         )
         const { status, cardValue, win } = getData()
@@ -70,6 +72,8 @@ describe('GameWidget', () => {
             <GameWidget
                 onGameFinished={mockOnGameFinished}
                 numberOfCardsToRemember={numberOfCardsToRemember}
+                gameIndex={0}
+                addGame={() => {}}
             />
         )
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
@@ -106,6 +110,8 @@ describe('GameWidget', () => {
                 <GameWidget
                     onGameFinished={mockOnGameFinished}
                     numberOfCardsToRemember={numberOfCardsToRemember}
+                    gameIndex={0}
+                    addGame={() => {}}
                     providedSequence={sequence}
                 />
             )

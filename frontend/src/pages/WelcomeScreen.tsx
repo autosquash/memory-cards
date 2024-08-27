@@ -17,8 +17,14 @@ const WelcomeScreen = ({ setNavState }: Props) => {
     const { users, newUserName, commitUser, setNewUserName, createUserErr } =
         useUsers()
 
-    const handleUserSelection = (name: string) => {
-        setNavState('start-page', name)
+    const handleUserSelection = (userName: string) => {
+        if (!users) {
+            throw new Error('No users but tring to select one of them')
+        }
+        if (!userName) {
+            throw new Error('Trying to go to start page with no user selected')
+        }
+        setNavState('start-page', userName)
     }
     const handleOnDemoCheckboxChange = () => {
         setShowingDemo(!showingDemo)
