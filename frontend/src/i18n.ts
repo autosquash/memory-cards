@@ -16,6 +16,7 @@ const resources = {
             'Start Game': 'Start Game',
             Exit: 'Exit',
             User: 'User:',
+            Score: 'Score:',
             'Game starting':
                 'The Game is starting! Remember the sequence of cards.',
             'Cards displayed': 'Cards displayed! Do you remember them?',
@@ -51,6 +52,7 @@ const resources = {
             'Start Game': 'Iniciar Juego',
             Exit: 'Salir',
             User: 'Usuaria/o:',
+            Score: 'Puntuación:',
             'Game starting':
                 '¡Empieza el juego! Recuerda la secuencia de tarjetas.',
             red: 'rojo',
