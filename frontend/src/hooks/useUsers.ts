@@ -1,15 +1,17 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { User } from '../types'
 
 const url = 'http://127.0.0.1:5000'
-const userNamesApi = url + '/names'
+const getUsersApi = url + '/users'
+
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
 
-const useNames = () => {
+const useUsers = () => {
     const { t } = useTranslation()
-    const [userNames, setUserNames] = useState<null | string[]>(null)
+    const [users, setUsers] = useState<null | User[]>(null)
     const [newUserName, setNewUserName] = useState<string>('')
     const [createUserErr, setCreateUserErr] = useState<string | null>(null)
     const getMessageFromErrCode = (errCode: string | null): string => {
@@ -24,9 +26,9 @@ const useNames = () => {
     }
     useEffect(() => {
         axios
-            .get(userNamesApi)
-            .then((response) => setUserNames(response.data))
-            .catch((error) => console.error('Error fetching names:', error))
+            .get(getUsersApi)
+            .then((response) => setUsers(response.data))
+            .catch((error) => console.error('Error fetching users:', error))
     }, [])
     useEffect(() => {
         if (createUserErr !== null) {
@@ -44,9 +46,9 @@ const useNames = () => {
             return
         }
         axios
-            .post(userNamesApi, { name: newName })
+            .post(getUsersApi, { name: newName })
             .then(() => {
-                setUserNames([...(userNames || []), newName])
+                setUsers([...(users || []), { name: newName, score: 0 }])
                 setNewUserName('')
             })
             .catch((error) => {
@@ -60,7 +62,7 @@ const useNames = () => {
             })
     }
     return {
-        userNames,
+        users,
         newUserName,
         commitUser,
         setNewUserName,
@@ -68,4 +70,4 @@ const useNames = () => {
     }
 }
 
-export default useNames
+export default useUsers

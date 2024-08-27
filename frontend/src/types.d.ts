@@ -6,5 +6,9 @@ interface CardData {
     color: Color
     shape: Shape
 }
+interface User {
+    readonly name: string
+    readonly score: number
+}
 
-export type { CardData, Color, Page, SetNavState, Shape }
+export type { CardData, Color, Page, SetNavState, Shape, User }
