@@ -2,11 +2,13 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import useStorage from '../hooks/useStorage'
 import i18n from '../i18n'
+import { SetNavState } from '../types'
 import './Settings.css'
 
 interface Props {
     numberOfCardsToRemember: number
     setNumberOfCardsToRemember: (n: number) => void
+    setNavState: SetNavState
 }
 
 type SelectOption = '2' | '3'
@@ -14,28 +16,42 @@ type SelectOption = '2' | '3'
 const Settings = ({
     numberOfCardsToRemember,
     setNumberOfCardsToRemember,
+    setNavState,
 }: Props) => {
     const { t } = useTranslation()
     return (
         <div>
             <h2>{t('Settings')}</h2>
-            <h3>{t('Language')}</h3>
             <div>
-                <ChangeLanguageButton text={t('spanish')} lang_code={'es'} />
-                <ChangeLanguageButton text={t('english')} lang_code={'en'} />
+                <h3>{t('Language')}</h3>
+                <div>
+                    <ChangeLanguageButton
+                        text={t('spanish')}
+                        lang_code={'es'}
+                    />
+                    <ChangeLanguageButton
+                        text={t('english')}
+                        lang_code={'en'}
+                    />
+                </div>
             </div>
-            <h3>{t('NumberOfCards')}</h3>
-            <select
-                value={numberOfCardsToRemember}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    setNumberOfCardsToRemember(
-                        parseInt(e.target.value as SelectOption)
-                    )
-                }
-            >
-                <option value="2">2</option>
-                <option value="3">3</option>
-            </select>
+            <div>
+                <h3>{t('NumberOfCards')}</h3>
+                <select
+                    value={numberOfCardsToRemember}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setNumberOfCardsToRemember(
+                            parseInt(e.target.value as SelectOption)
+                        )
+                    }
+                >
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <footer className="Settings_footer">
+                <button onClick={() => setNavState('home')}>{t('Back')}</button>
+            </footer>
         </div>
     )
 }

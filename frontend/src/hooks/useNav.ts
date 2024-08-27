@@ -12,14 +12,9 @@ const useNav = (): {
 } => {
     const [page, setPage] = useState<Page>('home')
     const [currentUserName, setCurrentUserName] = useState<string | null>(null)
-    const setNavState = (user: string | null) => {
-        if (user == null) {
-            setPage('home')
-            setCurrentUserName(null)
-        } else {
-            setCurrentUserName(user)
-            setPage('start-page')
-        }
+    const setNavState = (newPage: Page, user: string | null = null) => {
+        setCurrentUserName(user)
+        setPage(newPage)
     }
     return { navData: { page, userName: currentUserName }, setNavState }
 }
