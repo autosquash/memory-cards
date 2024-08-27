@@ -1,4 +1,6 @@
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import useStorage from '../hooks/useStorage'
 import i18n from '../i18n'
 import './Settings.css'
 
@@ -47,6 +49,11 @@ const ChangeLanguageButton = ({
     text,
     lang_code,
 }: ChangeLanguageButtonProps) => {
+    const storage = useRef(useStorage()).current
+    const changeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang)
+        storage.write('language', lang)
+    }
     return (
         <button
             className="Settings_button"
@@ -55,15 +62,6 @@ const ChangeLanguageButton = ({
             {text}
         </button>
     )
-}
-
-const changeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang)
-    let jsonData = window.localStorage.getItem('memory-cards')
-    const data = jsonData ? JSON.parse(jsonData) : {}
-    data['language'] = lang
-    jsonData = JSON.stringify(data)
-    window.localStorage.setItem('memory-cards', jsonData)
 }
 
 export default Settings
