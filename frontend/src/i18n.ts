@@ -76,6 +76,7 @@ const resources = {
                 'el nombre de usuario "{{name}}" no es válido',
             'unknown error': 'error desconocido',
             NumberOfCards: 'Número de tarjetas a recordar',
+            Back: 'Volver',
         },
     },
 }

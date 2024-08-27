@@ -1,28 +1,15 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Settings from '../components/Settings'
 import './Demo.css'
 import DemoCard from './DemoCard'
 import DemoCardsToClick from './DemoCardsToClick'
 import DemoHome from './DemoHome'
 
-type SelectOption =
-    | 'demo-home'
-    | 'demo-card'
-    | 'demo-cards-to-click'
-    | 'settings'
+type SelectOption = 'demo-home' | 'demo-card' | 'demo-cards-to-click'
 
-interface Props {
-    numberOfCardsToRemember: number
-    setNumberOfCardsToRemember: (n: number) => void
-}
-
-const Demo = ({
-    numberOfCardsToRemember,
-    setNumberOfCardsToRemember,
-}: Props) => {
+const Demo = () => {
     const { t } = useTranslation()
-    const [demoName, setDemoName] = useState<SelectOption>('settings')
+    const [demoName, setDemoName] = useState<SelectOption>('demo-home')
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
         setDemoName(e.target.value as SelectOption)
     return (
@@ -46,17 +33,6 @@ const Demo = ({
                             return <DemoCard />
                         case 'demo-cards-to-click':
                             return <DemoCardsToClick />
-                        case 'settings':
-                            return (
-                                <Settings
-                                    numberOfCardsToRemember={
-                                        numberOfCardsToRemember
-                                    }
-                                    setNumberOfCardsToRemember={
-                                        setNumberOfCardsToRemember
-                                    }
-                                />
-                            )
                         default:
                             return <p>{t('Unknown option')}</p>
                     }

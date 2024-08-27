@@ -8,12 +8,7 @@ interface Props {
 const ExitButton = ({ setNavState }: Props) => {
     const { t } = useTranslation()
     return (
-        <button
-            className="exit-button"
-            onClick={() => {
-                setNavState(null)
-            }}
-        >
+        <button className="exit-button" onClick={() => setNavState('home')}>
             {t('Exit')}
         </button>
     )

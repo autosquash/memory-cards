@@ -1,4 +1,5 @@
 import useNav from '../hooks/useNav'
+import Settings from './Settings'
 import StartScreen from './StartScreen'
 import WelcomeScreen from './WelcomeScreen'
 
@@ -13,9 +14,13 @@ function validateUserNameNotMissing(
 
 interface Props {
     numberOfCardsToRemember: number
+    setNumberOfCardsToRemember: (n: number) => void
 }
 
-const NavPage = ({ numberOfCardsToRemember }: Props) => {
+const NavPage = ({
+    numberOfCardsToRemember,
+    setNumberOfCardsToRemember,
+}: Props) => {
     const { navData, setNavState } = useNav()
 
     switch (navData.page) {
@@ -28,6 +33,14 @@ const NavPage = ({ numberOfCardsToRemember }: Props) => {
                     userName={navData.userName}
                     setNavState={setNavState}
                     numberOfCardsToRemember={numberOfCardsToRemember}
+                />
+            )
+        case 'settings-page':
+            return (
+                <Settings
+                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    setNumberOfCardsToRemember={setNumberOfCardsToRemember}
+                    setNavState={setNavState}
                 />
             )
         default:
