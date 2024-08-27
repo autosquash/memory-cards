@@ -6,13 +6,27 @@ interface CardData {
     color: Color
     shape: Shape
 }
+interface BackendUser {
+    readonly name: string
+    readonly score: number
+}
 interface User {
     readonly name: string
     readonly score: number
+    readonly recentGamesPlayed: ReadonlyArray<Game>
 }
 interface Game {
     gameIndex: number
     isWin: boolean
 }
 
-export type { CardData, Color, Game, Page, SetNavState, Shape, User }
+export type {
+    BackendUser,
+    CardData,
+    Color,
+    Game,
+    Page,
+    SetNavState,
+    Shape,
+    User,
+}

@@ -2,19 +2,25 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
 import GameWidget from '../components/GameWidget'
-import { Game, SetNavState } from '../types'
+import { Game, SetNavState, User } from '../types'
 import './StartScreen.css'
 
 interface Props {
-    userName: string
+    user: User
     setNavState: SetNavState
     numberOfCardsToRemember: number
+    addGame: (
+        userName: string,
+        game: Game,
+        numberOfCardsToRemember: number
+    ) => void
 }
 
 const StartScreen = ({
-    userName,
+    user,
     setNavState,
     numberOfCardsToRemember,
+    addGame,
 }: Props) => {
     const { t } = useTranslation()
     const [playing, setPlaying] = useState(false)
@@ -22,8 +28,10 @@ const StartScreen = ({
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
     const [games, setGames] = useState<Game[]>([])
     const handleGameFinished = () => setStartGameButtonEnabled(true)
-    const addGame = (game: Game) => {
-        setGames([...games, game])
+    const addThisGame = (game: Game) => {
+        const newGames = [...games, game]
+        setGames(newGames)
+        addGame(user.name, game, numberOfCardsToRemember)
     }
     return (
         <div className="start-screen">
@@ -34,7 +42,7 @@ const StartScreen = ({
                         gameIndex={gameIndex}
                         onGameFinished={handleGameFinished}
                         numberOfCardsToRemember={numberOfCardsToRemember}
-                        addGame={addGame}
+                        addGame={addThisGame}
                     />
                 ) : (
                     <p>{t('Click Start Game')}</p>
@@ -43,16 +51,10 @@ const StartScreen = ({
             <div className="bottom-bar">
                 <div className="StartScreen_user-data">
                     <p className="user-label">
-                        {t('User')} {userName}
+                        {t('User')} {user.name}
                     </p>
                     <p className="user-label">
-                        {t('Score')}{' '}
-                        {games.reduce(
-                            (partialSum, game) =>
-                                partialSum +
-                                (game.isWin ? numberOfCardsToRemember : 0),
-                            0
-                        )}
+                        {t('Score')} {user.score}
                     </p>
                 </div>
 
