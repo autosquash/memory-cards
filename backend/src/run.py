@@ -1,11 +1,18 @@
 import time
+from typing import TypedDict
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-names: list[str] = []
+
+class User(TypedDict):
+    name: str
+    score: int
+
+
+users: list[User] = []
 
 ERR_USERNAME_NOT_VALID = "ERR_USERNAME_NOT_VALID"
 ERR_USER_ALREADY_EXISTS = "ERR_USER_ALREADY_EXISTS"
@@ -14,14 +21,14 @@ ERR_USER_ALREADY_EXISTS = "ERR_USER_ALREADY_EXISTS"
 SIMULATED_DELAY = 0.6
 
 
-@app.route("/names", methods=["GET"])
-def get_names():
+@app.route("/users", methods=["GET"])
+def get_users():
     time.sleep(SIMULATED_DELAY)
-    return jsonify(names)
+    return jsonify(users)
 
 
-@app.route("/names", methods=["POST"])
-def add_name():
+@app.route("/users", methods=["POST"])
+def add_user():
     time.sleep(SIMULATED_DELAY)
     assert request.json
     new_name = request.json.get("name")
@@ -34,15 +41,15 @@ def add_name():
             ),
             400,
         )
-    if new_name in names:
+    if new_name in [user["name"] for user in users]:
         return (
             jsonify(
                 {"message": "Name already exists!", "err_code": ERR_USER_ALREADY_EXISTS}
             ),
             400,
         )
-    names.append(new_name)
-    return jsonify({"message": "Name added successfully!"}), 201
+    users.append(User(name=new_name, score=0))
+    return jsonify({"message": "User added successfully!"}), 201
 
 
 if __name__ == "__main__":
