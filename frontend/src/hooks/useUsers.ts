@@ -17,14 +17,17 @@ const useUsers = () => {
     const [usersMap, setUsersMap] = useState<null | ReadonlyMap<string, User>>(
         null
     )
-    const [newUserName, setNewUserName] = useState<string>('')
+
     const [createUserErr, setCreateUserErr] = useState<string | null>(null)
-    const getMessageFromErrCode = (errCode: string | null): string => {
+    const getMessageFromErrCode = (
+        errCode: string | null,
+        newName: string
+    ): string => {
         switch (errCode) {
             case ERR_USERNAME_NOT_VALID:
-                return t('user name not valid', { name: newUserName })
+                return t('user name not valid', { name: newName })
             case ERR_USER_ALREADY_EXISTS:
-                return t('user already exists', { user: newUserName })
+                return t('user already exists', { user: newName })
             default:
                 return t('unknown error')
         }
@@ -45,7 +48,6 @@ const useUsers = () => {
     }, [])
     useEffect(() => {
         if (createUserErr !== null) {
-            setNewUserName('')
             const timeoutId = window.setTimeout(
                 () => setCreateUserErr(null),
                 3000
@@ -68,14 +70,15 @@ const useUsers = () => {
                     recentGamesPlayed: [],
                 })
                 setUsersMap(newMap)
-                setNewUserName('')
             })
             .catch((error) => {
                 const errData = error.response?.data
                 if (errData !== null && 'err_code' in errData) {
-                    setCreateUserErr(getMessageFromErrCode(errData.err_code))
+                    setCreateUserErr(
+                        getMessageFromErrCode(errData.err_code, newName)
+                    )
                 } else {
-                    setCreateUserErr(getMessageFromErrCode(null))
+                    setCreateUserErr(getMessageFromErrCode(null, newName))
                     console.error(error)
                 }
             })
@@ -103,9 +106,7 @@ const useUsers = () => {
     }
     return {
         usersMap,
-        newUserName,
         commitUser,
-        setNewUserName,
         createUserErr,
         addGame,
     }
