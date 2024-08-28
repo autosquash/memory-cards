@@ -15,14 +15,7 @@ const NavPage = ({
     setNumberOfCardsToRemember,
 }: Props) => {
     const { navData, setNavState } = useNav()
-    const {
-        usersMap,
-        newUserName,
-        commitUser,
-        setNewUserName,
-        createUserErr,
-        addGame,
-    } = useUsers()
+    const { usersMap, commitUser, createUserErr, addGame } = useUsers()
 
     switch (navData.page) {
         case 'home':
@@ -30,9 +23,7 @@ const NavPage = ({
                 <WelcomeScreen
                     setNavState={setNavState}
                     usersMap={usersMap}
-                    newUserName={newUserName}
                     commitUser={commitUser}
-                    setNewUserName={setNewUserName}
                     createUserErr={createUserErr}
                 />
             )
