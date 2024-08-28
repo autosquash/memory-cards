@@ -9,22 +9,19 @@ import './WelcomeScreen.css'
 interface Props {
     setNavState: SetNavState
     usersMap: ReadonlyMap<string, User> | null
-    newUserName: string
     commitUser: (newName: string) => void
-    setNewUserName: (newName: string) => void
     createUserErr: string | null
 }
 
 const WelcomeScreen = ({
     setNavState,
     usersMap,
-    newUserName,
     commitUser,
-    setNewUserName,
     createUserErr,
 }: Props) => {
     const { t } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
+    const [newUserName, setNewUserName] = useState<string>('')
 
     const handleUserSelection = (userName: string) => {
         if (!usersMap) {
@@ -75,7 +72,10 @@ const WelcomeScreen = ({
                     ) : (
                         <AddUserForm
                             newUserName={newUserName}
-                            commitUser={commitUser}
+                            commitUser={(newName: string) => {
+                                setNewUserName('')
+                                commitUser(newName)
+                            }}
                             setNewUserName={setNewUserName}
                         />
                     )}
