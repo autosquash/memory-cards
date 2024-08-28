@@ -12,4 +12,18 @@ export function check(
     throw new Error(msg || 'assertion error')
 }
 
-export const repr = JSON.stringify
+export const repr = (obj: unknown): string => {
+    // Only works for maps if there are the top level item
+    // For example, an object containing a Map as property
+    // is going to default to JSON.stringify()
+    if (obj instanceof Map) return strMapToObj(obj)
+    return JSON.stringify(obj)
+}
+
+function strMapToObj(strMap: Map<string, unknown>) {
+    const obj = Object.create(null)
+    for (const [k, v] of strMap) {
+        obj[k] = v
+    }
+    return obj
+}
