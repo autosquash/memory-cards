@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import './AddUserForm.css'
 
 interface Props {
     newUserName: string
@@ -15,10 +16,7 @@ function AddUserForm({ commitUser, newUserName, setNewUserName }: Props) {
     return (
         <>
             <p>{t('call to register')}</p>
-            <form
-                className="WelcomeScreen_name-form-or-err"
-                onSubmit={handleAddName}
-            >
+            <form className="AddUserForm_name" onSubmit={handleAddName}>
                 <input
                     type="text"
                     name="user-name"
@@ -28,7 +26,7 @@ function AddUserForm({ commitUser, newUserName, setNewUserName }: Props) {
                 />
                 <button
                     type="submit"
-                    className="WelcomeScreen_add-me-button"
+                    className="AddUserForm_add-me-button"
                     disabled={!newUserName.trim()}
                 >
                     {t('Add me')}{' '}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import './NamesListing.css'
 
 interface Props {
     userNames: string[] | null
@@ -15,19 +16,21 @@ const NamesListing = ({ userNames, onUserSelection }: Props) => {
         onUserSelection(name)
     }
     return (
-        <div className="names-list-container">
+        <div className="NamesListing_names-list-container">
             {userNames !== null ? (
-                <ul className="names-list">
+                <ul className="NamesListing_names-list">
                     {userNames.length ? (
                         userNames.map((name, index) => (
                             <li key={index}>
                                 <button
-                                    className="user-button"
+                                    className="NamesListing_user-button"
                                     onClick={(event) =>
                                         handleChooseUser(event, name)
                                     }
                                 >
-                                    <span className="name">{name}</span>
+                                    <span className="NamesListing_name">
+                                        {name}
+                                    </span>
                                 </button>
                             </li>
                         ))
