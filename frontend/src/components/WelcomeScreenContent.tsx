@@ -38,14 +38,7 @@ const WelcomeScreenContent = ({
             />
 
             {createUserErr ? (
-                <div
-                    className="WelcomeScreenContent_name-err"
-                    style={{ backgroundColor: 'red' }}
-                >
-                    <p>
-                        {t('There was an error')} {createUserErr}
-                    </p>
-                </div>
+                <NameErrorBox createUserErr={createUserErr} />
             ) : (
                 <AddUserForm
                     newUserName={newUserName}
@@ -65,4 +58,23 @@ const WelcomeScreenContent = ({
         </div>
     )
 }
+
+interface Props {
+    createUserErr: string
+}
+
+function NameErrorBox({ createUserErr }: Props) {
+    const { t } = useTranslation()
+    return (
+        <div
+            className="WelcomeScreenContent_name-err"
+            style={{ backgroundColor: 'red' }}
+        >
+            <p>
+                {t('There was an error')} {createUserErr}
+            </p>
+        </div>
+    )
+}
+
 export default WelcomeScreenContent
