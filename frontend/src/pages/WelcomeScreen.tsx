@@ -14,11 +14,11 @@ interface Props {
 const WelcomeScreen = ({ setNavState }: Props) => {
     const { t } = useTranslation()
     const [showingDemo, setShowingDemo] = useState(false)
-    const { users, newUserName, commitUser, setNewUserName, createUserErr } =
+    const { usersMap, newUserName, commitUser, setNewUserName, createUserErr } =
         useUsers()
 
     const handleUserSelection = (userName: string) => {
-        if (!users) {
+        if (!usersMap) {
             throw new Error('No users but tring to select one of them')
         }
         if (!userName) {
@@ -50,7 +50,7 @@ const WelcomeScreen = ({ setNavState }: Props) => {
                 <div className="welcome-screen">
                     <h3>{t('Who are you?')}</h3>
                     <NamesListing
-                        userNames={users?.map((user) => user.name) || null}
+                        userNames={usersMap && Array.from(usersMap.keys())}
                         onUserSelection={handleUserSelection}
                     />
 
