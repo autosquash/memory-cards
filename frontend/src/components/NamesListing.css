@@ -1,0 +1,26 @@
+.NamesListing_names-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-shrink: 1;
+    max-height: 60%;
+}
+
+.NamesListing_names-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100%;
+}
+
+.NamesListing_name {
+    color: #CC0;
+}
+
+.NamesListing_user-button {
+    padding: 6px 12px;
+    margin: 6px;
+}
