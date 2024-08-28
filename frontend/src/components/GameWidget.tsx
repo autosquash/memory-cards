@@ -7,7 +7,7 @@ import { repr } from '../utils'
 import Card from './Card'
 import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
-import './GameWidget.css'
+import styles from './GameWidget.module.css'
 
 interface Props {
     gameIndex: number
@@ -43,7 +43,7 @@ const GameWidget = ({
     return (
         <div
             data-testid="game-widget-container"
-            className="game-screen"
+            className={styles.gameScreen}
             data-status={status}
             data-card-value={cardValue && reprCardData(cardValue)}
             data-win={repr(win)}
@@ -76,7 +76,7 @@ const GameWidgetContent = ({
         case 'showing-cards':
             return (
                 cardValue && (
-                    <div className="card-display">
+                    <div className={styles.cardDisplay}>
                         <Card shape={cardValue.shape} color={cardValue.color} />
                     </div>
                 )
@@ -86,7 +86,7 @@ const GameWidgetContent = ({
         case 'answering':
             return (
                 <>
-                    <div className="GameWidget_container">
+                    <div className={styles.container}>
                         <CardsToClick addCard={addCard} />
                     </div>
                     <SmallCardSequenceWithTitle
@@ -125,7 +125,7 @@ const SmallCardSequenceWithTitle = ({
     return (
         <>
             <p>{title}</p>
-            <div className="CardSequence_sequence">
+            <div className={styles.cardSequence}>
                 <CardSequence sequence={sequence} scale={0.4} />
             </div>
         </>

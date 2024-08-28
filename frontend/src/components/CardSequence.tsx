@@ -1,6 +1,5 @@
 import { CardData } from '../types'
 import Card from './Card'
-import './CardSequence.css'
 
 interface Props {
     sequence: ReadonlyArray<CardData>
