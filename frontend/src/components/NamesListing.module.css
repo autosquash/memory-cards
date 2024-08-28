@@ -1,4 +1,4 @@
-.NamesListing_names-list-container {
+.names-list-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -8,7 +8,7 @@
     max-height: 60%;
 }
 
-.NamesListing_names-list {
+.names-list {
     list-style-type: none;
     display: flex;
     flex-direction: column;
@@ -16,11 +16,11 @@
     max-height: 100%;
 }
 
-.NamesListing_name {
+.name {
     color: #CC0;
 }
 
-.NamesListing_user-button {
+.user-button {
     padding: 6px 12px;
     margin: 6px;
 }

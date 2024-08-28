@@ -1,4 +1,4 @@
-.WelcomeScreenContent_main {
+.main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -7,11 +7,11 @@
     background-color: #008;
 }
 
-.WelcomeScreenContent_name-err {
+.name-err {
     min-height: 20%;
 }
 
-.WelcomeScreenContent_settings_button {
+.settings_button {
     padding: 12px;
     position: absolute;
     bottom: 0;

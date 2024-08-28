@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import AddUserForm from '../components/AddUserForm'
 import NamesListing from '../components/NamesListing'
 import { SetNavState } from '../types'
-import './WelcomeScreenContent.css'
+import styles from './WelcomeScreenContent.module.css'
 
 interface Props {
     userNames: string[] | null
@@ -30,7 +30,7 @@ const WelcomeScreenContent = ({
         setNavState('start-page', userName)
     }
     return (
-        <div className="WelcomeScreenContent_main">
+        <div className={styles.main}>
             <h3>{t('Who are you?')}</h3>
             <NamesListing
                 userNames={userNames}
@@ -61,10 +61,7 @@ interface NameErrorBoxProps {
 function NameErrorBox({ createUserErr }: NameErrorBoxProps) {
     const { t } = useTranslation()
     return (
-        <div
-            className="WelcomeScreenContent_name-err"
-            style={{ backgroundColor: 'red' }}
-        >
+        <div className={styles.nameErr} style={{ backgroundColor: 'red' }}>
             <p>
                 {t('There was an error')} {createUserErr}
             </p>
@@ -79,7 +76,7 @@ interface SettingsButtonProps {
 function SettingsButton({ setNavState }: SettingsButtonProps) {
     return (
         <div
-            className="WelcomeScreenContent_settings_button"
+            className={styles.settingsButton}
             onClick={() => setNavState('settings-page')}
         >
             ⚙️

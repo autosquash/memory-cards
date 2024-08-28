@@ -1,8 +1,0 @@
-.CardSequence_sequence {
-    display: flex;
-    justify-content: center;
-}
-
-.CardSequence_sequence>* {
-    margin: 6px;
-}

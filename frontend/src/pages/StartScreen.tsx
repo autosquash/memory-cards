@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
 import GameWidget from '../components/GameWidget'
 import { Game, SetNavState, User } from '../types'
-import './StartScreen.css'
+import styles from './StartScreen.module.css'
 
 interface Props {
     user: User
@@ -34,8 +34,8 @@ const StartScreen = ({
         addGame(user.name, game, numberOfCardsToRemember)
     }
     return (
-        <div className="start-screen">
-            <div className="main-game">
+        <div className={styles.startScreen}>
+            <div className={styles.mainGame}>
                 {playing ? (
                     <GameWidget
                         key={gameIndex}
@@ -48,18 +48,18 @@ const StartScreen = ({
                     <p>{t('Click Start Game')}</p>
                 )}
             </div>
-            <div className="bottom-bar">
-                <div className="StartScreen_user-data">
-                    <p className="user-label">
+            <div className={styles.bottomBar}>
+                <div className={styles.userData}>
+                    <p className={styles.userLabel}>
                         {t('User')} {user.name}
                     </p>
-                    <p className="user-label">
+                    <p className={styles.userLabel}>
                         {t('Score')} {user.score}
                     </p>
                 </div>
 
                 <button
-                    className="start-button"
+                    className={styles.startButton}
                     onClick={() => {
                         setGameIndex(gameIndex + 1)
                         setPlaying(true)
