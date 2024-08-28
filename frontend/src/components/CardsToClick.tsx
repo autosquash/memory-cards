@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { cardsData, reprCardData } from '../model'
 import { CardData } from '../types'
 import Card from './Card'
-import './CardsToClick.css'
+import styles from './CardsToClick.module.css'
 
 interface Props {
     addCard: (cardData: CardData) => void
@@ -13,7 +13,7 @@ const CardsToClick = ({ addCard }: Props) => {
 
     return (
         <>
-            <div className="cards">
+            <div className={styles.cards}>
                 {cardsData.map((cardData, index) => (
                     <div
                         data-testid={reprCardData(cardData)}

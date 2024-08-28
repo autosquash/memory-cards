@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import useStorage from '../hooks/useStorage'
 import i18n from '../i18n'
 import { SetNavState } from '../types'
-import './Settings.css'
+import styles from './Settings.module.css'
 
 interface Props {
     numberOfCardsToRemember: number
@@ -49,7 +49,7 @@ const Settings = ({
                     <option value="3">3</option>
                 </select>
             </div>
-            <footer className="Settings_footer">
+            <footer className={styles.footer}>
                 <button onClick={() => setNavState('home')}>{t('Back')}</button>
             </footer>
         </div>
@@ -72,7 +72,7 @@ const ChangeLanguageButton = ({
     }
     return (
         <button
-            className="Settings_button"
+            className={styles.button}
             onClick={() => changeLanguage(lang_code)}
         >
             {text}
