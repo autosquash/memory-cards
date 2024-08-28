@@ -27,7 +27,7 @@ def get_users():
     return jsonify(users)
 
 
-@app.route("/users", methods=["POST"])
+@app.route("/users/add", methods=["POST"])
 def add_user():
     time.sleep(SIMULATED_DELAY)
     assert request.json

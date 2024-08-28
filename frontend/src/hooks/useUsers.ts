@@ -5,6 +5,7 @@ import { User } from '../types'
 
 const url = 'http://127.0.0.1:5000'
 const getUsersApi = url + '/users'
+const addUserApi = url + '/users/add'
 
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
@@ -46,7 +47,7 @@ const useUsers = () => {
             return
         }
         axios
-            .post(getUsersApi, { name: newName })
+            .post(addUserApi, { name: newName })
             .then(() => {
                 setUsers([...(users || []), { name: newName, score: 0 }])
                 setNewUserName('')
