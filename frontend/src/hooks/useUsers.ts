@@ -12,7 +12,9 @@ const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
 
 const useUsers = () => {
     const { t } = useTranslation()
-    const [users, setUsers] = useState<null | User[]>(null)
+    const [usersMap, setUsersMap] = useState<null | ReadonlyMap<string, User>>(
+        null
+    )
     const [newUserName, setNewUserName] = useState<string>('')
     const [createUserErr, setCreateUserErr] = useState<string | null>(null)
     const getMessageFromErrCode = (errCode: string | null): string => {
@@ -28,7 +30,14 @@ const useUsers = () => {
     useEffect(() => {
         axios
             .get(getUsersApi)
-            .then((response) => setUsers(response.data))
+            .then((response) => {
+                const fetchedUsers = response.data as User[]
+                const usersMap = new Map<string, User>()
+                for (const user of fetchedUsers) {
+                    usersMap.set(user.name, user)
+                }
+                setUsersMap(usersMap)
+            })
             .catch((error) => console.error('Error fetching users:', error))
     }, [])
     useEffect(() => {
@@ -49,7 +58,9 @@ const useUsers = () => {
         axios
             .post(addUserApi, { name: newName })
             .then(() => {
-                setUsers([...(users || []), { name: newName, score: 0 }])
+                const newMap = new Map(usersMap)
+                newMap.set(newName, { name: newName, score: 0 })
+                setUsersMap(newMap)
                 setNewUserName('')
             })
             .catch((error) => {
@@ -63,7 +74,7 @@ const useUsers = () => {
             })
     }
     return {
-        users,
+        usersMap,
         newUserName,
         commitUser,
         setNewUserName,
