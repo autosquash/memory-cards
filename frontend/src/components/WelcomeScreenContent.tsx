@@ -5,7 +5,7 @@ import NamesListing from '../components/NamesListing'
 import { SetNavState } from '../types'
 import './WelcomeScreenContent.css'
 
-interface ContentProps {
+interface Props {
     userNames: string[] | null
     commitUser: (newName: string) => void
     createUserErr: string | null
@@ -17,7 +17,7 @@ const WelcomeScreenContent = ({
     commitUser,
     createUserErr,
     setNavState,
-}: ContentProps) => {
+}: Props) => {
     const { t } = useTranslation()
     const [newUserName, setNewUserName] = useState<string>('')
     const handleUserSelection = (userName: string) => {
@@ -49,21 +49,16 @@ const WelcomeScreenContent = ({
                     setNewUserName={setNewUserName}
                 />
             )}
-            <div
-                className="WelcomeScreenContent_settings_button"
-                onClick={() => setNavState('settings-page')}
-            >
-                ⚙️
-            </div>
+            {<SettingsButton setNavState={setNavState} />}
         </div>
     )
 }
 
-interface Props {
+interface NameErrorBoxProps {
     createUserErr: string
 }
 
-function NameErrorBox({ createUserErr }: Props) {
+function NameErrorBox({ createUserErr }: NameErrorBoxProps) {
     const { t } = useTranslation()
     return (
         <div
@@ -73,6 +68,21 @@ function NameErrorBox({ createUserErr }: Props) {
             <p>
                 {t('There was an error')} {createUserErr}
             </p>
+        </div>
+    )
+}
+
+interface SettingsButtonProps {
+    setNavState: SetNavState
+}
+
+function SettingsButton({ setNavState }: SettingsButtonProps) {
+    return (
+        <div
+            className="WelcomeScreenContent_settings_button"
+            onClick={() => setNavState('settings-page')}
+        >
+            ⚙️
         </div>
     )
 }
