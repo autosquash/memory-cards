@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BackendUser, Game, User } from '../types'
 
-const url = 'http://127.0.0.1:5000'
+const url = import.meta.env.VITE_API_URL
 
 const getUsersApi = url + '/users'
 const addUserApi = url + '/users/add'
