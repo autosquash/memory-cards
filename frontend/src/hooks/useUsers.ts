@@ -1,12 +1,7 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getApiUrl } from '../envVars'
-import { BackendUser, Game, User } from '../types'
-
-const getUsersApi = '/users'
-const addUserApi = '/users/add'
-const updateUsersApi = '/users/update'
+import backendService from '../backendService'
+import { Game, User } from '../types'
 
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
@@ -32,18 +27,13 @@ const useUsers = () => {
         }
     }
     useEffect(() => {
-        axios
-            .get(getApiUrl() + getUsersApi)
-            .then((response) => {
-                const fetchedUsers = response.data as BackendUser[]
-                const usersMap = new Map<string, User>()
-                for (const fetchedUser of fetchedUsers) {
-                    const user: User = { ...fetchedUser, recentGamesPlayed: [] }
-                    usersMap.set(user.name, user)
-                }
-                setUsersMap(usersMap)
-            })
-            .catch((error) => console.error('Error fetching users:', error))
+        const loadUsersFromBackend = async () => {
+            const newUsersMap = await backendService.getUsers()
+            if (newUsersMap) {
+                setUsersMap(newUsersMap)
+            }
+        }
+        loadUsersFromBackend()
     }, [])
     useEffect(() => {
         if (createUserErr !== null) {
@@ -55,32 +45,28 @@ const useUsers = () => {
         }
         return
     }, [createUserErr])
-    const commitUser = (newName: string) => {
+    const commitUser = async (newName: string) => {
         if (!newName.trim()) {
             return
         }
-        axios
-            .post(getApiUrl() + addUserApi, { name: newName })
-            .then(() => {
-                const newMap = new Map(usersMap)
-                newMap.set(newName, {
-                    name: newName,
-                    score: 0,
-                    recentGamesPlayed: [],
-                })
-                setUsersMap(newMap)
+        const result = await backendService.addUser(newName)
+        if (result.ok) {
+            const newMap = new Map(usersMap)
+            newMap.set(newName, {
+                name: newName,
+                score: 0,
+                recentGamesPlayed: [],
             })
-            .catch((error) => {
-                const errData = error.response?.data
-                if (errData !== null && 'err_code' in errData) {
-                    setCreateUserErr(
-                        getMessageFromErrCode(errData.err_code, newName)
-                    )
-                } else {
-                    setCreateUserErr(getMessageFromErrCode(null, newName))
-                    console.error(error)
-                }
-            })
+            setUsersMap(newMap)
+        } else {
+            const error = result.error!
+            if (error.err_code) {
+                setCreateUserErr(getMessageFromErrCode(error.err_code, newName))
+            } else {
+                setCreateUserErr(getMessageFromErrCode(null, newName))
+                console.error(error)
+            }
+        }
     }
     const addGame = (
         userName: string,
@@ -99,9 +85,7 @@ const useUsers = () => {
         const newUsersMap = new Map(usersMap)
         newUsersMap.set(user.name, modifiedUser)
         setUsersMap(newUsersMap)
-        axios.post(getApiUrl() + updateUsersApi, {
-            users: toBackendUsers(newUsersMap),
-        })
+        backendService.updateUsers(newUsersMap)
     }
     return {
         usersMap,
@@ -109,15 +93,6 @@ const useUsers = () => {
         createUserErr,
         addGame,
     }
-}
-
-const toBackendUsers = (
-    usersMap: ReadonlyMap<string, User>
-): ReadonlyArray<BackendUser> => {
-    return Array.from(usersMap.values()).map((user) => ({
-        name: user.name,
-        score: user.score,
-    }))
 }
 
 export default useUsers
