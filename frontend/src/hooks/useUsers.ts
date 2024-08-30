@@ -1,13 +1,12 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { getApiUrl } from '../envVars'
 import { BackendUser, Game, User } from '../types'
 
-const url = import.meta.env.VITE_API_URL
-
-const getUsersApi = url + '/users'
-const addUserApi = url + '/users/add'
-const updateUsersApi = url + '/users/update'
+const getUsersApi = '/users'
+const addUserApi = '/users/add'
+const updateUsersApi = '/users/update'
 
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
@@ -34,7 +33,7 @@ const useUsers = () => {
     }
     useEffect(() => {
         axios
-            .get(getUsersApi)
+            .get(getApiUrl() + getUsersApi)
             .then((response) => {
                 const fetchedUsers = response.data as BackendUser[]
                 const usersMap = new Map<string, User>()
@@ -61,7 +60,7 @@ const useUsers = () => {
             return
         }
         axios
-            .post(addUserApi, { name: newName })
+            .post(getApiUrl() + addUserApi, { name: newName })
             .then(() => {
                 const newMap = new Map(usersMap)
                 newMap.set(newName, {
@@ -100,7 +99,7 @@ const useUsers = () => {
         const newUsersMap = new Map(usersMap)
         newUsersMap.set(user.name, modifiedUser)
         setUsersMap(newUsersMap)
-        axios.post(updateUsersApi, {
+        axios.post(getApiUrl() + updateUsersApi, {
             users: toBackendUsers(newUsersMap),
         })
     }
