@@ -25,10 +25,7 @@ const getUsers = async (): Promise<Map<string, User> | null> => {
 
 const addUser = async (
     newName: string
-): Promise<
-    | { ok: true; error: null }
-    | { ok: false; error: { err_code: string | null } }
-> => {
+): Promise<Result<null, { err_code: string | null }>> => {
     await axios.post(addUserApi, { name: newName }).catch((error) => {
         const errData: { err_code: string } | null = error.response?.data
         if (errData !== null && 'err_code' in errData) {
@@ -37,13 +34,16 @@ const addUser = async (
             return { ok: false, error: { err_code: null } }
         }
     })
-    return { ok: true, error: null }
+    return { ok: true, value: null }
 }
+
 const updateUsers = async (usersMap: ReadonlyMap<string, User>) => {
     axios.post(updateUsersApi, {
         users: toBackendUsers(usersMap),
     })
 }
+
+type Result<V, E> = { ok: true; value: V } | { ok: false; error: E }
 
 const toBackendUsers = (
     usersMap: ReadonlyMap<string, User>
@@ -53,4 +53,5 @@ const toBackendUsers = (
         score: user.score,
     }))
 }
+
 export default { getUsers, addUser, updateUsers }
