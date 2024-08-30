@@ -1,7 +1,11 @@
 import time
 from typing import TypedDict
+
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
