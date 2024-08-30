@@ -35,7 +35,7 @@ const addUser = async (
                 return { ok: false, error: { err_code: null } }
             }
         })
-    return { ok: true, value: null }
+    return { ok: true, value: null, error: null }
 }
 
 const updateUsers = async (usersMap: ReadonlyMap<string, User>) => {
@@ -44,7 +44,9 @@ const updateUsers = async (usersMap: ReadonlyMap<string, User>) => {
     })
 }
 
-type Result<V, E> = { ok: true; value: V } | { ok: false; error: E }
+type Result<V, E> =
+    | { ok: true; value: V; error: null }
+    | { ok: false; error: E }
 
 const toBackendUsers = (
     usersMap: ReadonlyMap<string, User>
