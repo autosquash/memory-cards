@@ -25,6 +25,7 @@ interface GameView {
 const useGame = (
     onGameFinished: () => void,
     numberOfCardsToRemember: number,
+    addCurrentGame: (isWin: boolean, numberOfCards: number) => void,
     providedSequence: ReadonlyArray<CardData> | null = null
 ): GameView => {
     const sequenceToRemember = useRef<ReadonlyArray<CardData>>(
@@ -69,10 +70,19 @@ const useGame = (
     useEffect(() => {
         if (timeToShowResults) {
             setStatus('showing-results')
-            setWin(getResult(sequenceToRemember, userSequence))
+            const isWin = getResult(sequenceToRemember, userSequence)
+            setWin(isWin)
+            addCurrentGame(isWin, numberOfCardsToRemember)
             onGameFinished()
         }
-    }, [timeToShowResults, onGameFinished, sequenceToRemember, userSequence])
+    }, [
+        timeToShowResults,
+        onGameFinished,
+        sequenceToRemember,
+        userSequence,
+        addCurrentGame,
+        numberOfCardsToRemember,
+    ])
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])

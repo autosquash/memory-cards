@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import useGame, { GameView } from '../hooks/useGame'
 import { reprCardData } from '../model'
@@ -24,7 +24,14 @@ const GameWidget = ({
     gameIndex,
     providedSequence = null,
 }: Props) => {
-    const addCurrentGame = useRef(addGame).current
+    const addCurrentGame = useRef((isWin: boolean, numberOfCards: number) =>
+        addGame({
+            gameIndex,
+            isWin,
+            numberOfCards,
+        })
+    ).current
+
     const {
         status,
         win,
@@ -32,17 +39,12 @@ const GameWidget = ({
         sequenceToRemember,
         userSequence,
         addCard,
-    } = useGame(onGameFinished, numberOfCardsToRemember, providedSequence)
-    useEffect(() => {
-        if (win !== null) {
-            addCurrentGame({
-                gameIndex: gameIndex,
-                isWin: win,
-                numberOfCards: numberOfCardsToRemember,
-            })
-        }
-        return
-    }, [gameIndex, win, numberOfCardsToRemember, addCurrentGame])
+    } = useGame(
+        onGameFinished,
+        numberOfCardsToRemember,
+        addCurrentGame,
+        providedSequence
+    )
 
     return (
         <div
