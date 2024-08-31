@@ -5,10 +5,11 @@ import useStorage from './hooks/useStorage'
 import NavPage from './pages/NavPage'
 
 const DEFAULT_LANGUAGE = 'en'
+const DEFAULT_AUTOMATIC_MODE = true
 
 function App() {
     const { i18n } = useTranslation()
-
+    const [automaticMode, setAutomaticMode] = useState(DEFAULT_AUTOMATIC_MODE)
     const [numberOfCardsToRemember, setNumberOfCardsToRemember] = useState(2)
     const storage = useRef(useStorage()).current
     useEffect(() => {
@@ -21,6 +22,8 @@ function App() {
         <NavPage
             numberOfCardsToRemember={numberOfCardsToRemember}
             setNumberOfCardsToRemember={setNumberOfCardsToRemember}
+            automaticMode={automaticMode}
+            setAutomaticMode={setAutomaticMode}
         />
     )
 }

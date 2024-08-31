@@ -8,7 +8,9 @@ import styles from './Settings.module.css'
 interface Props {
     numberOfCardsToRemember: number
     setNumberOfCardsToRemember: (n: number) => void
+    automaticMode: boolean
     setNavState: SetNavState
+    setAutomaticMode: (value: boolean) => void
 }
 
 type SelectOption = '2' | '3'
@@ -17,6 +19,8 @@ const Settings = ({
     numberOfCardsToRemember,
     setNumberOfCardsToRemember,
     setNavState,
+    automaticMode,
+    setAutomaticMode,
 }: Props) => {
     const { t } = useTranslation()
     return (
@@ -38,15 +42,24 @@ const Settings = ({
             <div>
                 <h3>{t('NumberOfCards')}</h3>
                 <select
-                    value={numberOfCardsToRemember}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setNumberOfCardsToRemember(
-                            parseInt(e.target.value as SelectOption)
-                        )
+                    value={
+                        automaticMode ? 'automatic' : numberOfCardsToRemember
                     }
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        if (e.target.value === 'automatic') {
+                            setNumberOfCardsToRemember(2)
+                            setAutomaticMode(true)
+                        } else {
+                            setAutomaticMode(false)
+                            setNumberOfCardsToRemember(
+                                parseInt(e.target.value as SelectOption)
+                            )
+                        }
+                    }}
                 >
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="automatic">{t('Automatic')}</option>
                 </select>
             </div>
             <footer className={styles.footer}>

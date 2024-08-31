@@ -27,3 +27,10 @@ function strMapToObj(strMap: Map<string, unknown>) {
     }
     return obj
 }
+
+export function arrayEquals(a: unknown[], b: unknown[]) {
+    if (!Array.isArray(a) || !Array.isArray(b)) {
+        throw new Error('Both arguments should be arrays')
+    }
+    return a.length === b.length && a.every((val, index) => val === b[index])
+}

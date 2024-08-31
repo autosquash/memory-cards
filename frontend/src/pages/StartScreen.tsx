@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
 import GameWidget from '../components/GameWidget'
@@ -9,11 +9,13 @@ interface Props {
     user: User
     setNavState: SetNavState
     numberOfCardsToRemember: number
+    automaticMode: boolean
     addGame: (
         userName: string,
         game: Game,
         numberOfCardsToRemember: number
     ) => void
+    updateNumberOfCardsToRemember: () => void
 }
 
 const StartScreen = ({
@@ -21,18 +23,23 @@ const StartScreen = ({
     setNavState,
     numberOfCardsToRemember,
     addGame,
+    automaticMode,
+    updateNumberOfCardsToRemember,
 }: Props) => {
     const { t } = useTranslation()
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
-    const handleGameFinished = useCallback(
-        () => setStartGameButtonEnabled(true),
-        []
-    )
+
+    const handleGameFinished = useCallback(() => {
+        setStartGameButtonEnabled(true)
+    }, [])
     const addThisGame = (game: Game) => {
         addGame(user.name, game, numberOfCardsToRemember)
     }
+    const recentGamesPlayedRef = useRef(user.recentGamesPlayed)
+    recentGamesPlayedRef.current = user.recentGamesPlayed
+
     return (
         <div className={styles.startScreen}>
             <div className={styles.mainGame}>
@@ -64,6 +71,9 @@ const StartScreen = ({
                         setGameIndex(gameIndex + 1)
                         setPlaying(true)
                         setStartGameButtonEnabled(false)
+                        if (automaticMode) {
+                            updateNumberOfCardsToRemember()
+                        }
                     }}
                     disabled={!startGameButtonEnabled}
                 >

@@ -61,9 +61,14 @@ const GameWidget = ({
                 sequenceToRemember={sequenceToRemember}
                 userSequence={userSequence}
                 addCard={addCard}
+                numberOfCardsToRemember={numberOfCardsToRemember}
             />
         </div>
     )
+}
+
+interface GameWidgetContentProps extends GameView {
+    numberOfCardsToRemember: number
 }
 
 const GameWidgetContent = ({
@@ -73,12 +78,13 @@ const GameWidgetContent = ({
     sequenceToRemember,
     userSequence,
     addCard,
-}: GameView) => {
+    numberOfCardsToRemember,
+}: GameWidgetContentProps) => {
     const { t } = useTranslation()
 
     switch (status) {
         case 'initial':
-            return <p>{t('Game starting')}</p>
+            return <p>{t('Game starting', { n: numberOfCardsToRemember })}</p>
         case 'showing-cards':
             return (
                 cardValue && (

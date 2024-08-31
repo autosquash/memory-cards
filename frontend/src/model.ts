@@ -1,5 +1,5 @@
-import { CardData, Color, Shape } from './types'
-import { check } from './utils'
+import { CardData, Color, Shape, User } from './types'
+import { arrayEquals, check } from './utils'
 const colors: Color[] = ['red', 'green', 'blue']
 const shapes: Shape[] = ['square', 'triangle', 'circle']
 
@@ -61,4 +61,33 @@ const getResult = (
     return true
 }
 
-export { cardsData, createCard, createRandomSequence, getResult, reprCardData }
+const adjustDifficulty = (user: User, numberOfCards: number) => {
+    if (user.recentGamesPlayed.at(-1)?.isWin === false) {
+        return numberOfCards - 1
+    }
+    const lastTwoGames = user.recentGamesPlayed.slice(-2)
+    if (lastTwoGames.length < 2) {
+        return numberOfCards
+    }
+    if (lastTwoGames[0].numberOfCards !== lastTwoGames[1].numberOfCards) {
+        return numberOfCards
+    }
+    if (
+        arrayEquals(
+            lastTwoGames.map((game) => game.isWin),
+            [true, true]
+        )
+    ) {
+        return numberOfCards + 1
+    }
+    return numberOfCards
+}
+
+export {
+    adjustDifficulty,
+    cardsData,
+    createCard,
+    createRandomSequence,
+    getResult,
+    reprCardData,
+}

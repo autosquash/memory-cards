@@ -18,7 +18,7 @@ const resources = {
             User: 'User:',
             Score: 'Score:',
             'Game starting':
-                'The Game is starting! Remember the sequence of cards.',
+                'The Game is starting! Remember the sequence of {{n}} cards.',
             'Cards displayed': 'Cards displayed! Do you remember them?',
             win: 'You win!',
             lost: `You've lost`,
@@ -54,7 +54,7 @@ const resources = {
             User: 'Usuaria/o:',
             Score: 'Puntuación:',
             'Game starting':
-                '¡Empieza el juego! Recuerda la secuencia de tarjetas.',
+                '¡Empieza el juego! Recuerda la secuencia de {{n}} tarjetas.',
             red: 'rojo',
             green: 'verde',
             blue: 'azul',
@@ -79,6 +79,7 @@ const resources = {
             'unknown error': 'error desconocido',
             NumberOfCards: 'Número de tarjetas a recordar',
             Back: 'Volver',
+            Automatic: 'Automático',
         },
     },
 }
