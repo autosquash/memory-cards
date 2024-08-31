@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createRandomSequence, getResult } from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
@@ -67,22 +67,25 @@ const useGame = (
         }
     }, [allCardsShowed])
 
-    useEffect(() => {
-        if (timeToShowResults) {
-            setStatus('showing-results')
-            const isWin = getResult(sequenceToRemember, userSequence)
-            setWin(isWin)
-            addCurrentGame(isWin, numberOfCardsToRemember)
-            onGameFinished()
-        }
+    const showResults = useCallback(() => {
+        setStatus('showing-results')
+        const isWin = getResult(sequenceToRemember, userSequence)
+        setWin(isWin)
+        addCurrentGame(isWin, numberOfCardsToRemember)
+        onGameFinished()
     }, [
-        timeToShowResults,
+        addCurrentGame,
+        numberOfCardsToRemember,
         onGameFinished,
         sequenceToRemember,
         userSequence,
-        addCurrentGame,
-        numberOfCardsToRemember,
     ])
+
+    useEffect(() => {
+        if (timeToShowResults) {
+            showResults()
+        }
+    }, [timeToShowResults, showResults])
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
