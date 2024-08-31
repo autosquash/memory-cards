@@ -8,7 +8,6 @@ import {
     timeToShowEachCard,
 } from '../settings'
 import { CardData } from '../types'
-import '../types/index.d.ts'
 import { sequenceData } from './examples'
 
 jest.useFakeTimers()
