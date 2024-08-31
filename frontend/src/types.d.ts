@@ -18,6 +18,7 @@ interface User {
 interface Game {
     gameIndex: number
     isWin: boolean
+    numberOfCards: number
 }
 
 export type {

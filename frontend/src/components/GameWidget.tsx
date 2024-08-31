@@ -35,10 +35,14 @@ const GameWidget = ({
     } = useGame(onGameFinished, numberOfCardsToRemember, providedSequence)
     useEffect(() => {
         if (win !== null) {
-            addCurrentGame({ gameIndex: gameIndex, isWin: win })
+            addCurrentGame({
+                gameIndex: gameIndex,
+                isWin: win,
+                numberOfCards: numberOfCardsToRemember,
+            })
         }
         return
-    }, [gameIndex, win, addCurrentGame])
+    }, [gameIndex, win, numberOfCardsToRemember, addCurrentGame])
 
     return (
         <div
