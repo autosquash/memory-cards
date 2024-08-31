@@ -26,11 +26,8 @@ const StartScreen = ({
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
-    const [games, setGames] = useState<Game[]>([])
     const handleGameFinished = () => setStartGameButtonEnabled(true)
     const addThisGame = (game: Game) => {
-        const newGames = [...games, game]
-        setGames(newGames)
         addGame(user.name, game, numberOfCardsToRemember)
     }
     return (
