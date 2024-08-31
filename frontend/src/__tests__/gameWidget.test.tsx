@@ -54,19 +54,24 @@ const getData = () => {
 describe('GameWidget', () => {
     const numberOfCardsToRemember = 3
     const times = getTimes(numberOfCardsToRemember)
+    let mockAddGame: jest.Mock<void, [], undefined>
+    beforeEach(() => {
+        mockAddGame = jest.fn(() => {})
+    })
     it('should start with the initial status', () => {
         render(
             <GameWidget
                 onGameFinished={mockOnGameFinished}
                 numberOfCardsToRemember={numberOfCardsToRemember}
                 gameIndex={0}
-                addGame={() => {}}
+                addGame={mockAddGame}
             />
         )
         const { status, cardValue, win } = getData()
         expect(status).toBe('initial')
         expect(cardValue).toBe(null)
         expect(win).toBe('null')
+        expect(mockAddGame.mock.calls).toHaveLength(0)
     })
     it('should change status when time passes', () => {
         render(
@@ -74,7 +79,7 @@ describe('GameWidget', () => {
                 onGameFinished={mockOnGameFinished}
                 numberOfCardsToRemember={numberOfCardsToRemember}
                 gameIndex={0}
-                addGame={() => {}}
+                addGame={mockAddGame}
             />
         )
         act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
@@ -96,26 +101,29 @@ describe('GameWidget', () => {
         expect(status).toBe('answering')
         expect(cardValue).toBe(null)
         expect(win).toBe('null')
+        expect(mockAddGame.mock.calls).toHaveLength(0)
     })
 
     describe('should get right result', () => {
         let clickCard: (cardData: CardData) => void
         let sequence: CardData[]
+        let rerender: (ui: React.ReactNode) => void
+        let createGameWidget: () => JSX.Element
         beforeEach(() => {
             // create the sequence
             sequence = sequenceData
                 .slice(0, numberOfCardsToRemember)
                 .map(([shape, color]) => createCard(shape, color))
-
-            render(
+            createGameWidget = () => (
                 <GameWidget
                     onGameFinished={mockOnGameFinished}
                     numberOfCardsToRemember={numberOfCardsToRemember}
                     gameIndex={0}
-                    addGame={() => {}}
+                    addGame={mockAddGame}
                     providedSequence={sequence}
                 />
             )
+            ;({ rerender } = render(createGameWidget()))
 
             // forward time
             act(() => jest.advanceTimersByTime(pauseBeforeFirstCard))
@@ -139,6 +147,7 @@ describe('GameWidget', () => {
             const { status, win } = getData()
             expect(status).toBe('showing-results')
             expect(win).toBe('true')
+            expect(mockAddGame.mock.calls).toHaveLength(1)
         })
         it('losses', () => {
             const anotherSequence = [...sequence]
@@ -152,6 +161,9 @@ describe('GameWidget', () => {
             const { status, win } = getData()
             expect(status).toBe('showing-results')
             expect(win).toBe('false')
+            expect(mockAddGame.mock.calls).toHaveLength(1)
+            rerender(createGameWidget())
+            expect(mockAddGame.mock.calls).toHaveLength(1)
         })
     })
 })
