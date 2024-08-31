@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createRandomSequence, getResult } from '../model'
 import { pauseBeforeAnswering, pauseBeforeFirstCard } from '../settings'
 import { CardData } from '../types'
@@ -32,12 +32,17 @@ const useGame = (
         getSequenceToRemember(providedSequence, numberOfCardsToRemember)
     ).current
 
+    const onGameFinishedRef = useRef(onGameFinished)
+    const addCurrentGameRef = useRef(addCurrentGame)
+
+    const numberOfCardsToRememberRef = useRef(0)
+    numberOfCardsToRememberRef.current = numberOfCardsToRemember
+
     const timerRef: React.RefObject<Timer> = useRef(useTimer())
     const getTimer = () => timerRef.current!
 
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
-    const [win, setWin] = useState<boolean | null>(null)
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
@@ -47,6 +52,11 @@ const useGame = (
     const timeToShowResults =
         status === 'answering' &&
         userSequence.length === numberOfCardsToRemember
+
+    const win =
+        status === 'showing-results'
+            ? getResult(sequenceToRemember, userSequence)
+            : null
 
     useEffect(() => {
         const timer = getTimer()
@@ -67,25 +77,21 @@ const useGame = (
         }
     }, [allCardsShowed])
 
-    const showResults = useCallback(() => {
-        setStatus('showing-results')
-        const isWin = getResult(sequenceToRemember, userSequence)
-        setWin(isWin)
-        addCurrentGame(isWin, numberOfCardsToRemember)
-        onGameFinished()
-    }, [
-        addCurrentGame,
-        numberOfCardsToRemember,
-        onGameFinished,
-        sequenceToRemember,
-        userSequence,
-    ])
-
     useEffect(() => {
         if (timeToShowResults) {
-            showResults()
+            setStatus('showing-results')
+            const onGameFinished = onGameFinishedRef.current
+            onGameFinished()
         }
-    }, [timeToShowResults, showResults])
+    }, [timeToShowResults])
+
+    useEffect(() => {
+        if (win !== null) {
+            const addCurrentGame = addCurrentGameRef.current
+            const numberOfCards = numberOfCardsToRememberRef.current
+            addCurrentGame(win, numberOfCards)
+        }
+    }, [win])
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])

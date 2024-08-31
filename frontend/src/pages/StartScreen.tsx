@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
 import GameWidget from '../components/GameWidget'
@@ -26,7 +26,10 @@ const StartScreen = ({
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
-    const handleGameFinished = () => setStartGameButtonEnabled(true)
+    const handleGameFinished = useCallback(
+        () => setStartGameButtonEnabled(true),
+        []
+    )
     const addThisGame = (game: Game) => {
         addGame(user.name, game, numberOfCardsToRemember)
     }
