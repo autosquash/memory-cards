@@ -36,6 +36,12 @@ const useUsers = () => {
         loadUsersFromBackend()
     }, [])
     useEffect(() => {
+        if (usersMap === null) {
+            return
+        }
+        backendService.updateUsers(usersMap)
+    }, [usersMap])
+    useEffect(() => {
         if (createUserErr !== null) {
             const timeoutId = window.setTimeout(
                 () => setCreateUserErr(null),
@@ -73,19 +79,21 @@ const useUsers = () => {
         game: Game,
         numberOfCardsToRemember: number
     ) => {
-        if (!usersMap) {
-            throw new Error("Can't add game if there are no users")
-        }
-        const user = usersMap!.get(userName)!
-        const modifiedUser: User = {
-            ...user,
-            score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
-            recentGamesPlayed: [...user.recentGamesPlayed, game],
-        }
-        const newUsersMap = new Map(usersMap)
-        newUsersMap.set(user.name, modifiedUser)
-        setUsersMap(newUsersMap)
-        backendService.updateUsers(newUsersMap)
+        let newUsersMap: Map<string, User>
+        setUsersMap((usersMap) => {
+            if (!usersMap) {
+                throw new Error("Can't add game if there are no users")
+            }
+            const user = usersMap!.get(userName)!
+            const modifiedUser: User = {
+                ...user,
+                score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
+                recentGamesPlayed: [...user.recentGamesPlayed, game],
+            }
+            newUsersMap = new Map(usersMap)
+            newUsersMap.set(user.name, modifiedUser)
+            return newUsersMap
+        })
     }
     return {
         usersMap,
