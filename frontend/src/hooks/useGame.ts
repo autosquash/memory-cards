@@ -36,6 +36,7 @@ const useGame = (
 
     const [status, setStatus] = useState<Status>('initial')
     const [userSequence, setUserSequence] = useState<CardData[]>([])
+    const [win, setWin] = useState<boolean | null>(null)
 
     const { allCardsShowed, cardValue } = useShowingCards(
         status === 'showing-cards',
@@ -68,14 +69,10 @@ const useGame = (
     useEffect(() => {
         if (timeToShowResults) {
             setStatus('showing-results')
+            setWin(getResult(sequenceToRemember, userSequence))
             onGameFinished()
         }
-    }, [timeToShowResults, onGameFinished])
-
-    const win =
-        status === 'showing-results'
-            ? getResult(sequenceToRemember, userSequence)
-            : null
+    }, [timeToShowResults, onGameFinished, sequenceToRemember, userSequence])
 
     const addCard = (cardData: CardData) => {
         setUserSequence((userSequence) => [...userSequence, cardData])
