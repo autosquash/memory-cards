@@ -23,15 +23,12 @@ const ChangeNumberOfCardsWidget = ({
             <select
                 value={automaticMode ? 'automatic' : numberOfCardsToRemember}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                    if (e.target.value === 'automatic') {
-                        setNumberOfCardsToRemember(initialNumberOfCardsValue)
-                        setAutomaticMode(true)
-                    } else {
-                        setAutomaticMode(false)
-                        setNumberOfCardsToRemember(
-                            parseInt(e.target.value as SelectOption)
-                        )
-                    }
+                    const shouldBeAutomatic = e.target.value === 'automatic'
+                    const numberOfCards = shouldBeAutomatic
+                        ? initialNumberOfCardsValue
+                        : parseInt(e.target.value as SelectOption)
+                    setAutomaticMode(shouldBeAutomatic)
+                    setNumberOfCardsToRemember(numberOfCards)
                 }}
             >
                 <option value="2">2</option>
