@@ -1,4 +1,4 @@
-import { CardData } from '../types'
+import { CardData } from '../../types'
 import CardSequence from './CardSequence'
 import styles from './SmallCardSequenceWithTitle.module.css'
 

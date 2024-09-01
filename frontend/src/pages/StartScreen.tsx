@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
-import GameWidget from '../components/GameWidget'
+import GameWidget from '../components/gameWidget/GameWidget'
 import { adjustDifficulty } from '../model'
 import { Game, SetNavState, User } from '../types'
 import styles from './StartScreen.module.css'

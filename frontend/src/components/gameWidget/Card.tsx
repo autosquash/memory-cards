@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Color, Shape } from '../types'
+import { Color, Shape } from '../../types'
 interface Props {
     color: Color
     shape: Shape

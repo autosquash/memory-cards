@@ -1,4 +1,4 @@
-import CardsToClick from '../components/CardsToClick'
+import CardsToClick from '../components/gameWidget/CardsToClick'
 
 const DemoCardsToClick = () => {
     return (

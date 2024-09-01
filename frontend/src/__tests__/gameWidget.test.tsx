@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react'
-import GameWidget from '../components/GameWidget'
+import GameWidget from '../components/gameWidget/GameWidget'
 import { createCard, reprCardData } from '../model'
 import {
     pauseBeforeAnswering,

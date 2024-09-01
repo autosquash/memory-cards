@@ -1,4 +1,4 @@
-import { CardData } from '../types'
+import { CardData } from '../../types'
 import Card from './Card'
 
 interface Props {

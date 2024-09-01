@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { cardsData, reprCardData } from '../model'
-import { CardData } from '../types'
+import { cardsData, reprCardData } from '../../model'
+import { CardData } from '../../types'
 import Card from './Card'
 import styles from './CardsToClick.module.css'
 

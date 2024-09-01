@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { GameView } from '../hooks/useGame'
-import { CardData } from '../types'
+import { GameView } from '../../hooks/useGame'
+import { CardData } from '../../types'
 import Card from './Card'
 import CardsToClick from './CardsToClick'
 import styles from './GameWidgetContent.module.css'

@@ -1,8 +1,8 @@
 import { useRef } from 'react'
-import useGame from '../hooks/useGame'
-import { reprCardData } from '../model'
-import { CardData, Game } from '../types'
-import { repr } from '../utils'
+import useGame from '../../hooks/useGame'
+import { reprCardData } from '../../model'
+import { CardData, Game } from '../../types'
+import { repr } from '../../utils'
 import styles from './GameWidget.module.css'
 import GameWidgetContent from './GameWidgetContent'
 
