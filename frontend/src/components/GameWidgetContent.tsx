@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { GameView } from '../hooks/useGame'
 import { CardData } from '../types'
 import Card from './Card'
-import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
 import styles from './GameWidgetContent.module.css'
+import SmallCardSequenceWithTitle from './SmallCardSequenceWithTitle'
 
 const GameWidgetContent = ({
     status,
@@ -80,23 +80,6 @@ function ShowingResults({
                 title={t('Actual sequence')}
                 sequence={sequenceToRemember}
             />
-        </>
-    )
-}
-
-const SmallCardSequenceWithTitle = ({
-    title,
-    sequence,
-}: {
-    title: string
-    sequence: ReadonlyArray<CardData>
-}) => {
-    return (
-        <>
-            <p>{title}</p>
-            <div className={styles.cardSequence}>
-                <CardSequence sequence={sequence} scale={0.4} />
-            </div>
         </>
     )
 }

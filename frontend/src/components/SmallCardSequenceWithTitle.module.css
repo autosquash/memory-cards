@@ -1,0 +1,8 @@
+.card-sequence {
+    display: flex;
+    justify-content: center;
+}
+
+.card-sequence>* {
+    margin: 6px;
+}
