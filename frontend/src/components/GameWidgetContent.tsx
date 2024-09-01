@@ -44,22 +44,44 @@ const GameWidgetContent = ({
             )
         case 'showing-results':
             return (
-                <>
-                    <h2>{win === true ? t('win') : t('lost')}</h2>
-                    <SmallCardSequenceWithTitle
-                        title={t('Your sequence')}
-                        sequence={userSequence}
-                    />
-                    <SmallCardSequenceWithTitle
-                        title={t('Actual sequence')}
-                        sequence={sequenceToRemember}
-                    />
-                </>
+                <ShowingResults
+                    win={win}
+                    userSequence={userSequence}
+                    sequenceToRemember={sequenceToRemember}
+                />
             )
         default:
             console.error('Unknown status: ' + status)
             return
     }
+}
+
+interface ShowingResultsProps {
+    win: boolean | null
+    userSequence: CardData[]
+    sequenceToRemember: readonly CardData[]
+}
+
+function ShowingResults({
+    win,
+
+    userSequence,
+    sequenceToRemember,
+}: ShowingResultsProps) {
+    const { t } = useTranslation()
+    return (
+        <>
+            <h2>{win === true ? t('win') : t('lost')}</h2>
+            <SmallCardSequenceWithTitle
+                title={t('Your sequence')}
+                sequence={userSequence}
+            />
+            <SmallCardSequenceWithTitle
+                title={t('Actual sequence')}
+                sequence={sequenceToRemember}
+            />
+        </>
+    )
 }
 
 const SmallCardSequenceWithTitle = ({
@@ -78,4 +100,5 @@ const SmallCardSequenceWithTitle = ({
         </>
     )
 }
+
 export default GameWidgetContent
