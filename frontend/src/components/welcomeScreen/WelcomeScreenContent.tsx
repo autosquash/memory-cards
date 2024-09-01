@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import AddUserForm from '../components/AddUserForm'
-import NamesListing from '../components/NamesListing'
-import { SetNavState } from '../types'
+import { SetNavState } from '../../types'
+import AddUserForm from './AddUserForm'
+import NamesListing from './NamesListing'
 import styles from './WelcomeScreenContent.module.css'
 
 interface Props {

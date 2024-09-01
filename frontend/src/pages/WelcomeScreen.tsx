@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import WelcomeScreenContent from '../components/WelcomeScreenContent'
+import WelcomeScreenContent from '../components/welcomeScreen/WelcomeScreenContent'
 import Demo from '../demos/Demo'
 import { SetNavState, User } from '../types'
 import styles from './WelcomeScreen.module.css'
