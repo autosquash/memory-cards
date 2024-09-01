@@ -58,7 +58,6 @@ const GameWidget = ({
                 sequenceToRemember={sequenceToRemember}
                 userSequence={userSequence}
                 addCard={addCard}
-                numberOfCardsToRemember={numberOfCardsToRemember}
             />
         </div>
     )

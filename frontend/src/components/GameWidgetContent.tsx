@@ -6,10 +6,6 @@ import CardSequence from './CardSequence'
 import CardsToClick from './CardsToClick'
 import styles from './GameWidgetContent.module.css'
 
-interface Props extends GameView {
-    numberOfCardsToRemember: number
-}
-
 const GameWidgetContent = ({
     status,
     win,
@@ -17,9 +13,9 @@ const GameWidgetContent = ({
     sequenceToRemember,
     userSequence,
     addCard,
-    numberOfCardsToRemember,
-}: Props) => {
+}: GameView) => {
     const { t } = useTranslation()
+    const numberOfCardsToRemember = sequenceToRemember.length
 
     switch (status) {
         case 'initial':
