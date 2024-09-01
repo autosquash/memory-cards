@@ -16,7 +16,8 @@ const useShowingCards = (
     const getTimer = () => timerRef.current!
     const [currentStep, setCurrentStep] = useState<number>(0)
     const numberOfCardsToRemember = sequence.length
-    const allCardsShowed = currentStep >= numberOfCardsToRemember * 2 - 1
+    const totalSteps = numberOfCardsToRemember * 2 - 1
+    const allCardsShowed = currentStep >= totalSteps
     const isEvenStep = currentStep % 2 === 0
 
     useEffect(() => {
