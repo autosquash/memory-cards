@@ -50,6 +50,7 @@ const resources = {
             'Your name': 'Tu nombre',
             'Click Start Game': "Pulsa 'Iniciar Juego' cuando estés lista/o",
             'Start Game': 'Iniciar Juego',
+            Replay: 'Jugar de nuevo',
             Exit: 'Salir',
             User: 'Usuaria/o:',
             Score: 'Puntuación:',

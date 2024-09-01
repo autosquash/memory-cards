@@ -77,7 +77,9 @@ const StartScreen = ({
                     }}
                     disabled={!startGameButtonEnabled}
                 >
-                    {t('Start Game')}
+                    {user.recentGamesPlayed.length
+                        ? t('Replay')
+                        : t('Start Game')}
                 </button>
                 <ExitButton setNavState={setNavState} />
             </div>
