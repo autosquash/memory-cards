@@ -2,35 +2,48 @@ import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ExitButton from '../components/ExitButton'
 import GameWidget from '../components/GameWidget'
+import { adjustDifficulty } from '../model'
 import { Game, SetNavState, User } from '../types'
 import styles from './StartScreen.module.css'
 
 interface Props {
     user: User
     setNavState: SetNavState
-    numberOfCardsToRemember: number
+    defaultNumberOfCardsToRemember: number
     automaticMode: boolean
     addGame: (
         userName: string,
         game: Game,
         numberOfCardsToRemember: number
     ) => void
-    updateNumberOfCardsToRemember: () => void
 }
 
 const StartScreen = ({
     user,
     setNavState,
-    numberOfCardsToRemember,
+    defaultNumberOfCardsToRemember,
     addGame,
     automaticMode,
-    updateNumberOfCardsToRemember,
 }: Props) => {
     const { t } = useTranslation()
     const [playing, setPlaying] = useState(false)
     const [gameIndex, setGameIndex] = useState(0)
     const [startGameButtonEnabled, setStartGameButtonEnabled] = useState(true)
+    const [numberOfCardsToRemember, setNumberOfCardsToRemember] = useState(
+        defaultNumberOfCardsToRemember
+    )
 
+    const updateNumberOfCardsToRemember = () => {
+        if (!automaticMode) {
+            if (numberOfCardsToRemember !== defaultNumberOfCardsToRemember) {
+                setNumberOfCardsToRemember(defaultNumberOfCardsToRemember)
+            }
+        } else {
+            setNumberOfCardsToRemember(
+                adjustDifficulty(user) || defaultNumberOfCardsToRemember
+            )
+        }
+    }
     const handleGameFinished = useCallback(() => {
         setStartGameButtonEnabled(true)
     }, [])
@@ -71,9 +84,7 @@ const StartScreen = ({
                         setGameIndex(gameIndex + 1)
                         setPlaying(true)
                         setStartGameButtonEnabled(false)
-                        if (automaticMode) {
-                            updateNumberOfCardsToRemember()
-                        }
+                        updateNumberOfCardsToRemember()
                     }}
                     disabled={!startGameButtonEnabled}
                 >

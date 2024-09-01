@@ -1,6 +1,5 @@
 import useNav from '../hooks/useNav'
 import useUsers from '../hooks/useUsers'
-import { adjustDifficulty } from '../model'
 import { check } from '../utils'
 import Settings from './Settings'
 import StartScreen from './StartScreen'
@@ -37,26 +36,13 @@ const NavPage = ({
             check(usersMap)
             const user = usersMap.get(navData.userName)!
             check(user)
-            const updateNumberOfCardsToRemember = () => {
-                if (!automaticMode) {
-                    throw new Error(
-                        "Can't update number of cards with automatic mode off"
-                    )
-                }
-                setNumberOfCardsToRemember(
-                    adjustDifficulty(user, numberOfCardsToRemember)
-                )
-            }
             return (
                 <StartScreen
                     key={user.name}
                     user={user}
                     setNavState={setNavState}
-                    numberOfCardsToRemember={numberOfCardsToRemember}
+                    defaultNumberOfCardsToRemember={numberOfCardsToRemember}
                     addGame={addGame}
-                    updateNumberOfCardsToRemember={
-                        updateNumberOfCardsToRemember
-                    }
                     automaticMode={automaticMode}
                 />
             )

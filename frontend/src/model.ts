@@ -61,7 +61,11 @@ const getResult = (
     return true
 }
 
-const adjustDifficulty = (user: User, numberOfCards: number) => {
+const adjustDifficulty = (user: User): number | null => {
+    const numberOfCards = user.recentGamesPlayed.at(-1)?.numberOfCards
+    if (numberOfCards === undefined) {
+        return null
+    }
     if (user.recentGamesPlayed.at(-1)?.isWin === false) {
         return numberOfCards - 1
     }
