@@ -15,6 +15,8 @@ interface Props {
 
 type SelectOption = '2' | '3'
 
+const initialNumberOfCardsValue = 2
+
 const Settings = ({
     numberOfCardsToRemember,
     setNumberOfCardsToRemember,
@@ -26,45 +28,34 @@ const Settings = ({
     return (
         <div>
             <h2>{t('Settings')}</h2>
-            <div>
-                <h3>{t('Language')}</h3>
-                <div>
-                    <ChangeLanguageButton
-                        text={t('spanish')}
-                        lang_code={'es'}
-                    />
-                    <ChangeLanguageButton
-                        text={t('english')}
-                        lang_code={'en'}
-                    />
-                </div>
-            </div>
-            <div>
-                <h3>{t('NumberOfCards')}</h3>
-                <select
-                    value={
-                        automaticMode ? 'automatic' : numberOfCardsToRemember
-                    }
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        if (e.target.value === 'automatic') {
-                            setNumberOfCardsToRemember(2)
-                            setAutomaticMode(true)
-                        } else {
-                            setAutomaticMode(false)
-                            setNumberOfCardsToRemember(
-                                parseInt(e.target.value as SelectOption)
-                            )
-                        }
-                    }}
-                >
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="automatic">{t('Automatic')}</option>
-                </select>
-            </div>
+            <LanguageSettingsWidget />
+            <ChangeNumberOfCardsWidget
+                automaticMode={automaticMode}
+                numberOfCardsToRemember={numberOfCardsToRemember}
+                setNumberOfCardsToRemember={setNumberOfCardsToRemember}
+                setAutomaticMode={setAutomaticMode}
+            />
             <footer className={styles.footer}>
                 <button onClick={() => setNavState('home')}>{t('Back')}</button>
             </footer>
+        </div>
+    )
+}
+
+const LanguageSettingsWidget = () => {
+    return (
+        <div>
+            <h3>{i18n.t('Language')}</h3>
+            <div>
+                <ChangeLanguageButton
+                    text={i18n.t('spanish')}
+                    lang_code={'es'}
+                />
+                <ChangeLanguageButton
+                    text={i18n.t('english')}
+                    lang_code={'en'}
+                />
+            </div>
         </div>
     )
 }
@@ -90,6 +81,43 @@ const ChangeLanguageButton = ({
         >
             {text}
         </button>
+    )
+}
+
+interface ChangeNumberOfCardsWidgetProps {
+    automaticMode: boolean
+    numberOfCardsToRemember: number
+    setNumberOfCardsToRemember: (n: number) => void
+    setAutomaticMode: (value: boolean) => void
+}
+function ChangeNumberOfCardsWidget({
+    automaticMode,
+    numberOfCardsToRemember,
+    setNumberOfCardsToRemember,
+    setAutomaticMode,
+}: ChangeNumberOfCardsWidgetProps) {
+    return (
+        <div>
+            <h3>{i18n.t('NumberOfCards')}</h3>
+            <select
+                value={automaticMode ? 'automatic' : numberOfCardsToRemember}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    if (e.target.value === 'automatic') {
+                        setNumberOfCardsToRemember(initialNumberOfCardsValue)
+                        setAutomaticMode(true)
+                    } else {
+                        setAutomaticMode(false)
+                        setNumberOfCardsToRemember(
+                            parseInt(e.target.value as SelectOption)
+                        )
+                    }
+                }}
+            >
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="automatic">{i18n.t('Automatic')}</option>
+            </select>
+        </div>
     )
 }
 
