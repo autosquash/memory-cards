@@ -50,8 +50,8 @@ const StartScreen = ({
     const addThisGame = (game: Game) => {
         addGame(user.name, game, numberOfCardsToRemember)
     }
-    const recentGamesPlayedRef = useRef(user.recentGamesPlayed)
-    recentGamesPlayedRef.current = user.recentGamesPlayed
+    const recentGamesPlayedRef = useRef(user.gamesPlayed)
+    recentGamesPlayedRef.current = user.gamesPlayed
 
     return (
         <div className={styles.startScreen}>
@@ -88,9 +88,7 @@ const StartScreen = ({
                     }}
                     disabled={!startGameButtonEnabled}
                 >
-                    {user.recentGamesPlayed.length
-                        ? t('Replay')
-                        : t('Start Game')}
+                    {user.gamesPlayed.length ? t('Replay') : t('Start Game')}
                 </button>
                 <ExitButton setNavState={setNavState} />
             </div>

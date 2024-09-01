@@ -50,7 +50,7 @@ def add_user():
             ),
             400,
         )
-    users.append(User(name=new_name, score=0, recentGamesPlayed=[]))
+    users.append(User(name=new_name, score=0, gamesPlayed=[]))
     save_users_to_file(users)
     return jsonify({"message": "User added successfully!"}), 201
 

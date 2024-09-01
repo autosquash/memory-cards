@@ -47,7 +47,7 @@ const useUsers = () => {
             newMap.set(newName, {
                 name: newName,
                 score: 0,
-                recentGamesPlayed: [],
+                gamesPlayed: [],
             })
             setUsersMap(newMap)
         } else {
@@ -74,7 +74,7 @@ const useUsers = () => {
             const modifiedUser: User = {
                 ...user,
                 score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
-                recentGamesPlayed: [...user.recentGamesPlayed, game],
+                gamesPlayed: [...user.gamesPlayed, game],
             }
             newUsersMap = new Map(usersMap)
             newUsersMap.set(user.name, modifiedUser)

@@ -31,11 +31,11 @@ const isBackendUser = (maybeUser: unknown): maybeUser is BackendUser => {
         isObject(maybeUser) &&
         'name' in maybeUser &&
         'score' in maybeUser &&
-        'recentGamesPlayed' in maybeUser &&
+        'gamesPlayed' in maybeUser &&
         isString(maybeUser.name) &&
         isNumber(maybeUser.score) &&
-        Array.isArray(maybeUser.recentGamesPlayed) &&
-        maybeUser.recentGamesPlayed.every(isGame)
+        Array.isArray(maybeUser.gamesPlayed) &&
+        maybeUser.gamesPlayed.every(isGame)
     )
 }
 const areBackendUsers = (maybeUsers: unknown): maybeUsers is BackendUser[] => {

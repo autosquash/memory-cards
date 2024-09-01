@@ -61,7 +61,7 @@ const toBackendUsers = (
     return Array.from(usersMap.values()).map((user) => ({
         name: user.name,
         score: user.score,
-        recentGamesPlayed: user.recentGamesPlayed,
+        gamesPlayed: user.gamesPlayed,
     }))
 }
 

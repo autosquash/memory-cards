@@ -62,14 +62,14 @@ const getResult = (
 }
 
 const adjustDifficulty = (user: User): number | null => {
-    const numberOfCards = user.recentGamesPlayed.at(-1)?.numberOfCards
+    const numberOfCards = user.gamesPlayed.at(-1)?.numberOfCards
     if (numberOfCards === undefined) {
         return null
     }
-    if (user.recentGamesPlayed.at(-1)?.isWin === false) {
+    if (user.gamesPlayed.at(-1)?.isWin === false) {
         return numberOfCards - 1
     }
-    const lastTwoGames = user.recentGamesPlayed.slice(-2)
+    const lastTwoGames = user.gamesPlayed.slice(-2)
     if (lastTwoGames.length < 2) {
         return numberOfCards
     }

@@ -10,4 +10,4 @@ class Game(TypedDict):
 class User(TypedDict):
     name: str
     score: int
-    recentGamesPlayed: list[Game]
+    gamesPlayed: list[Game]
