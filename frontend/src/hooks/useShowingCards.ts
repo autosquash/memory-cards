@@ -17,6 +17,7 @@ const useShowingCards = (
     const [currentStep, setCurrentStep] = useState<number>(0)
     const numberOfCardsToRemember = sequence.length
     const allCardsShowed = currentStep >= numberOfCardsToRemember * 2 - 1
+    const isEvenStep = currentStep % 2 === 0
 
     useEffect(() => {
         if (!showingCards) {
@@ -27,17 +28,16 @@ const useShowingCards = (
             setCurrentStep((step) => step + 1)
         }
         const timer = getTimer()
-        const time =
-            currentStep % 2 === 0 ? timeToShowEachCard : pauseBetweenCards
+        const time = isEvenStep ? timeToShowEachCard : pauseBetweenCards
         timer.activateOneTime(goToNextStep, time)
         return timer.clear
-    }, [showingCards, currentStep])
+    }, [showingCards, isEvenStep])
 
     const getCurrentCardValue = (): CardData | null => {
         if (!showingCards || allCardsShowed) {
             return null
         }
-        if (currentStep % 2 !== 0) {
+        if (!isEvenStep) {
             // pause between cards
             return null
         }
@@ -50,6 +50,7 @@ const useShowingCards = (
         showingCards,
         allCardsShowed,
         currentStep,
+        isEvenStep,
         sequence,
     ])
 
