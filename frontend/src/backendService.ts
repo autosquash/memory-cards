@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { getApiUrl } from './envVars'
+import { areBackendUsers } from './typeAssertions'
 import { BackendUser, User } from './types'
+import { repr } from './utils'
 
 const getUsersApi = '/users'
 const addUserApi = '/users/add'
@@ -11,10 +13,15 @@ const getUsers = async (): Promise<Map<string, User> | null> => {
     await axios
         .get(getApiUrl() + getUsersApi)
         .then((response) => {
-            const fetchedUsers = response.data as BackendUser[]
+            const fetchedUsers: unknown = response.data
+            if (!areBackendUsers(fetchedUsers)) {
+                throw new Error(
+                    'Fetched users failed validation: ' + repr(fetchedUsers)
+                )
+            }
             usersMap = new Map<string, User>()
             for (const fetchedUser of fetchedUsers) {
-                const user: User = { ...fetchedUser, recentGamesPlayed: [] }
+                const user = { ...fetchedUser, recentGamesPlayed: [] }
                 usersMap.set(user.name, user)
             }
         })
