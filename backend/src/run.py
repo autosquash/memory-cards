@@ -1,7 +1,7 @@
 import time
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 
 from src.model import User
@@ -13,9 +13,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# Load users initially
-users: list[User] = load_users_from_file()
-
 ERR_USERNAME_NOT_VALID = "ERR_USERNAME_NOT_VALID"
 ERR_USER_ALREADY_EXISTS = "ERR_USER_ALREADY_EXISTS"
 
@@ -24,8 +21,10 @@ SIMULATED_DELAY = 0.6
 
 
 @app.route("/users", methods=["GET"])
-def get_users():
+def get_users() -> Response:
     time.sleep(SIMULATED_DELAY)
+    # Load users initially
+    users = load_users_from_file()
     return jsonify(users)
 
 
@@ -43,6 +42,7 @@ def add_user():
             ),
             400,
         )
+    users = load_users_from_file()
     if new_name in [user["name"] for user in users]:
         return (
             jsonify(
@@ -50,7 +50,7 @@ def add_user():
             ),
             400,
         )
-    users.append(User(name=new_name, score=0))
+    users.append(User(name=new_name, score=0, recentGamesPlayed=[]))
     save_users_to_file(users)
     return jsonify({"message": "User added successfully!"}), 201
 
@@ -59,10 +59,8 @@ def add_user():
 def update_users():
     time.sleep(SIMULATED_DELAY)
     assert request.json
-    new_users = request.json.get("users")
-    users.clear()
-    users.extend(new_users)
-    save_users_to_file(users)
+    updated_users = request.json.get("users")
+    save_users_to_file(updated_users)
     return jsonify({"message": "Users updated successfully!"}), 201
 
 

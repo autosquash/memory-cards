@@ -21,7 +21,7 @@ const getUsers = async (): Promise<Map<string, User> | null> => {
             }
             usersMap = new Map<string, User>()
             for (const fetchedUser of fetchedUsers) {
-                const user = { ...fetchedUser, recentGamesPlayed: [] }
+                const user = { ...fetchedUser }
                 usersMap.set(user.name, user)
             }
         })
@@ -61,6 +61,7 @@ const toBackendUsers = (
     return Array.from(usersMap.values()).map((user) => ({
         name: user.name,
         score: user.score,
+        recentGamesPlayed: user.recentGamesPlayed,
     }))
 }
 

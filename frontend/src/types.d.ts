@@ -9,6 +9,7 @@ interface CardData {
 interface BackendUser {
     readonly name: string
     readonly score: number
+    readonly recentGamesPlayed: ReadonlyArray<Game>
 }
 interface User {
     readonly name: string
