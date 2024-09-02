@@ -44,11 +44,7 @@ const useUsers = () => {
         const result = await backendService.addUser(newName)
         if (result.ok) {
             const newMap = new Map(usersMap)
-            newMap.set(newName, {
-                name: newName,
-                score: 0,
-                gamesPlayed: [],
-            })
+            newMap.set(newName, createNewUser(newName))
             setUsersMap(newMap)
         } else {
             const error = result.error!
@@ -86,6 +82,13 @@ const useUsers = () => {
         commitUser,
         createUserErr,
         addGame,
+    }
+}
+const createNewUser = (name: string) => {
+    return {
+        name: name,
+        score: 0,
+        gamesPlayed: [],
     }
 }
 
