@@ -61,20 +61,15 @@ const useUsers = () => {
         game: Game,
         numberOfCardsToRemember: number
     ) => {
-        let newUsersMap: Map<string, User>
         setUsersMap((usersMap) => {
             if (!usersMap) {
                 throw new Error("Can't add game if there are no users")
             }
             const user = usersMap!.get(userName)!
-            const modifiedUser: User = {
-                ...user,
-                score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
-                gamesPlayed: [...user.gamesPlayed, game],
-            }
-            newUsersMap = new Map(usersMap)
-            newUsersMap.set(user.name, modifiedUser)
-            return newUsersMap
+            return new Map(usersMap).set(
+                user.name,
+                getUserWithAddedGame(user, game, numberOfCardsToRemember)
+            )
         })
     }
     return {
@@ -89,6 +84,18 @@ const createNewUser = (name: string) => {
         name: name,
         score: 0,
         gamesPlayed: [],
+    }
+}
+
+const getUserWithAddedGame = (
+    user: User,
+    game: Game,
+    numberOfCardsToRemember: number
+): User => {
+    return {
+        ...user,
+        score: user.score + (game.isWin ? numberOfCardsToRemember : 0),
+        gamesPlayed: [...user.gamesPlayed, game],
     }
 }
 
