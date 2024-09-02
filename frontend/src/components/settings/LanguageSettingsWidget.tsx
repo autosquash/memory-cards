@@ -28,18 +28,15 @@ interface ChangeLanguageButtonProps {
 
 const ChangeLanguageButton = ({
     text,
-    lang_code,
+    lang_code: language_code,
 }: ChangeLanguageButtonProps) => {
     const storage = useRef(useStorage()).current
-    const changeLanguage = (lang: string) => {
-        i18n.changeLanguage(lang)
-        storage.write(STORAGE_LANGUAGE_KEY, lang)
+    const changeLanguage = () => {
+        i18n.changeLanguage(language_code)
+        storage.write(STORAGE_LANGUAGE_KEY, language_code)
     }
     return (
-        <button
-            className={styles.button}
-            onClick={() => changeLanguage(lang_code)}
-        >
+        <button className={styles.button} onClick={() => changeLanguage()}>
             {text}
         </button>
     )
