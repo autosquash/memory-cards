@@ -6,6 +6,8 @@ import { Game, User } from '../types'
 const ERR_USERNAME_NOT_VALID = 'ERR_USERNAME_NOT_VALID'
 const ERR_USER_ALREADY_EXISTS = 'ERR_USER_ALREADY_EXISTS'
 
+const timeToShowErrors = 3000
+
 const useUsers = () => {
     const [usersMap, setUsersMap] = useState<null | ReadonlyMap<string, User>>(
         null
@@ -31,7 +33,7 @@ const useUsers = () => {
         if (createUserErr !== null) {
             const timeoutId = window.setTimeout(
                 () => setCreateUserErr(null),
-                3000
+                timeToShowErrors
             )
             return () => clearTimeout(timeoutId)
         }
