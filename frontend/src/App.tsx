@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
 import useStorage from './hooks/useStorage'
+import { STORAGE_LANGUAGE_KEY } from './i18n'
 import NavPage from './pages/NavPage'
 
 const DEFAULT_LANGUAGE = 'en'
@@ -13,7 +14,7 @@ function App() {
     const [numberOfCardsToRemember, setNumberOfCardsToRemember] = useState(2)
     const storage = useRef(useStorage()).current
     useEffect(() => {
-        const lang = storage.read('language') || DEFAULT_LANGUAGE
+        const lang = storage.read(STORAGE_LANGUAGE_KEY) || DEFAULT_LANGUAGE
         i18n.changeLanguage(lang as string)
         return
     }, [i18n, storage])

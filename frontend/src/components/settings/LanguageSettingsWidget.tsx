@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import useStorage from '../../hooks/useStorage'
-import i18n from '../../i18n'
+import i18n, { STORAGE_LANGUAGE_KEY } from '../../i18n'
 import styles from './LanguageSettingsWidget.module.css'
 
 const LanguageSettingsWidget = () => {
@@ -33,7 +33,7 @@ const ChangeLanguageButton = ({
     const storage = useRef(useStorage()).current
     const changeLanguage = (lang: string) => {
         i18n.changeLanguage(lang)
-        storage.write('language', lang)
+        storage.write(STORAGE_LANGUAGE_KEY, lang)
     }
     return (
         <button

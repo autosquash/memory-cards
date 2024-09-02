@@ -94,4 +94,7 @@ i18n.use(initReactI18next).init({
     },
 })
 
+const STORAGE_LANGUAGE_KEY = 'language'
+
 export default i18n
+export { STORAGE_LANGUAGE_KEY }
