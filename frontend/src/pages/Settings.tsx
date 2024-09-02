@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import ChangeNumberOfCardsWidget from '../components/settings/ChangeNumberOfCardsWidget'
-import LanguageSettingsWidget from '../components/settings/LanguageSettingsWidget'
+import {
+    ChangeNumberOfCardsWidget,
+    LanguageSettingsWidget,
+} from '../components/settings'
 import { SetNavState } from '../types'
 import styles from './Settings.module.css'
 
