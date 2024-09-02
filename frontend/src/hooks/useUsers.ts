@@ -47,13 +47,8 @@ const useUsers = () => {
             newMap.set(newName, createNewUser(newName))
             setUsersMap(newMap)
         } else {
-            const error = result.error!
-            if (error.err_code) {
-                setCreateUserErr(getMessageFromErrCode(error.err_code, newName))
-            } else {
-                setCreateUserErr(getMessageFromErrCode(null, newName))
-                console.error(error)
-            }
+            const errCode = result.error.err_code || null
+            setCreateUserErr(getMessageFromErrCode(errCode, newName))
         }
     }
     const addGame = (
